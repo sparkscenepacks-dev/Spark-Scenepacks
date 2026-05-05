@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Spark Scenepacks</title>
+
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS for direct browser uploads -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --primary: #0f0e0e;
+            --accent: #ffffff;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-hover: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('assets/Blackhole.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Glass Visual Background */
+        .bg-visuals {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: orbFloat 10s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            top: -100px;
+            left: -100px;
+        }
+
+        .orb-2 {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            bottom: -100px;
+            right: -100px;
+            animation-delay: 2s;
+        }
+
+        .orb-3 {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.08;
+        }
+
+        @keyframes orbFloat {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(50px, -30px) scale(1.1);
+            }
+        }
+
+        /* Login Shield */
+        #loginShield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 40px;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        }
+
+        .login-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--accent);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            border: none;
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dashboard Layout */
+        #adminDashboard {
+            display: none;
+            width: 90%;
+            max-width: 1000px;
+            padding: 40px 0;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .admin-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .admin-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Dynamic Links */
+        .link-entry {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .remove-link {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #ff4444;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .remove-link:hover {
+            opacity: 1;
+        }
+
+        .add-link-btn {
+            background: transparent;
+            border: 1px dashed var(--border);
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        .add-link-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+        }
+
+        .tag-pill {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag-pill i {
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .tag-input {
+            border: none;
+            background: transparent;
+            width: auto;
+            flex-grow: 1;
+            padding: 4px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .category-checkbox {
+            display: none;
+        }
+
+        .category-label {
+            display: block;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+        }
+
+        .category-checkbox:checked+.category-label {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 16px 24px;
+            background: #fff;
+            color: #000;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 10001;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 850px) {
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* New Upload Zone Styles */
+        .upload-zone {
+            width: 100%;
+            height: 160px;
+            border: 2px dashed var(--border);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.drag-active {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .upload-zone i {
+            font-size: 1.8rem;
+            color: var(--text-secondary);
+            transition: all 0.4s ease;
+        }
+
+        .upload-zone:hover i,
+        .upload-zone.drag-active i {
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .upload-zone span {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #thumbnailFile {
+            display: none;
+        }
+
+        .preview-container {
+            margin-top: 15px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: none;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .preview-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .remove-preview {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 68, 68, 0.85);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            border: none;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .remove-preview:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: #ff4444;
+        }
+
+        /* Management List Styles */
+        .management-section {
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .management-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+        }
+
+        .management-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .manage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .manage-item:hover {
+            border-color: #ff4444;
+            transform: translateY(-2px);
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .item-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .item-details h4 {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .item-details p {
+            margin: 2px 0 0;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .delete-btn {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
+            border: 1px solid #ff4444;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        .delete-btn:hover {
+            background: #ff4444;
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Elements -->
+    <div class="bg-visuals">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Login Section -->
+    <div id="loginShield">
+        <div class="login-card">
+            <h2 class="login-title">Admin Entry</h2>
+            <div class="input-group">
+                <label class="input-label">Username</label>
+                <input type="text" id="adminUser" placeholder="Enter username...">
+            </div>
+            <div class="input-group" style="position: relative;">
+                <label class="input-label">Password</label>
+                <input type="password" id="adminPass" placeholder="Enter password...">
+                <i class="far fa-eye" id="togglePassword"
+                    style="position: absolute; right: 15px; top: 38px; cursor: pointer; color: var(--text-secondary);"></i>
+            </div>
+            <button onclick="checkAccess()">Unlock Dashboard</button>
+            <p id="loginError" style="color: #ff4444; font-size: 12px; margin-top: 15px; display: none;">Access Denied.
+                Try again.</p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="adminDashboard">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="saveScenepack()" id="saveBtn" style="width: auto; padding: 12px 30px;">
+                    <i class="fas fa-save"></i> Save Element
+                </button>
+                <button onclick="cancelEdit()" id="cancelBtn"
+                    style="width: auto; padding: 12px 20px; background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid #ff4444; display: none;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button onclick="location.href='/'"
+                    style="width: auto; background: transparent; color: #fff; border: 1px solid var(--border);">
+                    View Site
+                </button>
+            </div>
+        </div>
+
+        <div class="admin-grid">
+            <!-- Left Side: Basic Info -->
+            <div class="admin-card">
+                <h3 class="card-title"><i class="fas fa-info-circle"></i> Basic Details</h3>
+
+                <div class="input-group">
+                    <label class="input-label">Title / Name</label>
+                    <input type="text" id="title" placeholder="e.g. John Wick Scenepack">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Unique ID (URL-friendly)</label>
+                    <input type="text" id="id" placeholder="e.g. john-wick-4k">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Preview Text (Card summary)</label>
+                    <input type="text" id="preview" placeholder="Short catchy line...">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label class="input-label">Created By (e.g. son.astral)</label>
+                        <input type="text" id="creator" placeholder="Creator handle...">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Uploaded By (e.g. tcmmi.ae)</label>
+                        <input type="text" id="uploader" placeholder="Uploader handle...">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Categories (Select one or more)</label>
+                    <div class="category-grid">
+                        <input type="checkbox" id="cat-scenepacks" class="category-checkbox" value="SCENEPACKS">
+                        <label for="cat-scenepacks" class="category-label">Scenepacks</label>
+
+                        <input type="checkbox" id="cat-trailers" class="category-checkbox" value="TRAILERS">
+                        <label for="cat-trailers" class="category-label">Trailers</label>
+
+                        <input type="checkbox" id="cat-wallpapers" class="category-checkbox" value="WALLPAPERS">
+                        <label for="cat-wallpapers" class="category-label">Wallpapers</label>
+
+                        <input type="checkbox" id="cat-sports" class="category-checkbox" value="SPORTS">
+                        <label for="cat-sports" class="category-label">Sports</label>
+
+                        <input type="checkbox" id="cat-softwares" class="category-checkbox" value="SOFTWARES">
+                        <label for="cat-softwares" class="category-label">Softwares</label>
+
+                        <input type="checkbox" id="cat-plugins" class="category-checkbox" value="PLUGINS">
+                        <label for="cat-plugins" class="category-label">Plugins</label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Thumbnail (Upload or URL)</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <button type="button" onclick="setThumbMode('file')" id="mode-file"
+                            style="width: auto; padding: 8px 20px; font-size: 10px; background: var(--accent); color: var(--primary);">UPLOAD
+                            FILE</button>
+                        <button type="button" onclick="setThumbMode('url')" id="mode-url"
+                            style="width: auto; padding: 8px 20px; font-size: 10px; background: transparent; color: #fff; border: 1px solid var(--border);">IMAGE
+                            URL</button>
+                    </div>
+
+                    <div id="file-input-container">
+                        <div class="upload-zone" id="dropZone"
+                            onclick="document.getElementById('thumbnailFile').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Click or Drag & Drop Image</span>
+                            <input type="file" id="thumbnailFile" accept="image/*">
+                        </div>
+
+                    <div id="thumb-preview" class="preview-container" onclick="document.getElementById('thumbnailFile').click()" title="Click to replace thumbnail" style="cursor:pointer;">
+                            <button class="remove-preview" onclick="removeThumbnail(event)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;letter-spacing:1px;backdrop-filter:blur(6px);pointer-events:none;text-transform:uppercase;">Click to Replace</div>
+                            <img src="" id="previewImg">
+                        </div>
+                    </div>
+
+                    <div id="url-input-container" style="display: none;">
+                        <input type="text" id="thumbnail" placeholder="e.g. https://images.com/pic.jpg">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Full Description</label>
+                    <textarea id="description" rows="3" placeholder="Detailed description of the content..."></textarea>
+                </div>
+            </div>
+
+
+
+            <!-- Right Side: Metadata & Links -->
+            <div class="admin-card">
+                <h3 class="card-title"><i class="fas fa-tags"></i> Tags & Metadata</h3>
+
+                <div class="input-group">
+                    <label class="input-label">Tags (Type and press Enter)</label>
+                    <div class="tag-input-container" id="tagContainer">
+                        <input type="text" class="tag-input" id="tagInput" placeholder="Add tags...">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label class="input-label">Release Year</label>
+                        <input type="text" id="year" placeholder="2024">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">IMDb Rating</label>
+                        <input type="text" id="rating" placeholder="8.5/10">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label class="input-label">Director</label>
+                        <input type="text" id="director" placeholder="e.g. Christopher Nolan">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Runtime</label>
+                        <input type="text" id="runtime" placeholder="e.g. 2h 49m">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Genres (Comma separated)</label>
+                    <input type="text" id="genre" placeholder="e.g. Action, Drama, Sci-Fi">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Actors / Cast</label>
+                    <input type="text" id="cast" placeholder="e.g. Cillian Murphy, Emily Blunt">
+                </div>
+
+                <h3 class="card-title" style="margin-top: 30px;"><i class="fas fa-download"></i> Download Links</h3>
+                <div id="linksList">
+                    <!-- Links will be added here -->
+                </div>
+                <button class="add-link-btn" onclick="addLinkEntry()">
+                    <i class="fas fa-plus"></i> Add New Link
+                </button>
+            </div>
+        </div>
+
+        <!-- Management Section -->
+        <div class="management-section">
+            <div class="management-card">
+                <div class="header" style="margin-bottom: 20px;">
+                    <h3 class="card-title" style="margin: 0;"><i class="fas fa-tasks"></i> Manage Elements</h3>
+                    <button onclick="loadManagementList()"
+                        style="width: auto; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); padding: 8px 15px; font-size: 10px;">
+                        <i class="fas fa-sync-alt"></i> REFRESH
+                    </button>
+                </div>
+                <div id="managementList" class="management-list">
+                    <!-- Items will be loaded here -->
+                    <div style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <p>Loading scenepacks...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Successfully Saved!</div>
+
+    <script>
+        const API_BASE = (window.location.hostname === 'localhost' && window.location.port !== '5000') ? 'http://localhost:5000' : '';
+
+        // Supabase client for direct browser-to-storage uploads
+        const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Upload a file directly from the browser to Supabase Storage
+        async function uploadThumbnailToSupabase(file, scenepackId) {
+            const ext = file.name.split('.').pop();
+            const sanitizedId = scenepackId.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+            const fileName = `${sanitizedId}.${ext}`;
+
+            const { data, error } = await supabaseClient.storage
+                .from('thumbnails')
+                .upload(fileName, file, { contentType: file.type, upsert: true });
+
+            if (error) {
+                console.error('Supabase direct upload failed:', error);
+                throw new Error('Image upload failed: ' + (error.message || error));
+            }
+
+            const { data: urlData } = supabaseClient.storage
+                .from('thumbnails')
+                .getPublicUrl(fileName);
+
+            // Add cache-buster to ensure the browser sees the new image immediately
+            return `${urlData.publicUrl}?t=${Date.now()}`;
+        }
+
+        // Global store for scenepacks to enable easy editing
+        let currentScenepacks = [];
+        let isEditing = false;
+        let editingId = null;
+
+        // Security - Server-side authentication
+        async function checkAccess() {
+            const user = document.getElementById('adminUser').value.trim();
+            const pass = document.getElementById('adminPass').value.trim();
+            const loginError = document.getElementById('loginError');
+            const loginBtn = document.querySelector('#loginShield button');
+
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include', // Ensure session cookies are sent/saved
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('loginShield').style.display = 'none';
+                    document.getElementById('adminDashboard').style.display = 'block';
+                    loadManagementList();
+                } else {
+                    const errorMsg = response.status === 401 ? 'Invalid username or password.' :
+                        response.status === 404 ? `Error 404: API route not found. Check your Netlify config.` :
+                            `Error ${response.status}: Failed to log in.`;
+                    loginError.style.display = 'block';
+                    loginError.textContent = errorMsg;
+                }
+            } catch (error) {
+                loginError.style.display = 'block';
+                // More detailed error checking
+                if (error.message.includes('fetch')) {
+                    loginError.textContent = 'Connection error. The backend might not be running correctly.';
+                } else {
+                    loginError.textContent = 'Error: ' + error.message;
+                }
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = 'Unlock Dashboard';
+            }
+        }
+
+        // Password visibility toggle
+        document.getElementById('togglePassword').addEventListener('click', function (e) {
+            const password = document.getElementById('adminPass');
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Tag System
+        const tags = [];
+        const tagInput = document.getElementById('tagInput');
+        const tagContainer = document.getElementById('tagContainer');
+
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && tagInput.value.trim()) {
+                const tag = tagInput.value.trim();
+                if (!tags.includes(tag)) {
+                    tags.push(tag);
+                    renderTags();
+                }
+                tagInput.value = '';
+            }
+        });
+
+        function renderTags() {
+            const pills = tags.map((t, i) => `
+                <div class="tag-pill">
+                    ${t} <i class="fas fa-times" onclick="removeTag(${i})"></i>
+                </div>
+            `).join('');
+
+            // Keep input at the end
+            const inputHtml = `<input type="text" class="tag-input" id="tagInput" placeholder="Add tags...">`;
+            tagContainer.innerHTML = pills + inputHtml;
+
+            // Re-bind listener after innerHTML update
+            document.getElementById('tagInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const val = e.target.value.trim();
+                    if (val && !tags.includes(val)) {
+                        tags.push(val);
+                        renderTags();
+                    }
+                    e.target.value = '';
+                }
+            });
+            document.getElementById('tagInput').focus();
+        }
+
+        function removeTag(index) {
+            tags.splice(index, 1);
+            renderTags();
+        }
+
+        // Link System
+        function addLinkEntry() {
+            const container = document.getElementById('linksList');
+            const div = document.createElement('div');
+            div.className = 'link-entry';
+            div.innerHTML = `
+                <i class="fas fa-times remove-link" onclick="this.parentElement.remove()"></i>
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <label class="input-label">Link Label (e.g. Part 1)</label>
+                    <input type="text" class="link-label" placeholder="Varanasi Official Trailer">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <div class="input-group">
+                        <label class="input-label">Quality</label>
+                        <input type="text" class="link-quality" placeholder="1080P HEVC">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Size (or Upload below)</label>
+                        <input type="text" class="link-size" placeholder="Auto if uploaded">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">URL (or Upload below)</label>
+                        <input type="text" class="link-url" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top: 10px;">
+                    <label class="input-label">Upload Scenepack File (Optional)</label>
+                    <input type="file" class="link-file" accept="video/mp4,video/x-matroska,video/*">
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        // Auto-add first link
+        addLinkEntry();
+
+        // Image Upload & Preview System
+        let thumbMode = 'file';
+
+        function setThumbMode(mode) {
+            thumbMode = mode;
+            const fileBtn = document.getElementById('mode-file');
+            const urlBtn = document.getElementById('mode-url');
+            const fileCont = document.getElementById('file-input-container');
+            const urlCont = document.getElementById('url-input-container');
+
+            if (mode === 'file') {
+                fileBtn.style.background = 'var(--accent)';
+                fileBtn.style.color = 'var(--primary)';
+                urlBtn.style.background = 'transparent';
+                urlBtn.style.color = '#fff';
+                fileCont.style.display = 'block';
+                urlCont.style.display = 'none';
+            } else {
+                urlBtn.style.background = 'var(--accent)';
+                urlBtn.style.color = 'var(--primary)';
+                fileBtn.style.background = 'transparent';
+                fileBtn.style.color = '#fff';
+                fileCont.style.display = 'none';
+                urlCont.style.display = 'block';
+            }
+        }
+
+        function handleFileSelect(file) {
+            const preview = document.getElementById('thumb-preview');
+            const previewImg = document.getElementById('previewImg');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                    document.getElementById('dropZone').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeThumbnail(e) {
+            if (e) e.stopPropagation();
+            document.getElementById('thumbnailFile').value = '';
+            document.getElementById('thumbnail').value = ''; // clear hidden URL backup
+            document.getElementById('thumb-preview').style.display = 'none';
+            document.getElementById('dropZone').style.display = 'flex';
+        }
+
+        // Setup Drag & Drop
+        const dropZone = document.getElementById('dropZone');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, e => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-active'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-active'), false);
+        });
+
+        dropZone.addEventListener('drop', e => {
+            const dt = e.dataTransfer;
+            const file = dt.files[0];
+            if (file && file.type.startsWith('image/')) {
+                document.getElementById('thumbnailFile').files = dt.files;
+                handleFileSelect(file);
+            }
+        });
+
+        document.getElementById('thumbnailFile').addEventListener('change', function () {
+            handleFileSelect(this.files[0]);
+        });
+
+        // Save Function
+        async function saveScenepack() {
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            try {
+                // Collect links data
+                const linkEntries = Array.from(document.querySelectorAll('.link-entry'));
+                const links = linkEntries.map(entry => ({
+                    character: entry.querySelector('.link-label').value,
+                    movie: document.getElementById('title').value,
+                    quality: entry.querySelector('.link-quality').value,
+                    size: entry.querySelector('.link-size').value || "",
+                    encoder: "Admin",
+                    url: entry.querySelector('.link-url').value
+                }));
+
+                const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
+                    .map(cb => cb.value)
+                    .join(',');
+
+                const scenepackId = document.getElementById('id').value || Date.now().toString();
+
+                // Determine thumbnail URL
+                let thumbnailUrl = document.getElementById('thumbnail').value || '';
+                const thumbInput = document.getElementById('thumbnailFile');
+
+                if (thumbInput.files[0]) {
+                    // Upload directly from browser to Supabase Storage
+                    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading Image...';
+                    thumbnailUrl = await uploadThumbnailToSupabase(thumbInput.files[0], scenepackId);
+                    // Update the preview to confirm
+                    document.getElementById('previewImg').src = thumbnailUrl;
+                    document.getElementById('thumbnail').value = thumbnailUrl;
+                }
+
+                const data = {
+                    id: scenepackId,
+                    title: document.getElementById('title').value,
+                    preview: document.getElementById('preview').value,
+                    description: document.getElementById('description').value,
+                    thumbnail: thumbnailUrl,
+                    category: selectedCategories,
+                    tags: tags,
+                    year: document.getElementById('year').value,
+                    director: document.getElementById('director').value || "N/A",
+                    genre: document.getElementById('genre').value || tags.slice(0, 3).join(', '),
+                    rating: document.getElementById('rating').value,
+                    runtime: document.getElementById('runtime').value || "N/A",
+                    cast: document.getElementById('cast').value || "N/A",
+                    creator: document.getElementById('creator').value || "son.astral",
+                    uploader: document.getElementById('uploader').value || "tcmmi.ae",
+                    downloadLinks: links
+                };
+
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                const response = await fetch(`${API_BASE}/api/scenepacks`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showToast(isEditing ? 'Successfully Updated!' : 'Successfully Saved!');
+                    if (isEditing) cancelEdit();
+                    loadManagementList();
+                } else {
+                    let errorMessage = 'Failed to save.';
+                    try {
+                        const err = await response.json();
+                        errorMessage = err.error || errorMessage;
+                    } catch (e) {
+                        errorMessage = `Server Error (${response.status}): The database might be unreachable.`;
+                    }
+                    console.error('Save Error:', errorMessage);
+                    alert('Error: ' + errorMessage);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Element';
+            }
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
+        }
+
+        function cancelEdit() {
+            isEditing = false;
+            editingId = null;
+
+            // Reset form
+            document.getElementById('title').value = '';
+            document.getElementById('id').value = '';
+            document.getElementById('preview').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('year').value = '';
+            document.getElementById('rating').value = '';
+            document.getElementById('director').value = '';
+            document.getElementById('runtime').value = '';
+            document.getElementById('genre').value = '';
+            document.getElementById('cast').value = '';
+            document.getElementById('creator').value = '';
+            document.getElementById('uploader').value = '';
+            document.getElementById('thumbnail').value = '';
+
+            // Clear categories
+            document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
+
+            // Clear tags
+            tags.length = 0;
+            renderTags();
+
+            // Clear links and add first empty one
+            document.getElementById('linksList').innerHTML = '';
+            addLinkEntry();
+
+            // Reset thumbnail preview
+            removeThumbnail();
+
+            // Update UI
+            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-save"></i> Save Element';
+            document.getElementById('cancelBtn').style.display = 'none';
+            document.getElementById('id').readOnly = false;
+
+            showToast('Form Reset');
+        }
+
+        function editScenepack(id) {
+            const item = currentScenepacks.find(s => s.id === id);
+            if (!item) return;
+
+            isEditing = true;
+            editingId = id;
+
+            // Fill basic info
+            document.getElementById('title').value = item.title || '';
+            document.getElementById('id').value = item.id;
+            document.getElementById('id').readOnly = true; // Protect ID during edit
+            document.getElementById('preview').value = item.preview || '';
+            document.getElementById('description').value = item.description || '';
+            document.getElementById('year').value = item.year || '';
+            document.getElementById('rating').value = item.rating || '';
+            document.getElementById('director').value = item.director || '';
+            document.getElementById('runtime').value = item.runtime || '';
+            document.getElementById('genre').value = item.genre || '';
+            document.getElementById('cast').value = item.cast || '';
+            document.getElementById('creator').value = item.creator || '';
+            document.getElementById('uploader').value = item.uploader || '';
+
+            // Categories
+            const activeCats = (item.category || '').split(',').map(c => c.trim());
+            document.querySelectorAll('.category-checkbox').forEach(cb => {
+                cb.checked = activeCats.includes(cb.value);
+            });
+
+            // Tags
+            tags.length = 0;
+            if (item.tags) {
+                if (Array.isArray(item.tags)) tags.push(...item.tags);
+                else if (typeof item.tags === 'string') tags.push(...item.tags.split(',').map(t => t.trim()));
+            }
+            renderTags();
+
+            // Thumbnail
+            if (item.thumbnail && !item.thumbnail.includes('placeholder')) {
+                // Show the existing thumbnail in the preview, but keep file mode so a new file can be uploaded
+                setThumbMode('file');
+                const previewImg = document.getElementById('previewImg');
+                const thumbPreview = document.getElementById('thumb-preview');
+                const dropZone = document.getElementById('dropZone');
+                previewImg.src = item.thumbnail;
+                thumbPreview.style.display = 'block';
+                dropZone.style.display = 'none';
+                // Store the existing URL so it is preserved if no new file is uploaded
+                document.getElementById('thumbnail').value = item.thumbnail;
+            } else {
+                removeThumbnail();
+            }
+
+            // Download Links
+            const linksList = document.getElementById('linksList');
+            linksList.innerHTML = '';
+
+            const links = item.download_links || item.downloadLinks || [];
+            if (links.length === 0) {
+                addLinkEntry();
+            } else {
+                links.forEach(link => {
+                    const div = document.createElement('div');
+                    div.className = 'link-entry';
+                    div.innerHTML = `
+                        <i class="fas fa-times remove-link" onclick="this.parentElement.remove()"></i>
+                        <div class="input-group" style="margin-bottom: 10px;">
+                            <label class="input-label">Link Label (e.g. Part 1)</label>
+                            <input type="text" class="link-label" value="${link.character || ''}" placeholder="Varanasi Official Trailer">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                            <div class="input-group">
+                                <label class="input-label">Quality</label>
+                                <input type="text" class="link-quality" value="${link.quality || ''}" placeholder="1080P HEVC">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Size (or Upload below)</label>
+                                <input type="text" class="link-size" value="${link.size || ''}" placeholder="Auto if uploaded">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">URL (or Upload below)</label>
+                                <input type="text" class="link-url" value="${link.url || ''}" placeholder="https://...">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-top: 10px;">
+                            <label class="input-label">Upload Scenepack File (Optional)</label>
+                            <input type="file" class="link-file" accept="video/mp4,video/x-matroska,video/*">
+                        </div>
+                    `;
+                    linksList.appendChild(div);
+                });
+            }
+
+            // Update UI
+            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-check-circle"></i> Update Element';
+            document.getElementById('cancelBtn').style.display = 'block';
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function loadManagementList() {
+            const container = document.getElementById('managementList');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/scenepacks`);
+                if (!response.ok) throw new Error('Failed to fetch');
+
+                const data = await response.json();
+                currentScenepacks = data.scenepacks || [];
+
+                if (currentScenepacks.length === 0) {
+                    container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 40px;">No elements found. Add your first scenepack above!</div>`;
+                    return;
+                }
+
+                container.innerHTML = currentScenepacks.map(item => `
+                    <div class="manage-item" id="item-${item.id}">
+                        <div class="item-info">
+                            <img src="${item.thumbnail || 'assets/placeholder.jpg'}" class="item-thumb" onerror="this.src='/assets/Spark Logo.jpg'; this.onerror=null;">
+                            <div class="item-details">
+                                <h4>${item.title}</h4>
+                                <p style="color: #666; font-size: 10px;">ID: ${item.id}</p>
+                                <p style="color: var(--accent); font-size: 10px; text-transform: uppercase;">Category: ${item.category || 'N/A'}</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="delete-btn" style="background: rgba(255, 255, 255, 0.1); color: white; border-color: rgba(255, 255, 255, 0.2);" onclick="editScenepack('${item.id}')">
+                                <i class="fas fa-edit"></i> EDIT
+                            </button>
+                            <button class="delete-btn" onclick="deleteScenepack(event, '${item.id}', '${item.title.replace(/'/g, "\\'")}')">
+                                <i class="fas fa-trash-alt"></i> DELETE
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 40px;">Error loading list. Check if server is running.</div>`;
+            }
+        }
+
+        async function deleteScenepack(e, id, title) {
+            if (e) e.preventDefault();
+
+            const confirmed = confirm(`--- PERMANENT DELETION ---\n\nAre you absolutely sure you want to delete "${title}"?\n\nThis action is FINAL and cannot be undone. It will be removed from the website and database immediately.`);
+
+            if (!confirmed) return;
+
+            const btn = e.currentTarget;
+            const originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> DELETING...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/scenepacks/${id}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    showToast('Deleted Permanently ✓');
+                    // Animate out then reload list from server to confirm deletion
+                    const itemElement = document.getElementById(`item-${id}`);
+                    if (itemElement) {
+                        itemElement.style.opacity = '0';
+                        itemElement.style.transform = 'translateX(20px)';
+                        itemElement.style.transition = 'all 0.3s ease';
+                        setTimeout(() => {
+                            itemElement.remove();
+                            loadManagementList(); // Re-fetch from server to confirm
+                        }, 300);
+                    } else {
+                        loadManagementList();
+                    }
+                } else {
+                    let errorMessage = 'Could not delete.';
+                    try {
+                        const err = await response.json();
+                        errorMessage = err.error || errorMessage;
+                    } catch (e) {
+                        if (response.status === 401) errorMessage = 'Session expired. Please refresh and log in again.';
+                        else errorMessage = `Server Error (${response.status}).`;
+                    }
+                    console.error('Delete Error:', errorMessage);
+                    alert('Error: ' + errorMessage);
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
+            } catch (error) {
+                alert('Connection Error. Database is busy or unreachable.');
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        }
+    </script>
+</body>
+
+</html>

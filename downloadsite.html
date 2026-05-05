@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download File - Spark Scenepacks</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #000000;
+            --secondary: #0a0a0a;
+            --accent: #ffffff;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --border: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --glass-blur: blur(40px) saturate(180%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('assets/Blackhole.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Back Button */
+        .back-nav {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            z-index: 100;
+        }
+
+        .back-btn {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--accent);
+            transform: translateX(-5px);
+        }
+
+        /* Download Card */
+        .download-card {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            width: 90%;
+            max-width: 550px;
+            padding: 45px 35px;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            animation: cardEntrance 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .badge i {
+            font-size: 12px;
+        }
+
+        .file-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.25;
+            letter-spacing: -0.5px;
+        }
+
+        .metadata-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pill-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 50px;
+        }
+
+        .pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+        }
+
+        .pill i {
+            font-size: 14px;
+        }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto 40px;
+        }
+
+        .btn {
+            padding: 18px 30px;
+            border-radius: 14px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        /* Social Icons */
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .social-link {
+            color: var(--text-secondary);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--accent);
+            transform: scale(1.2);
+        }
+
+        .report-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .report-link:hover {
+            color: #ff4444;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .footer span {
+            color: var(--accent);
+        }
+
+        /* Auth Nav & Modal Styles */
+        .auth-nav {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            z-index: 100;
+        }
+
+        .auth-nav-btn {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .auth-nav-btn:hover {
+            color: var(--accent);
+            transform: translateX(5px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary);
+            z-index: 2100;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .close:hover {
+            color: #ff4757;
+            background: var(--card-bg);
+        }
+
+        .auth-modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(0, 0, 0, 0.1) 100%);
+            backdrop-filter: blur(25px) saturate(1.5);
+            -webkit-backdrop-filter: blur(25px) saturate(1.5);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            width: 90%;
+            max-width: 450px;
+            margin: 10vh auto;
+            padding: 0;
+            transform: scale(0.85) translateY(40px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 20px;
+            overflow: hidden;
+            will-change: transform, opacity;
+            position: relative;
+        }
+
+        .auth-modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.05) 100%);
+            pointer-events: none;
+            border-radius: inherit;
+        }
+
+        .modal.show .auth-modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .auth-modal-header {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+            backdrop-filter: blur(15px);
+            padding: 30px 30px 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .auth-modal-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .auth-modal-title i {
+            color: var(--accent);
+            font-size: 1.4rem;
+        }
+
+        .auth-modal-subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .auth-tabs {
+            display: flex;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .auth-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .auth-form-container {
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .auth-form.active {
+            display: flex;
+        }
+
+        .auth-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .auth-input-group label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: left;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+            text-align: left;
+        }
+
+        .auth-input:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .auth-btn {
+            background: var(--accent);
+            color: var(--primary);
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-error {
+            color: #ff4757;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255, 71, 87, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+
+        .related-section {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: left;
+            animation: fadeIn 0.8s ease 0.5s both;
+        }
+        
+        .related-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .related-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .related-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .related-thumb {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .related-info {
+            padding: 15px;
+            flex: 1;
+            min-width: 0;
+        }
+        .related-name {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .related-meta {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            .download-card {
+                padding: 30px 20px;
+                width: 95%;
+            }
+
+            .file-title {
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+
+            .metadata-row {
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 20px;
+            }
+
+            .metadata-row span:nth-child(2) {
+                display: none;
+            }
+
+            .pill-group {
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 30px;
+            }
+
+            .pill {
+                width: 100%;
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .back-nav {
+                top: 15px;
+                left: 15px;
+            }
+
+            .btn {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="back-nav">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </nav>
+
+    <main class="download-card">
+        <div class="badge">
+            <i class="fas fa-share-alt"></i> Shared File
+        </div>
+
+        <h1 class="file-title" id="fileName">Loading File...</h1>
+
+        <div class="metadata-row">
+            <div class="meta-item">
+                <i class="far fa-eye"></i> <span id="viewCount">0</span> views
+            </div>
+            <span>•</span>
+            <div class="meta-item">
+                <i class="far fa-calendar-alt"></i> <span id="uploadDate">11/28/2025</span>
+            </div>
+        </div>
+
+        <div class="pill-group">
+            <div class="pill">
+                <i class="fas fa-database"></i> <span id="fileSize">-- GB</span>
+            </div>
+            <div class="pill">
+                <i class="fas fa-video"></i> Video
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="#" id="downloadBtn" class="btn btn-primary">
+                <i class="fas fa-download"></i> Download
+            </a>
+        </div>
+
+        <div class="socials">
+            <a href="https://discord.gg/eQUpXE2F5N" class="social-link" target="_blank"><i
+                    class="fab fa-discord"></i></a>
+            <a href="https://instagram.com/sparkscenepacks_" class="social-link" target="_blank"><i
+                    class="fab fa-instagram"></i></a>
+            <a href="#" class="social-link" target="_blank"><i class="fas fa-globe"></i></a>
+        </div>
+
+        <a href="https://discord.gg/eQUpXE2F5N" class="report-link" target="_blank">
+            <i class="fas fa-flag"></i> Report Link
+        </a>
+
+        <div class="footer">
+            Powered by <span>Spark Scenepacks</span>
+        </div>
+    </main>
+    
+    <div class="related-section" id="relatedSection" style="display: none;">
+        <h2 class="related-title">You Might Also Like</h2>
+        <div class="related-grid" id="relatedGrid">
+            <!-- Related items populated by JS -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Parse URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const fileName = urlParams.get('fn') || 'Spark Scenepack File';
+            const fileSize = urlParams.get('sz') && urlParams.get('sz') !== 'null' ? urlParams.get('sz') : '-- GB';
+            const uploadDate = urlParams.get('tm') || '11/28/2025';
+            const downloadUrl = urlParams.get('dl') || '#';
+            const scenepackId = urlParams.get('id');
+            const viewsKey = `views_${fileName}`;
+            let viewsValue = parseInt(localStorage.getItem(viewsKey) || '0') + 1;
+            localStorage.setItem(viewsKey, viewsValue);
+
+            // Populate page
+            document.getElementById('fileName').textContent = fileName;
+            document.getElementById('fileSize').textContent = fileSize;
+            document.getElementById('uploadDate').textContent = uploadDate;
+            document.getElementById('viewCount').textContent = viewsValue.toLocaleString();
+
+            const dlBtn = document.getElementById('downloadBtn');
+            dlBtn.href = downloadUrl;
+
+            // Track download in database
+            dlBtn.addEventListener('click', async (e) => {
+                if (downloadUrl === '#') {
+                    e.preventDefault();
+                    alert('Download link not available.');
+                    return;
+                }
+
+                // Call the increment API if ID is present
+                if (scenepackId) {
+                    try {
+                        fetch(`/api/scenepacks/${scenepackId}/download`, {
+                            method: 'POST'
+                        });
+                        console.log('Download tracking ping sent');
+                    } catch (err) {
+                        console.error('Failed to track download:', err);
+                    }
+                }
+            });
+
+            // Load related items
+            if (scenepackId) {
+                fetch('data.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        const currentPack = data.find(p => p.id === scenepackId);
+                        if (currentPack) {
+                            const related = data.filter(p => p.id !== scenepackId && p.category === currentPack.category)
+                                                .sort(() => 0.5 - Math.random())
+                                                .slice(0, 3);
+                            if (related.length > 0) {
+                                document.getElementById('relatedSection').style.display = 'block';
+                                const grid = document.getElementById('relatedGrid');
+                                grid.innerHTML = related.map(p => `
+                                    <a href="index.html?scenepack=${p.id}" class="related-card">
+                                        <img src="${p.thumbnail || ''}" class="related-thumb" alt="${p.title}" onerror="this.src='assets/Spark Logo No Bg Cropped.png'">
+                                        <div class="related-info">
+                                            <div class="related-name">${p.title}</div>
+                                            <div class="related-meta">${p.year || ''} • ${p.category || 'SCENEPACK'}</div>
+                                        </div>
+                                    </a>
+                                `).join('');
+                            }
+                        }
+                    })
+                    .catch(err => console.error('Error fetching related scenepacks:', err));
+            }
+        });
+    </script>
+</body>
+
+</html>

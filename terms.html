@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Spark Scenepacks</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="assets/Spark Logo No Bg Cropped.png">
+    <link rel="shortcut icon" type="image/png" href="assets/Spark Logo No Bg Cropped.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f0e0e;
+            --secondary: #0a0a0a;
+            --tertiary: #1a1a1a;
+            --accent: #ffffff;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --border: #333333;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Background System */
+        .bg-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: #000;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('assets/Blackhole.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: linear-gradient(var(--text-secondary) 1px, transparent 1px), linear-gradient(90deg, var(--text-secondary) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.1;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 12px 5%;
+            z-index: 1000;
+            background: rgba(15, 14, 14, 0.4);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo img {
+            height: clamp(28px, 5vw, 32px);
+            width: auto;
+            transition: transform 0.3s ease;
+            filter: invert(1);
+            mix-blend-mode: screen;
+        }
+
+        .nav-container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+            transform: translateX(-5px);
+        }
+
+        /* Content Area */
+        .content-section {
+            padding: 60px 5% 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .legal-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .legal-block {
+            margin-bottom: 40px;
+        }
+
+        .legal-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .block-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .block-title i {
+            font-size: 1.2rem;
+            opacity: 0.5;
+        }
+
+        .block-text {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .block-list {
+            list-style: none;
+            margin-left: 5px;
+        }
+
+        .block-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .block-list li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 12px;
+            top: 4px;
+            opacity: 0.6;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 5%;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 40px;
+        }
+
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                grid-template-columns: auto 1fr;
+                padding: 10px 0;
+            }
+
+            .spacer {
+                display: none;
+            }
+
+            .logo {
+                justify-content: flex-end;
+            }
+
+            .legal-card {
+                padding: 25px 20px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-system">
+        <div class="grid-bg"></div>
+    </div>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div class="logo">
+                <img src="assets/Spark Logo No Bg Cropped.png" alt="Spark Logo">
+            </div>
+            <div class="spacer"></div>
+        </div>
+    </nav>
+
+    <main class="content-section">
+        <header class="page-header">
+            <h1 class="page-title">Terms of Service</h1>
+            <p class="last-updated">Last Updated: April 15, 2026</p>
+        </header>
+
+        <div class="legal-card">
+            <div class="legal-block">
+                <h2 class="block-title"><i class="fas fa-handshake"></i> 1. Acceptance of Terms</h2>
+                <p class="block-text">
+                    By accessing or using Spark Scenepacks, you agree to be bound by these Terms of Service. If you do
+                    not agree to all of these terms, do not use this website.
+                </p>
+            </div>
+
+            <div class="legal-block">
+                <h2 class="block-title"><i class="fas fa-film"></i> 2. Use of Content</h2>
+                <p class="block-text">
+                    All scenepacks, trailers, and digital assets provided on Spark Scenepacks are for personal,
+                    non-commercial use, specifically for video editing and community sharing.
+                </p>
+                <ul class="block-list">
+                    <li>You may use these assets in your creative edits (AMVs, Edits, Montages).</li>
+                    <li>You may not resell or redistribute the raw scenepack files for profit.</li>
+                    <li>Credit to the original creators and Spark Scenepacks is appreciated but not mandatory unless
+                        specified.</li>
+                </ul>
+            </div>
+
+            <div class="legal-block">
+                <h2 class="block-title"><i class="fas fa-user-shield"></i> 3. User Conduct</h2>
+                <p class="block-text">
+                    When using our Discord or website features, you agree to maintain a respectful environment.
+                </p>
+                <ul class="block-list">
+                    <li>No harassment, hate speech, or toxic behavior.</li>
+                    <li>No spamming or unauthorized advertising of other services.</li>
+                    <li>Respect copyright and intellectual property rights of others.</li>
+                </ul>
+            </div>
+
+            <div class="legal-block">
+                <h2 class="block-title"><i class="fas fa-exclamation-triangle"></i> 4. Disclaimer</h2>
+                <p class="block-text">
+                    Spark Scenepacks provides content "as is" without any warranties. We do not own the rights to the
+                    movies or shows featured in the scenepacks; we only provide the curated clips for editing purposes.
+                </p>
+            </div>
+
+            <div class="legal-block">
+                <h2 class="block-title"><i class="fas fa-gavel"></i> 5. Limitation of Liability</h2>
+                <p class="block-text">
+                    Spark Scenepacks shall not be liable for any indirect, incidental, or consequential damages
+                    resulting from the use or inability to use our services.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">&copy; 2026 Spark Scenepacks. All Rights Reserved.</div>
+    </footer>
+</body>
+
+</html>
