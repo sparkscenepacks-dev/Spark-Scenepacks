@@ -106,13 +106,13 @@
             max-width: 1200px;
             padding: 10px 24px;
             z-index: 2000;
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
             border-radius: 100px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav.scrolled {
@@ -140,16 +140,9 @@
             height: 32px;
             width: auto;
             transition: transform 0.3s ease;
-            filter: none; /* Removed invert to keep original colors on white bg */
+            filter: invert(1);
         }
 
-        .logo-text {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #1a1a1a;
-            letter-spacing: -0.5px;
-        }
 
         .nav-links {
             display: flex;
@@ -158,7 +151,7 @@
         }
 
         .nav-link {
-            color: #555555;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             font-weight: 600;
             font-size: 14px;
@@ -170,7 +163,7 @@
         }
 
         .nav-link:hover {
-            color: #000000;
+            color: #ffffff;
             transform: translateY(-1px);
         }
 
@@ -180,8 +173,8 @@
         }
 
         .nav-cta {
-            background: #0f0e0e;
-            color: #ffffff;
+            background: #ffffff;
+            color: #000000;
             padding: 10px 22px;
             border-radius: 50px;
             font-weight: 700;
@@ -191,14 +184,14 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
         .nav-cta:hover {
-            background: #252525;
+            background: rgba(255, 255, 255, 0.9);
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-            color: #fff;
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+            color: #000;
         }
 
         /* Mobile Nav Toggle */
@@ -215,7 +208,7 @@
             display: block;
             width: 25px;
             height: 2px;
-            background: #1a1a1a;
+            background: #ffffff;
             border-radius: 2px;
             transition: all 0.3s ease;
         }
@@ -233,16 +226,17 @@
                 width: 80%;
                 max-width: 300px;
                 height: 100vh;
-                background: #ffffff;
-                backdrop-filter: blur(20px);
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(25px);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 z-index: 1050;
-                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
                 padding: 40px;
                 gap: 20px;
+                border-left: 1px solid rgba(255, 255, 255, 0.05);
             }
 
             .nav-links.active {
@@ -250,13 +244,13 @@
             }
 
             .nav-link {
-                color: #1a1a1a;
+                color: #ffffff;
                 font-size: 1.1rem;
                 width: 100%;
                 padding: 15px;
                 border-radius: 12px;
                 justify-content: space-between;
-                border-bottom: 1px solid rgba(0,0,0,0.05);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             }
 
             .nav-link:hover {
