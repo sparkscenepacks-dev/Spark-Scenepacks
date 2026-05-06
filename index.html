@@ -106,11 +106,13 @@
             max-width: 1200px;
             padding: 10px 24px;
             z-index: 2000;
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-radius: 100px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .nav.scrolled {
@@ -2266,7 +2268,6 @@
         <div class="nav-container">
             <a href="/" class="logo">
                 <img src="assets/Spark Logo No Bg Cropped.png" alt="Spark Logo">
-                <span class="logo-text">SPARK</span>
             </a>
             <div class="nav-links" id="navLinks">
                 <a href="#home" class="nav-link" onclick="toggleNav()">
