@@ -496,6 +496,18 @@
             background: #ff4444;
         }
 
+        .preview-watermark {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 60px;
+            height: auto;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 5;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)) brightness(1.2);
+        }
+
         /* Management List Styles */
         .management-section {
             margin-top: 40px;
@@ -709,6 +721,7 @@
                             </button>
                             <div style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;letter-spacing:1px;backdrop-filter:blur(6px);pointer-events:none;text-transform:uppercase;">Click to Replace</div>
                             <img src="" id="previewImg">
+                            <img src="assets/watermark.png" class="preview-watermark">
                         </div>
                     </div>
 
