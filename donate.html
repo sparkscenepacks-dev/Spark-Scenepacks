@@ -379,6 +379,33 @@
             font-size: 14px;
         }
 
+        .top-bar-link i {
+            color: #ff4757;
+            font-size: 10px;
+        }
+
+        .logout-btn {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 71, 87, 0.2);
+            border-color: rgba(255, 71, 87, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.1);
+        }
+
         /* Footer */
         .footer {
             background: transparent;
@@ -546,6 +573,14 @@
             <div class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="index.html#scenepacks" class="nav-link">Scenepacks</a>
+                <a href="auth.html" class="nav-link" id="navLoginBtn">Login</a>
+                <div id="userProfile" class="nav-link" style="display: none; gap: 12px; align-items: center;">
+                    <img id="userAvatar" src="" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+                    <span id="userName" style="font-weight: 700; font-size: 13px;">User</span>
+                    <a href="#" class="logout-btn" id="navLogoutBtn" style="margin-left: 5px;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
                 <a href="https://discord.gg/eQUpXE2F5N" class="nav-cta" target="_blank">
                     Join Discord <i class="fas fa-arrow-right"></i>
                 </a>
@@ -679,6 +714,39 @@
             requestAnimationFrame(animate);
         }
         animate();
+
+        // Auth Check
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('spark_user'));
+            const loginBtn = document.getElementById('navLoginBtn');
+            const userProfile = document.getElementById('userProfile');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+            const logoutBtn = document.getElementById('navLogoutBtn');
+
+            if (user) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (userProfile) {
+                    userProfile.style.display = 'flex';
+                    if (userName) userName.textContent = user.displayName || user.username;
+                    if (userAvatar) userAvatar.src = user.profilePic || 'assets/Spark Logo PFP.jpg';
+                    
+                    if (logoutBtn) {
+                        logoutBtn.onclick = (e) => {
+                            e.preventDefault();
+                            if (confirm('Are you sure you want to logout?')) {
+                                localStorage.removeItem('spark_user');
+                                window.location.reload();
+                            }
+                        };
+                    }
+                }
+            } else {
+                if (loginBtn) loginBtn.style.display = 'flex';
+                if (userProfile) userProfile.style.display = 'none';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', checkAuth);
     </script>
 </body>
 
