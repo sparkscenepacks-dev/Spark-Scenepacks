@@ -737,7 +737,7 @@
         
         .fav-btn {
             position: absolute;
-            bottom: 15px;
+            top: 15px;
             right: 15px;
             background: rgba(0,0,0,0.5);
             border: none;
@@ -764,7 +764,7 @@
 
         .badge-new, .badge-hot {
             position: absolute;
-            top: 15px;
+            bottom: 15px;
             left: 15px;
             padding: 4px 10px;
             border-radius: 8px;
@@ -793,9 +793,9 @@
 
         .scenepack-watermark {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 80px;
+            top: 12px;
+            left: 12px;
+            width: 55px;
             height: auto;
             opacity: 0.2;
             pointer-events: none;
@@ -3278,8 +3278,8 @@
                     watermark.className = 'scenepack-watermark';
                     watermark.style.width = '80px';
                     watermark.style.opacity = '0.3';
-                    watermark.style.top = '20px';
-                    watermark.style.right = '20px';
+                    watermark.style.top = '15px';
+                    watermark.style.left = '15px';
                     modalPoster.appendChild(watermark);
                 } else {
                     modalPoster.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
