@@ -2684,12 +2684,18 @@
 
         // Robust API URL resolution
         const getApiUrl = (endpoint) => {
-            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-            // If running on a dev port (like 5500) but not the server port (5000), point to localhost:5000
-            const apiBase = (isLocal && window.location.port && window.location.port !== '5000') 
-                ? 'http://localhost:5000' 
-                : '';
-            return `${apiBase}/api/${endpoint}`;
+            const hostname = window.location.hostname;
+            const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+            
+            // On production, always use relative paths for best reliability
+            if (!isLocal) return `/api/${endpoint}`;
+            
+            // On local, if we are not on the server port (5000), try to point to it
+            if (window.location.port && window.location.port !== '5000') {
+                return `http://localhost:5000/api/${endpoint}`;
+            }
+            
+            return `/api/${endpoint}`;
         };
 
         const DATA_URL = getApiUrl('scenepacks');
@@ -2714,36 +2720,33 @@
 
         async function loadData() {
             try {
-                const response = await fetch(`${DATA_URL}?t=${Date.now()}`);
+                const response = await fetch(`${DATA_URL}${DATA_URL.includes('?') ? '&' : '?'}t=${Date.now()}`);
                 if (!response.ok) {
-                    const contentType = response.headers.get('content-type');
-                    if (contentType && contentType.includes('application/json')) {
-                        const errData = await response.json();
-                        throw new Error(errData.error || `Server error: ${response.status}`);
-                    } else {
-                        throw new Error(`Server returned status ${response.status}. The API might be down or misconfigured.`);
-                    }
+                    const text = await response.text();
+                    let errorMessage = `Server error: ${response.status}`;
+                    try {
+                        const json = JSON.parse(text);
+                        errorMessage = json.error || errorMessage;
+                    } catch(e) {}
+                    throw new Error(errorMessage);
                 }
                 const data = await response.json();
                 if (!data || !Array.isArray(data.scenepacks)) {
-                    throw new Error('Unexpected data format from server');
+                    throw new Error('Invalid data format received from server');
                 }
                 
-                // Update local state
                 scenepacks = data.scenepacks;
-                
-                // Update cache
                 localStorage.setItem('spark_scenepacks_cache', JSON.stringify(data));
-                
-                // Only re-render if we are not actively searching/filtering? 
-                // Or just perform the current filter again
                 performSearch(document.getElementById('searchInput').value);
                 return true;
             } catch (error) {
-                console.error('Error loading data:', error);
-                // Only show error if we have no data at all (neither from cache nor previous fetch)
+                console.error('Fetch Error:', error);
                 if (scenepacks.length === 0) {
-                    showError('Failed to load scenepacks data — ' + error.message);
+                    let msg = error.message;
+                    if (msg === 'Failed to fetch') {
+                        msg = 'Cannot connect to the server. Please check your internet or ensure the backend is running.';
+                    }
+                    showError(msg);
                 }
                 return false;
             }

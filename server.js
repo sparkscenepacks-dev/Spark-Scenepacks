@@ -52,6 +52,11 @@ const ADMIN_USERS = [
     { username: 'admin', password: 'admin123' }
 ];
 
+// Health Check
+app.get(['/api/health', '/health'], (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Authentication Middleware
 const isAuthenticated = (req, res, next) => {
     if (req.signedCookies && req.signedCookies.isAdmin === 'true') {
