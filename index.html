@@ -270,6 +270,28 @@
             font-size: 12px;
         }
 
+        .logout-btn {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 71, 87, 0.2);
+            border-color: rgba(255, 71, 87, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.1);
+        }
+
         /* Mobile Nav Toggle */
         .nav-toggle {
             display: none;
@@ -2451,11 +2473,11 @@
                 </a>
                 <div id="userProfile" class="nav-link" style="display: none; gap: 15px; align-items: center;">
                     <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="window.location.href='index.html'">
-                        <span id="userName">User</span>
                         <img id="userAvatar" src="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+                        <span id="userName" style="font-weight: 700; font-size: 13px;">User</span>
                     </div>
-                    <a href="#" class="nav-link" id="navLogoutBtn" style="color: #ff4757; font-size: 12px; font-weight: 700; opacity: 0.8;">
-                        Logout <i class="fas fa-sign-out-alt"></i>
+                    <a href="#" class="logout-btn" id="navLogoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </div>
                 <a href="https://discord.gg/eQUpXE2F5N" class="nav-cta" target="_blank">
