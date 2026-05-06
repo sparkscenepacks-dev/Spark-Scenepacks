@@ -137,7 +137,7 @@
 
         .login-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-bottom: 25px;
         }
 
@@ -225,7 +225,7 @@
 
         .header h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
+            font-size: 1.6rem;
         }
 
         .admin-grid {
@@ -253,7 +253,7 @@
 
         .card-title {
             margin-bottom: 20px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -760,11 +760,15 @@
                             <input type="file" id="thumbnailFile" accept="image/*">
                         </div>
 
-                    <div id="thumb-preview" class="preview-container" onclick="document.getElementById('thumbnailFile').click()" title="Click to replace thumbnail" style="cursor:pointer;">
+                        <div id="thumb-preview" class="preview-container"
+                            onclick="document.getElementById('thumbnailFile').click()"
+                            title="Click to replace thumbnail" style="cursor:pointer;">
                             <button class="remove-preview" onclick="removeThumbnail(event)">
                                 <i class="fas fa-times"></i>
                             </button>
-                            <div style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;letter-spacing:1px;backdrop-filter:blur(6px);pointer-events:none;text-transform:uppercase;">Click to Replace</div>
+                            <div
+                                style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;letter-spacing:1px;backdrop-filter:blur(6px);pointer-events:none;text-transform:uppercase;">
+                                Click to Replace</div>
                             <img src="" id="previewImg">
                         </div>
                     </div>
@@ -1089,7 +1093,7 @@
 
         function applyCrop() {
             if (!cropper) return;
-            
+
             const canvas = cropper.getCroppedCanvas({
                 width: 1280,
                 height: 720
@@ -1098,13 +1102,13 @@
             canvas.toBlob((blob) => {
                 croppedBlob = blob;
                 const url = URL.createObjectURL(blob);
-                
+
                 const preview = document.getElementById('thumb-preview');
                 const previewImg = document.getElementById('previewImg');
                 previewImg.src = url;
                 preview.style.display = 'block';
                 document.getElementById('dropZone').style.display = 'none';
-                
+
                 document.getElementById('cropperModal').style.display = 'none';
                 cropper.destroy();
                 cropper = null;
@@ -1114,7 +1118,7 @@
         function removeThumbnail(e) {
             if (e) e.stopPropagation();
             document.getElementById('thumbnailFile').value = '';
-            document.getElementById('thumbnail').value = ''; 
+            document.getElementById('thumbnail').value = '';
             croppedBlob = null;
             document.getElementById('thumb-preview').style.display = 'none';
             document.getElementById('dropZone').style.display = 'flex';
@@ -1177,7 +1181,7 @@
 
                 // Determine thumbnail URL
                 let thumbnailUrl = document.getElementById('thumbnail').value || '';
-                
+
                 if (croppedBlob) {
                     // Upload the cropped blob directly
                     saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading Cropped Image...';

@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Spark Community</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Cropper.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --accent-white: #ffffff;
+            --text-grey: rgba(255, 255, 255, 0.5);
+            --text-dim: rgba(255, 255, 255, 0.3);
+            --welcome-orange: #d97706;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(20px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), url('assets/Blackhole.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--accent-white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Gradients */
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.05) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -200px;
+            right: -200px;
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        .bg-glow-2 {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(217, 119, 6, 0.03) 0%, rgba(0, 0, 0, 0) 70%);
+            bottom: -150px;
+            left: -150px;
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 40px 24px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .welcome-back {
+            color: var(--welcome-orange);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .title {
+            font-family: 'Outfit', 'Space Grotesk', sans-serif;
+            font-size: 48px;
+            line-height: 0.9;
+            font-weight: 900;
+            margin-bottom: 12px;
+            letter-spacing: -1.5px;
+        }
+
+        .subtitle {
+            color: var(--text-grey);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* Tab System */
+        .tabs-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            padding: 6px;
+            display: flex;
+            margin-bottom: 32px;
+            position: relative;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--text-grey);
+            border-radius: 100px;
+        }
+
+        .tab.active {
+            color: #000000;
+        }
+
+        .tab-indicator {
+            position: absolute;
+            height: calc(100% - 12px);
+            width: calc(50% - 6px);
+            background: var(--accent-white);
+            border-radius: 100px;
+            top: 6px;
+            left: 6px;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+            transform: translateX(100%);
+        }
+
+        .tab-register.active ~ .tab-indicator {
+            transform: translateX(100%);
+        }
+
+        .tab-login.active ~ .tab-indicator {
+            transform: translateX(0);
+        }
+
+        /* Forms */
+        .form-content {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .form-content.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Upload Section */
+        .upload-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .upload-card {
+            background: var(--card-bg);
+            border: 1px dashed var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: var(--glass-blur);
+            padding: 20px;
+        }
+
+        .upload-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .upload-pfp {
+            width: 140px;
+            height: 140px;
+        }
+
+        .upload-banner {
+            flex: 1;
+        }
+
+        .upload-label {
+            color: var(--text-dim);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            align-self: flex-start;
+        }
+
+        .circle-upload {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 1px dashed var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            transition: all 0.3s ease;
+        }
+
+        .upload-card:hover .circle-upload {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .banner-placeholder {
+            width: 100%;
+            height: 80px;
+            border: 1px dashed var(--glass-border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            transition: all 0.3s ease;
+        }
+
+        .upload-card:hover .banner-placeholder {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .icon-text {
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        /* Input Fields */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .label {
+            display: block;
+            color: var(--text-grey);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--accent-white);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .input-field:focus {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.03);
+        }
+
+        .input-field::placeholder {
+            color: var(--text-dim);
+        }
+
+        /* Textarea */
+        textarea.input-field {
+            resize: none;
+            height: 100px;
+        }
+
+        /* Button */
+        .submit-btn {
+            width: 100%;
+            background: var(--accent-white);
+            color: #000000;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 32px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
+            background: #f0f0f0;
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Cropper Modal */
+        .auth-cropper-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000f5; /* Near black */
+            z-index: 5000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        .cropper-container {
+            background: #0a0a0a; /* Deep dark container */
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 600px;
+            padding: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .cropper-wrapper {
+            width: 100%;
+            max-height: 400px;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .cropper-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-crop {
+            flex: 2;
+            background: var(--accent-white);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-crop:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Darken Cropper.js overlay */
+        .cropper-modal {
+            background-color: #000 !important;
+            opacity: 0.85 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="container">
+        <a href="index.html" style="position: absolute; top: 20px; left: 20px; color: var(--text-grey); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+        <div class="header">
+            <span class="welcome-back">Welcome Back</span>
+            <h1 class="title">Join Spark<br>Community</h1>
+            <p class="subtitle">Create your editor profile and start downloading.</p>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tab tab-login" onclick="switchTab('login')">Login</div>
+            <div class="tab tab-register active" onclick="switchTab('register')">Register</div>
+            <div class="tab-indicator"></div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" class="form-content active">
+            <div class="upload-row">
+                <div class="upload-card upload-pfp">
+                    <span class="upload-label">Profile Pic</span>
+                    <div class="circle-upload">
+                        <i class="fas fa-camera"></i>
+                        <span class="icon-text">Upload</span>
+                    </div>
+                </div>
+                <div class="upload-card upload-banner">
+                    <span class="upload-label">Profile Banner</span>
+                    <div class="banner-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span class="icon-text">Upload banner</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="label">Username</label>
+                <div class="input-wrapper">
+                    <input type="text" class="input-field" placeholder="your_username">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="label">Display Name</label>
+                <div class="input-wrapper">
+                    <input type="text" class="input-field" placeholder="Your Name">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="label">Email</label>
+                <div class="input-wrapper">
+                    <input type="email" class="input-field" placeholder="you@example.com">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="label">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" class="input-field" placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="label">Bio (Optional)</label>
+                <div class="input-wrapper">
+                    <textarea class="input-field" placeholder="Say something about yourself..."></textarea>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="registerBtn">
+                <i class="fas fa-user-plus"></i>
+                Create Account
+            </button>
+        </div>
+
+        <!-- Hidden File Inputs -->
+        <input type="file" id="pfpInput" accept="image/*" style="display: none;">
+        <input type="file" id="bannerInput" accept="image/*" style="display: none;">
+
+        <!-- Login Form -->
+        <div id="login-form" class="form-content">
+            <div class="input-group">
+                <label class="label">Email or Username</label>
+                <div class="input-wrapper">
+                    <input type="text" class="input-field" placeholder="you@example.com">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="label">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" class="input-field" placeholder="••••••••">
+                </div>
+            </div>
+
+            <button class="submit-btn" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </button>
+        </div>
+    </div>
+
+    <!-- Cropper Modal -->
+    <div id="cropperModal" class="auth-cropper-modal">
+        <div class="cropper-container">
+            <h3 class="label" style="margin-bottom: 20px; font-size: 14px;">Adjust Image</h3>
+            <div class="cropper-wrapper">
+                <img id="cropperImg" src="">
+            </div>
+            <div class="cropper-actions">
+                <button class="btn-cancel" onclick="closeCropper()">Cancel</button>
+                <button class="btn-crop" onclick="applyCrop()">Apply Crop</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let pfpFile = null;
+        let bannerFile = null;
+        let currentCroppingType = ''; // 'pfp' or 'banner'
+        let cropper = null;
+
+        function switchTab(type) {
+            const loginTab = document.querySelector('.tab-login');
+            const registerTab = document.querySelector('.tab-register');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const indicator = document.querySelector('.tab-indicator');
+
+            if (type === 'login') {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                indicator.style.transform = 'translateX(0)';
+            } else {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                registerForm.classList.add('active');
+                loginForm.classList.remove('active');
+                indicator.style.transform = 'translateX(100%)';
+            }
+        }
+
+        // Image Previews
+        document.querySelector('.upload-pfp').addEventListener('click', () => {
+            currentCroppingType = 'pfp';
+            document.getElementById('pfpInput').click();
+        });
+        document.querySelector('.upload-banner').addEventListener('click', () => {
+            currentCroppingType = 'banner';
+            document.getElementById('bannerInput').click();
+        });
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const modal = document.getElementById('cropperModal');
+                    const img = document.getElementById('cropperImg');
+                    img.src = event.target.result;
+                    modal.style.display = 'flex';
+
+                    if (cropper) cropper.destroy();
+                    
+                    const aspectRatio = currentCroppingType === 'pfp' ? 1 : 2.5;
+                    cropper = new Cropper(img, {
+                        aspectRatio: aspectRatio,
+                        viewMode: 1,
+                        background: false,
+                        autoCropArea: 1,
+                        modal: true,
+                        guides: true,
+                        center: true,
+                        highlight: false
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        document.getElementById('pfpInput').addEventListener('change', handleFileSelect);
+        document.getElementById('bannerInput').addEventListener('change', handleFileSelect);
+
+        function closeCropper() {
+            document.getElementById('cropperModal').style.display = 'none';
+            if (cropper) cropper.destroy();
+            cropper = null;
+            document.getElementById('pfpInput').value = '';
+            document.getElementById('bannerInput').value = '';
+        }
+
+        function applyCrop() {
+            if (!cropper) return;
+            
+            const canvas = cropper.getCroppedCanvas({
+                width: currentCroppingType === 'pfp' ? 400 : 1000,
+                height: currentCroppingType === 'pfp' ? 400 : 400
+            });
+
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                if (currentCroppingType === 'pfp') {
+                    pfpFile = blob;
+                    const circle = document.querySelector('.circle-upload');
+                    circle.style.backgroundImage = `url(${url})`;
+                    circle.style.backgroundSize = 'cover';
+                    circle.style.backgroundPosition = 'center';
+                    circle.innerHTML = '';
+                } else {
+                    bannerFile = blob;
+                    const banner = document.querySelector('.banner-placeholder');
+                    banner.style.backgroundImage = `url(${url})`;
+                    banner.style.backgroundSize = 'cover';
+                    banner.style.backgroundPosition = 'center';
+                    banner.innerHTML = '';
+                }
+                closeCropper();
+            }, 'image/jpeg', 0.9);
+        }
+
+        // Register Logic
+        document.getElementById('registerBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('registerBtn');
+            const username = document.querySelector('#register-form input[placeholder="your_username"]').value.trim();
+            const displayName = document.querySelector('#register-form input[placeholder="Your Name"]').value.trim();
+            const email = document.querySelector('#register-form input[placeholder="you@example.com"]').value.trim();
+            const password = document.querySelector('#register-form input[placeholder="••••••••"]').value.trim();
+            const bio = document.querySelector('#register-form textarea').value.trim();
+
+            if (!username || !password || !email) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+
+            try {
+                let pfpUrl = '';
+                let bannerUrl = '';
+
+                // Upload PFP if selected
+                if (pfpFile) {
+                    const fileName = `profiles/pfp_${Date.now()}_${username}.jpg`;
+                    const { data, error } = await supabaseClient.storage.from('thumbnails').upload(fileName, pfpFile, { contentType: 'image/jpeg' });
+                    if (error) throw error;
+                    pfpUrl = supabaseClient.storage.from('thumbnails').getPublicUrl(fileName).data.publicUrl;
+                }
+
+                // Upload Banner if selected
+                if (bannerFile) {
+                    const fileName = `profiles/banner_${Date.now()}_${username}.jpg`;
+                    const { data, error } = await supabaseClient.storage.from('thumbnails').upload(fileName, bannerFile, { contentType: 'image/jpeg' });
+                    if (error) throw error;
+                    bannerUrl = supabaseClient.storage.from('thumbnails').getPublicUrl(fileName).data.publicUrl;
+                }
+
+                const userData = {
+                    username,
+                    displayName,
+                    email,
+                    password, // Note: Should be hashed in real app
+                    bio,
+                    profilePic: pfpUrl,
+                    profileBanner: bannerUrl,
+                    joinedAt: new Date().toISOString()
+                };
+
+                // Save to Supabase (assuming users table exists)
+                const { error: dbError } = await supabaseClient.from('users').upsert([userData]);
+                
+                // Save to localStorage for instant login
+                localStorage.setItem('spark_user', JSON.stringify(userData));
+
+                alert('Account created successfully!');
+                window.location.href = 'index.html';
+
+            } catch (err) {
+                console.error(err);
+                // Fallback to localStorage if Supabase table doesn't exist yet
+                const userData = {
+                    username,
+                    displayName,
+                    email,
+                    password,
+                    bio,
+                    profilePic: '',
+                    profileBanner: '',
+                    joinedAt: new Date().toISOString()
+                };
+                localStorage.setItem('spark_user', JSON.stringify(userData));
+                alert('Account created! (Saved locally)');
+                window.location.href = 'index.html';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+            }
+        });
+
+        // Login Logic (Simplified for now)
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const email = document.querySelector('#login-form input[placeholder="you@example.com"]').value.trim();
+            const password = document.querySelector('#login-form input[placeholder="••••••••"]').value.trim();
+
+            // Mock login check
+            const savedUser = JSON.parse(localStorage.getItem('spark_user'));
+            if (savedUser && (savedUser.email === email || savedUser.username === email) && savedUser.password === password) {
+                alert('Welcome back!');
+                window.location.href = 'index.html';
+            } else {
+                alert('Invalid credentials or account not found locally.');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -103,7 +103,7 @@ app.get(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'], 
             .order('created_at', { ascending: false });
 
         if (error) throw error;
-        res.json({ 
+        res.json({
             creators: CREATORS,
             scenepacks: (data || []).map(item => ({
                 ...item,
@@ -189,10 +189,10 @@ app.use(express.static(__dirname));
 app.use((req, res) => {
     const isApiRequest = req.path.startsWith('/api/') || req.path === '/api';
     if (isApiRequest) {
-        return res.status(404).json({ 
-            error: 'API Endpoint not found', 
+        return res.status(404).json({
+            error: 'API Endpoint not found',
             path: req.path,
-            method: req.method 
+            method: req.method
         });
     }
     // If it's a GET request for a non-API route, serve index.html

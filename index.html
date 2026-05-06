@@ -698,7 +698,8 @@
 
         .scenepack-thumbnail {
             width: 100%;
-            aspect-ratio: 1.8 / 1;
+            aspect-ratio: 16 / 9;
+            background: #000;
             background: linear-gradient(110deg, #1a1a1a 8%, #252525 18%, #1a1a1a 33%);
             background-size: 200% 100%;
             animation: shimmer 1.5s linear infinite;
@@ -802,7 +803,7 @@
         .scenepack-card-title {
             font-family: 'Inter', sans-serif;
             font-weight: 600 !important;
-            font-size: 1.35rem;
+            font-size: 1.15rem;
             margin-bottom: 2px;
             line-height: 1.1;
             text-transform: uppercase;
@@ -1115,7 +1116,7 @@
 
         .modal-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             font-weight: 800;
             margin-bottom: 25px;
             color: #ffffff;
@@ -1176,7 +1177,7 @@
 
         .scenepacks-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #ffffff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
@@ -2194,7 +2195,7 @@
             }
 
             .scenepack-card-title {
-                font-size: 1rem !important;
+                font-size: 0.9rem !important;
             }
 
             .footer {
@@ -2445,6 +2446,13 @@
                 <a href="#" class="nav-link" onclick="openDiscordModal(); toggleNav(); return false;">
                     Community <i class="fas fa-chevron-down"></i>
                 </a>
+                <a href="auth.html" class="nav-link" id="navLoginBtn">
+                    Login <i class="fas fa-sign-in-alt"></i>
+                </a>
+                <div id="userProfile" class="nav-link" style="display: none; gap: 10px; cursor: pointer;">
+                    <span id="userName">User</span>
+                    <img id="userAvatar" src="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+                </div>
                 <a href="https://discord.gg/eQUpXE2F5N" class="nav-cta" target="_blank">
                     Join Discord <i class="fas fa-arrow-right" style="font-size: 12px;"></i>
                 </a>
@@ -3493,11 +3501,37 @@
 
             // Setup
             setupSearch();
+            checkAuth(); // Check user login status
             loadData().then(() => {
                 // Check URL after data is loaded
                 checkURLForScenepack();
             });
         });
+
+        // User Auth Check
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('spark_user'));
+            const loginBtn = document.getElementById('navLoginBtn');
+            const userProfile = document.getElementById('userProfile');
+            const userName = document.getElementById('userName');
+            const userAvatar = document.getElementById('userAvatar');
+
+            if (user) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (userProfile) {
+                    userProfile.style.display = 'flex';
+                    userName.textContent = user.displayName || user.username;
+                    userAvatar.src = user.profilePic || 'assets/Spark Logo PFP.jpg';
+                    
+                    userProfile.onclick = () => {
+                        if (confirm('Do you want to logout?')) {
+                            localStorage.removeItem('spark_user');
+                            window.location.reload();
+                        }
+                    };
+                }
+            }
+        }
         
         // Smooth scrolling
         document.addEventListener('click', function (e) {

@@ -122,7 +122,7 @@
 
         .file-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-size: clamp(1.3rem, 3.5vw, 1.8rem);
             font-weight: 700;
             margin-bottom: 20px;
             line-height: 1.25;
@@ -519,10 +519,10 @@
             text-align: left;
             animation: fadeIn 0.8s ease 0.5s both;
         }
-        
+
         .related-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             color: var(--text-secondary);
             margin-bottom: 20px;
             text-transform: uppercase;
@@ -537,8 +537,8 @@
         }
 
         .related-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
             overflow: hidden;
             transition: all 0.3s ease;
@@ -552,14 +552,14 @@
         .related-card:hover {
             transform: translateY(-2px);
             border-color: var(--accent);
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .related-thumb {
             width: 120px;
             height: 80px;
             object-fit: cover;
-            border-right: 1px solid rgba(255,255,255,0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .related-info {
@@ -567,6 +567,7 @@
             flex: 1;
             min-width: 0;
         }
+
         .related-name {
             font-size: 14px;
             font-weight: 700;
@@ -575,6 +576,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .related-meta {
             font-size: 11px;
             color: var(--text-secondary);
@@ -683,7 +685,7 @@
             Powered by <span>Spark Scenepacks</span>
         </div>
     </main>
-    
+
     <div class="related-section" id="relatedSection" style="display: none;">
         <h2 class="related-title">You Might Also Like</h2>
         <div class="related-grid" id="relatedGrid">
@@ -743,8 +745,8 @@
                         const currentPack = data.find(p => p.id === scenepackId);
                         if (currentPack) {
                             const related = data.filter(p => p.id !== scenepackId && p.category === currentPack.category)
-                                                .sort(() => 0.5 - Math.random())
-                                                .slice(0, 3);
+                                .sort(() => 0.5 - Math.random())
+                                .slice(0, 3);
                             if (related.length > 0) {
                                 document.getElementById('relatedSection').style.display = 'block';
                                 const grid = document.getElementById('relatedGrid');
