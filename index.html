@@ -764,7 +764,7 @@
 
         .badge-new, .badge-hot {
             position: absolute;
-            bottom: 15px;
+            top: 15px;
             left: 15px;
             padding: 4px 10px;
             border-radius: 8px;
@@ -789,24 +789,6 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
-        }
-
-        .scenepack-watermark {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            width: 55px;
-            height: auto;
-            opacity: 0.2;
-            pointer-events: none;
-            z-index: 100;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .scenepack-card:hover .scenepack-watermark {
-            opacity: 0.4;
-            transform: scale(1.05);
         }
 
         .scenepack-card-content {
@@ -3145,8 +3127,7 @@
                  badgeHtml = '<div class="badge-hot"><i class="fas fa-fire"></i> HOT</div>';
             }
             
-            const watermarkHtml = `<img src="assets/watermark.png" class="scenepack-watermark" alt="Watermark">`;
-            thumbnailDiv.insertAdjacentHTML('beforeend', favIconHtml + badgeHtml + watermarkHtml);
+            thumbnailDiv.insertAdjacentHTML('beforeend', favIconHtml + badgeHtml);
 
             cardElement.appendChild(thumbnailDiv);
 
@@ -3271,16 +3252,6 @@
                         modalPoster.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
                     };
                     modalPoster.appendChild(img);
-                    
-                    // Add Watermark to modal poster
-                    const watermark = document.createElement('img');
-                    watermark.src = 'assets/watermark.png';
-                    watermark.className = 'scenepack-watermark';
-                    watermark.style.width = '80px';
-                    watermark.style.opacity = '0.3';
-                    watermark.style.top = '15px';
-                    watermark.style.left = '15px';
-                    modalPoster.appendChild(watermark);
                 } else {
                     modalPoster.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
                 }
