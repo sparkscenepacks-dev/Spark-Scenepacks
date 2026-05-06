@@ -60,12 +60,8 @@ const isAuthenticated = (req, res, next) => {
     res.status(401).json({ error: 'Unauthorized. Please log in.' });
 };
 
-// --- API ROUTER ---
-const apiRouter = express.Router();
-
 // --- AUTH API ---
-
-apiRouter.post(['/login', '/login/'], (req, res) => {
+app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
     const { username, password } = req.body;
     const user = ADMIN_USERS.find(u =>
         u.username.toLowerCase() === (username || "").toLowerCase().trim() &&
@@ -86,20 +82,15 @@ apiRouter.post(['/login', '/login/'], (req, res) => {
     }
 });
 
-apiRouter.post(['/logout', '/logout/'], (req, res) => {
+app.post(['/api/logout', '/api/logout/', '/logout', '/logout/'], (req, res) => {
     res.clearCookie('isAdmin');
     res.json({ message: 'Logged out successfully' });
 });
 
-// --- SCENEPACKS API (SUPABASE) ---
-
-// List all scenepacks
-apiRouter.get(['/scenepacks', '/scenepacks/'], async (req, res) => {
-    // Prevent caching so deletions show up immediately
+// --- SCENEPACKS API ---
+app.get(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'], async (req, res) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.set('Pragma', 'no-cache');
-    res.set('Expires', '0');
-
     try {
         const { data, error } = await supabase
             .from('scenepacks')
@@ -107,12 +98,10 @@ apiRouter.get(['/scenepacks', '/scenepacks/'], async (req, res) => {
             .order('created_at', { ascending: false });
 
         if (error) throw error;
-
-        res.json({
+        res.json({ 
             creators: CREATORS,
             scenepacks: (data || []).map(item => ({
                 ...item,
-                // Fallback to sc_ fields in download_links if top-level columns are missing
                 creator: item.creator || (item.download_links?.[0]?.sc_creator) || 'son.astral',
                 uploader: item.uploader || (item.download_links?.[0]?.sc_uploader) || 'tcmmi.ae',
                 downloadLinks: item.download_links
@@ -124,19 +113,9 @@ apiRouter.get(['/scenepacks', '/scenepacks/'], async (req, res) => {
     }
 });
 
-// Add / update a scenepack
-apiRouter.post(['/scenepacks', '/scenepacks/'], isAuthenticated, async (req, res) => {
+app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'], isAuthenticated, async (req, res) => {
     try {
         const scenepackData = req.body;
-        console.log('Processing scenepack save request for ID:', scenepackData.id);
-
-        // Attach attribution to download links as a fallback for missing columns
-        const linksWithAttribution = (scenepackData.downloadLinks || []).map(link => ({
-            ...link,
-            sc_creator: scenepackData.creator,
-            sc_uploader: scenepackData.uploader
-        }));
-
         const { data, error } = await supabase
             .from('scenepacks')
             .upsert([{
@@ -153,53 +132,30 @@ apiRouter.post(['/scenepacks', '/scenepacks/'], isAuthenticated, async (req, res
                 rating: scenepackData.rating,
                 runtime: scenepackData.runtime,
                 cast: scenepackData.cast,
-                download_links: linksWithAttribution
-            }])
-            .select();
+                download_links: scenepackData.downloadLinks
+            }]);
 
         if (error) throw error;
-        res.json({ message: 'Scenepack saved successfully', data });
+        res.json({ message: 'Scenepack saved successfully' });
     } catch (err) {
         console.error('Supabase Save Error:', err);
-        res.status(500).json({
-            error: 'Failed to save to Supabase: ' + (err.message || err.details || 'Unknown Error')
-        });
+        res.status(500).json({ error: 'Failed to save to Supabase' });
     }
 });
 
-// Increment download count
-apiRouter.post('/scenepacks/:id/download', async (req, res) => {
+app.post(['/api/scenepacks/:id/download', '/scenepacks/:id/download'], async (req, res) => {
     try {
         const { id } = req.params;
-
-        // Fetch current count
-        const { data: current, error: getError } = await supabase
-            .from('scenepacks')
-            .select('downloads')
-            .eq('id', id)
-            .single();
-
-        if (getError) throw getError;
-
-        // Atomic increment
+        const { data: current } = await supabase.from('scenepacks').select('downloads').eq('id', id).single();
         const newCount = (current?.downloads || 0) + 1;
-
-        const { error: updateError } = await supabase
-            .from('scenepacks')
-            .update({ downloads: newCount })
-            .eq('id', id);
-
-        if (updateError) throw updateError;
-
+        await supabase.from('scenepacks').update({ downloads: newCount }).eq('id', id);
         res.json({ success: true, downloads: newCount });
     } catch (err) {
-        console.error('Download Increment Error:', err);
         res.status(500).json({ error: 'Failed to increment downloads' });
     }
 });
 
-// Delete a scenepack
-apiRouter.delete(['/scenepacks/:id', '/scenepacks/:id/'], isAuthenticated, async (req, res) => {
+app.delete(['/api/scenepacks/:id', '/api/scenepacks/:id/', '/scenepacks/:id', '/scenepacks/:id/'], isAuthenticated, async (req, res) => {
     try {
         const { id } = req.params;
         const { error } = await supabase
@@ -214,11 +170,6 @@ apiRouter.delete(['/scenepacks/:id', '/scenepacks/:id/'], isAuthenticated, async
         res.status(500).json({ error: 'Failed to delete from Supabase' });
     }
 });
-
-// Mount the API router
-// Handle both /api prefix and root for serverless environment compatibility
-app.use('/api', apiRouter);
-app.use('/', apiRouter); 
 
 
 // --- ROUTES & STATIC ---
