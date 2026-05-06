@@ -795,18 +795,18 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 90px;
+            width: 80px;
             height: auto;
-            opacity: 0.95;
+            opacity: 0.2;
             pointer-events: none;
             z-index: 100;
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7));
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .scenepack-card:hover .scenepack-watermark {
-            opacity: 1;
-            transform: scale(1.1) translateY(-2px);
+            opacity: 0.4;
+            transform: scale(1.05);
         }
 
         .scenepack-card-content {
@@ -3274,7 +3274,7 @@
                     watermark.src = 'assets/watermark.png';
                     watermark.className = 'scenepack-watermark';
                     watermark.style.width = '80px';
-                    watermark.style.opacity = '0.8';
+                    watermark.style.opacity = '0.3';
                     watermark.style.top = '20px';
                     watermark.style.right = '20px';
                     modalPoster.appendChild(watermark);
