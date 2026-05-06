@@ -194,6 +194,34 @@
             color: #000;
         }
 
+        .nav-donate {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            color: #ffffff !important;
+            padding: 10px 20px !important;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .nav-donate:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-donate i {
+            color: #ff4757;
+            font-size: 12px;
+        }
+
         /* Mobile Nav Toggle */
         .nav-toggle {
             display: none;
@@ -2273,8 +2301,8 @@
                 <a href="#" class="nav-link" onclick="openDiscordModal(); toggleNav(); return false;">
                     Community <i class="fas fa-chevron-down"></i>
                 </a>
-                <a href="donate.html" class="nav-link">
-                    Donate <i class="fas fa-heart" style="color: #ff4757; font-size: 10px;"></i>
+                <a href="donate.html" class="nav-donate">
+                    Donate <i class="fas fa-heart"></i>
                 </a>
                 <a href="https://discord.gg/eQUpXE2F5N" class="nav-cta" target="_blank">
                     Join Discord <i class="fas fa-arrow-right" style="font-size: 12px;"></i>
