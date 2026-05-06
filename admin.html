@@ -862,7 +862,7 @@
                     loadManagementList();
                 } else {
                     const errorMsg = response.status === 401 ? 'Invalid username or password.' :
-                        response.status === 404 ? `Error 404: API route not found. Check your Netlify config.` :
+                        response.status === 404 ? `Error 404: API route not found. Check your server configuration.` :
                             `Error ${response.status}: Failed to log in.`;
                     loginError.style.display = 'block';
                     loginError.textContent = errorMsg;

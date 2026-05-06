@@ -216,7 +216,9 @@ apiRouter.delete('/scenepacks/:id', isAuthenticated, async (req, res) => {
 });
 
 // Mount the API router
+// Handle both /api prefix and root for serverless environment compatibility
 app.use('/api', apiRouter);
+app.use('/', apiRouter); 
 
 
 // --- ROUTES & STATIC ---
