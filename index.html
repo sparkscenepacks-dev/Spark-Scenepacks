@@ -96,72 +96,107 @@
 
         /* Navigation */
 
+        /* Navigation Redesign */
         .nav {
             position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 12px 5%;
-            z-index: 1000;
-            background: rgba(15, 14, 14, 0.4);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            padding: 10px 24px;
+            z-index: 2000;
+            background: #ffffff;
+            border-radius: 100px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav.scrolled {
+            top: 10px;
+            width: 95%;
+            padding: 8px 24px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
         }
 
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
+            width: 100%;
         }
 
         .logo {
             text-decoration: none;
             display: flex;
             align-items: center;
+            gap: 10px;
         }
 
         .logo img {
-            height: clamp(28px, 5vw, 32px);
+            height: 32px;
             width: auto;
             transition: transform 0.3s ease;
-            filter: invert(1);
-            mix-blend-mode: screen;
+            filter: none; /* Removed invert to keep original colors on white bg */
         }
 
-
-
-        .logo:hover img {
-            transform: scale(1.05);
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
         }
 
         .nav-links {
             display: flex;
-            gap: clamp(15px, 4vw, 30px);
+            gap: 24px;
             align-items: center;
         }
 
         .nav-link {
-            color: var(--text-secondary);
+            color: #555555;
             text-decoration: none;
-            font-weight: 500;
-            font-size: clamp(13px, 3vw, 16px);
+            font-weight: 600;
+            font-size: 14px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: clamp(4px, 1vw, 8px);
+            gap: 6px;
             cursor: pointer;
         }
 
         .nav-link:hover {
-            color: var(--accent);
-            transform: translateY(-2px);
+            color: #000000;
+            transform: translateY(-1px);
         }
 
-        .nav-link i {
-            font-size: clamp(12px, 3vw, 16px);
+        .nav-link i.fa-chevron-down {
+            font-size: 10px;
+            opacity: 0.5;
+        }
+
+        .nav-cta {
+            background: #0f0e0e;
+            color: #ffffff;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-cta:hover {
+            background: #252525;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            color: #fff;
         }
 
         /* Mobile Nav Toggle */
@@ -170,7 +205,7 @@
             flex-direction: column;
             gap: 5px;
             cursor: pointer;
-            z-index: 1100;
+            z-index: 2100;
             padding: 10px;
         }
 
@@ -178,7 +213,7 @@
             display: block;
             width: 25px;
             height: 2px;
-            background: var(--accent);
+            background: #1a1a1a;
             border-radius: 2px;
             transition: all 0.3s ease;
         }
@@ -193,17 +228,19 @@
                 position: fixed;
                 top: 0;
                 right: -100%;
-                width: 70%;
+                width: 80%;
+                max-width: 300px;
                 height: 100vh;
-                background: rgba(10, 10, 10, 0.95);
+                background: #ffffff;
                 backdrop-filter: blur(20px);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
                 z-index: 1050;
-                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-                border-left: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+                padding: 40px;
+                gap: 20px;
             }
 
             .nav-links.active {
@@ -211,10 +248,23 @@
             }
 
             .nav-link {
-                font-size: 1.2rem;
-                padding: 20px;
+                color: #1a1a1a;
+                font-size: 1.1rem;
+                width: 100%;
+                padding: 15px;
+                border-radius: 12px;
+                justify-content: space-between;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+            }
+
+            .nav-link:hover {
+                background: rgba(0,0,0,0.05);
+            }
+
+            .nav-cta {
                 width: 100%;
                 justify-content: center;
+                margin-top: 10px;
             }
 
             .nav-link i {
@@ -2212,23 +2262,24 @@
     <div class="bg-system"></div>
 
     <!-- Navigation -->
-    <nav class="nav">
+    <nav class="nav" id="mainNav">
         <div class="nav-container">
             <a href="/" class="logo">
                 <img src="assets/Spark Logo No Bg Cropped.png" alt="Spark Logo">
+                <span class="logo-text">SPARK</span>
             </a>
             <div class="nav-links" id="navLinks">
                 <a href="#home" class="nav-link" onclick="toggleNav()">
-                    <i class="fas fa-home"></i>
-                    <span>Home</span>
+                    Home <i class="fas fa-chevron-down"></i>
                 </a>
                 <a href="#scenepacks" class="nav-link" onclick="toggleNav()">
-                    <i class="fas fa-film"></i>
-                    <span>Scenepacks</span>
+                    Scenepacks <i class="fas fa-chevron-down"></i>
                 </a>
                 <a href="#" class="nav-link" onclick="openDiscordModal(); toggleNav(); return false;">
-                    <i class="fab fa-discord"></i>
-                    <span>Discord</span>
+                    Community <i class="fas fa-chevron-down"></i>
+                </a>
+                <a href="https://discord.gg/eQUpXE2F5N" class="nav-cta" target="_blank">
+                    Join Discord <i class="fas fa-arrow-right" style="font-size: 12px;"></i>
                 </a>
             </div>
             <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
@@ -2391,6 +2442,16 @@
 
 
     <script>
+        // Scroll listener for nav
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('mainNav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
         // Toggle mobile navigation
         function toggleNav() {
             const navLinks = document.getElementById('navLinks');
