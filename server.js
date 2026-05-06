@@ -65,7 +65,7 @@ const apiRouter = express.Router();
 
 // --- AUTH API ---
 
-apiRouter.post('/login', (req, res) => {
+apiRouter.post(['/login', '/login/'], (req, res) => {
     const { username, password } = req.body;
     const user = ADMIN_USERS.find(u =>
         u.username.toLowerCase() === (username || "").toLowerCase().trim() &&
@@ -86,7 +86,7 @@ apiRouter.post('/login', (req, res) => {
     }
 });
 
-apiRouter.post('/logout', (req, res) => {
+apiRouter.post(['/logout', '/logout/'], (req, res) => {
     res.clearCookie('isAdmin');
     res.json({ message: 'Logged out successfully' });
 });
@@ -125,7 +125,7 @@ apiRouter.get(['/scenepacks', '/scenepacks/'], async (req, res) => {
 });
 
 // Add / update a scenepack
-apiRouter.post('/scenepacks', isAuthenticated, express.json({ limit: '2mb' }), async (req, res) => {
+apiRouter.post(['/scenepacks', '/scenepacks/'], isAuthenticated, async (req, res) => {
     try {
         const scenepackData = req.body;
         console.log('Processing scenepack save request for ID:', scenepackData.id);
@@ -199,7 +199,7 @@ apiRouter.post('/scenepacks/:id/download', async (req, res) => {
 });
 
 // Delete a scenepack
-apiRouter.delete('/scenepacks/:id', isAuthenticated, async (req, res) => {
+apiRouter.delete(['/scenepacks/:id', '/scenepacks/:id/'], isAuthenticated, async (req, res) => {
     try {
         const { id } = req.params;
         const { error } = await supabase
@@ -229,12 +229,21 @@ app.get('/admin', (req, res) => {
 
 app.use(express.static(__dirname));
 
-app.get('*', (req, res) => {
+// Fallback for all other routes
+app.use((req, res) => {
     const isApiRequest = req.path.startsWith('/api/') || req.path === '/api';
     if (isApiRequest) {
-        return res.status(404).json({ error: 'API Endpoint not found' });
+        return res.status(404).json({ 
+            error: 'API Endpoint not found', 
+            path: req.path,
+            method: req.method 
+        });
     }
-    res.sendFile(path.join(__dirname, 'index.html'));
+    // If it's a GET request for a non-API route, serve index.html
+    if (req.method === 'GET') {
+        return res.sendFile(path.join(__dirname, 'index.html'));
+    }
+    res.status(404).send('Not Found');
 });
 
 // Export for Serverless
