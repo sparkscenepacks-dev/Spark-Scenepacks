@@ -1971,6 +1971,36 @@
             font-weight: 700;
         }
 
+        .footer-socials {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(123, 97, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+        }
+
         .footer-nav {
             display: flex;
             gap: 24px;
@@ -2495,6 +2525,11 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-left">
+                <div class="footer-socials">
+                    <a href="https://discord.gg/eQUpXE2F5N" class="social-btn" target="_blank" title="Join Discord"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-btn" target="_blank" title="Follow on Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="mailto:sparkscenepacks@gmail.com" class="social-btn" title="Contact Us"><i class="fas fa-envelope"></i></a>
+                </div>
                 <div class="footer-copyright">© 2026 Spark Scenepacks. All rights reserved.</div>
                 <div class="footer-made-by">Made with <i class="fas fa-heart" style="color: #ff4757;"></i> by <span class="creator-name">Insane</span></div>
             </div>
