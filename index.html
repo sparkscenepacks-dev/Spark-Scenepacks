@@ -3056,14 +3056,30 @@
             grid.innerHTML = '';
 
             if (filteredScenepacks.length === 0) {
+                // Map category names to display names for the empty state
+                const categoryDisplayMap = {
+                    'ALL': 'Results',
+                    'FAVORITES': 'Favorites',
+                    'SCENEPACKS': 'Scenepacks',
+                    'TRAILERS': 'Trailers',
+                    'WALLPAPERS': 'Wallpapers',
+                    'SPORTS': 'Sports Content',
+                    'SOFTWARES': 'Softwares',
+                    'PLUGINS': 'Plugins'
+                };
+                
+                const categoryName = categoryDisplayMap[currentCategory] || (currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1).toLowerCase());
+                const isGeneral = currentCategory === 'ALL' || currentCategory === 'FAVORITES';
+                const itemType = isGeneral ? 'what' : categoryName.toLowerCase();
+
                 const noResults = document.createElement('div');
                 noResults.className = 'no-results';
                 noResults.innerHTML = `
                     <div class="no-results-content">
-                        <div class="no-results-icon"><i class="fas fa-film"></i></div>
-                        <h3 class="no-results-title">Scenepack Not Found?</h3>
+                        <div class="no-results-icon"><i class="fas ${currentCategory === 'FAVORITES' ? 'fa-heart' : 'fa-film'}"></i></div>
+                        <h3 class="no-results-title">${categoryName} Not Found?</h3>
                         <p class="no-results-text">
-                            Can't find what you're looking for? Our community is always working on new scenepacks! 
+                            Can't find ${itemType} you're looking for? Our community is always working on new ${isGeneral ? 'content' : categoryName.toLowerCase()}! 
                             Request your favorite movie or show and we'll try to make it happen.
                         </p>
                         <a href="https://discord.gg/eQUpXE2F5N" class="discord-request-btn" target="_blank">
