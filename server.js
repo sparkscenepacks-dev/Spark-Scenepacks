@@ -60,9 +60,12 @@ const isAuthenticated = (req, res, next) => {
     res.status(401).json({ error: 'Unauthorized. Please log in.' });
 };
 
+// --- API ROUTER ---
+const apiRouter = express.Router();
+
 // --- AUTH API ---
 
-app.post('/api/login', (req, res) => {
+apiRouter.post('/login', (req, res) => {
     const { username, password } = req.body;
     const user = ADMIN_USERS.find(u =>
         u.username.toLowerCase() === (username || "").toLowerCase().trim() &&
@@ -83,7 +86,7 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-app.post('/api/logout', (req, res) => {
+apiRouter.post('/logout', (req, res) => {
     res.clearCookie('isAdmin');
     res.json({ message: 'Logged out successfully' });
 });
@@ -91,7 +94,7 @@ app.post('/api/logout', (req, res) => {
 // --- SCENEPACKS API (SUPABASE) ---
 
 // List all scenepacks
-app.get(['/api/scenepacks', '/api/scenepacks/'], async (req, res) => {
+apiRouter.get(['/scenepacks', '/scenepacks/'], async (req, res) => {
     // Prevent caching so deletions show up immediately
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.set('Pragma', 'no-cache');
@@ -121,8 +124,8 @@ app.get(['/api/scenepacks', '/api/scenepacks/'], async (req, res) => {
     }
 });
 
-// Add / update a scenepack (thumbnail URL already resolved by browser-side Supabase upload)
-app.post('/api/scenepacks', isAuthenticated, express.json({ limit: '2mb' }), async (req, res) => {
+// Add / update a scenepack
+apiRouter.post('/scenepacks', isAuthenticated, express.json({ limit: '2mb' }), async (req, res) => {
     try {
         const scenepackData = req.body;
         console.log('Processing scenepack save request for ID:', scenepackData.id);
@@ -165,7 +168,7 @@ app.post('/api/scenepacks', isAuthenticated, express.json({ limit: '2mb' }), asy
 });
 
 // Increment download count
-app.post('/api/scenepacks/:id/download', async (req, res) => {
+apiRouter.post('/scenepacks/:id/download', async (req, res) => {
     try {
         const { id } = req.params;
 
@@ -178,7 +181,7 @@ app.post('/api/scenepacks/:id/download', async (req, res) => {
 
         if (getError) throw getError;
 
-        // Atomic increment (using a raw field update isn't standard in JS client without RPC, so we do this)
+        // Atomic increment
         const newCount = (current?.downloads || 0) + 1;
 
         const { error: updateError } = await supabase
@@ -196,7 +199,7 @@ app.post('/api/scenepacks/:id/download', async (req, res) => {
 });
 
 // Delete a scenepack
-app.delete('/api/scenepacks/:id', isAuthenticated, async (req, res) => {
+apiRouter.delete('/scenepacks/:id', isAuthenticated, async (req, res) => {
     try {
         const { id } = req.params;
         const { error } = await supabase
@@ -212,6 +215,10 @@ app.delete('/api/scenepacks/:id', isAuthenticated, async (req, res) => {
     }
 });
 
+// Mount the API router
+app.use('/api', apiRouter);
+
+
 // --- ROUTES & STATIC ---
 
 app.get('/admin', (req, res) => {
@@ -221,7 +228,8 @@ app.get('/admin', (req, res) => {
 app.use(express.static(__dirname));
 
 app.get('*', (req, res) => {
-    if (req.url.startsWith('/api')) {
+    const isApiRequest = req.path.startsWith('/api/') || req.path === '/api';
+    if (isApiRequest) {
         return res.status(404).json({ error: 'API Endpoint not found' });
     }
     res.sendFile(path.join(__dirname, 'index.html'));

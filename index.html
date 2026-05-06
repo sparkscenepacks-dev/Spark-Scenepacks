@@ -577,7 +577,9 @@
         .scenepack-thumbnail {
             width: 100%;
             aspect-ratio: 1.8 / 1;
-            background: var(--gradient-1);
+            background: linear-gradient(110deg, #1a1a1a 8%, #252525 18%, #1a1a1a 33%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s linear infinite;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -585,13 +587,21 @@
             overflow: hidden;
         }
 
-
+        @keyframes shimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 100% 0; }
+        }
 
         .scenepack-thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.6s ease;
+            transition: transform 0.6s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        
+        .scenepack-thumbnail img.loaded {
+            opacity: 1;
         }
 
         .scenepack-card:hover .scenepack-thumbnail img {
@@ -2413,14 +2423,38 @@
         }
 
 
-        // Always fetch from the live API to ensure sync with Supabase
-        const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && window.location.port !== '5000' ? 'http://localhost:5000' : '';
-        const DATA_URL = `${API_BASE}/api/scenepacks`;
+        // Robust API URL resolution
+        const getApiUrl = (endpoint) => {
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            // If running on a dev port (like 5500) but not the server port (5000), point to localhost:5000
+            const apiBase = (isLocal && window.location.port && window.location.port !== '5000') 
+                ? 'http://localhost:5000' 
+                : '';
+            return `${apiBase}/api/${endpoint}`;
+        };
 
+        const DATA_URL = getApiUrl('scenepacks');
+
+        // Load cached data immediately for instant feel
+        function initCachedData() {
+            try {
+                const cached = localStorage.getItem('spark_scenepacks_cache');
+                if (cached) {
+                    const data = JSON.parse(cached);
+                    if (data && Array.isArray(data.scenepacks)) {
+                        scenepacks = data.scenepacks;
+                        filteredScenepacks = [...scenepacks];
+                        renderScenepacks();
+                        console.log('Loaded from cache');
+                    }
+                }
+            } catch (e) {
+                console.warn('Failed to load cache:', e);
+            }
+        }
 
         async function loadData() {
             try {
-                // Add timestamp to prevent browser caching
                 const response = await fetch(`${DATA_URL}?t=${Date.now()}`);
                 if (!response.ok) {
                     const contentType = response.headers.get('content-type');
@@ -2428,23 +2462,37 @@
                         const errData = await response.json();
                         throw new Error(errData.error || `Server error: ${response.status}`);
                     } else {
-                        throw new Error(`Invalid response from server (Status: ${response.status}). The server might be misconfigured.`);
+                        throw new Error(`Server returned status ${response.status}. The API might be down or misconfigured.`);
                     }
                 }
                 const data = await response.json();
                 if (!data || !Array.isArray(data.scenepacks)) {
                     throw new Error('Unexpected data format from server');
                 }
+                
+                // Update local state
                 scenepacks = data.scenepacks;
-                filteredScenepacks = [...scenepacks];
-                renderScenepacks();
+                
+                // Update cache
+                localStorage.setItem('spark_scenepacks_cache', JSON.stringify(data));
+                
+                // Only re-render if we are not actively searching/filtering? 
+                // Or just perform the current filter again
+                performSearch(document.getElementById('searchInput').value);
                 return true;
             } catch (error) {
                 console.error('Error loading data:', error);
-                showError('Failed to load scenepacks data — ' + error.message);
+                // Only show error if we have no data at all (neither from cache nor previous fetch)
+                if (scenepacks.length === 0) {
+                    showError('Failed to load scenepacks data — ' + error.message);
+                }
                 return false;
             }
         }
+
+        // Initialize from cache then fetch fresh
+        initCachedData();
+        loadData();
 
         // Real-time updates: Refresh data Every 15 seconds for live feel
         setInterval(loadData, 15000);
@@ -2608,14 +2656,19 @@
             performSearch(text);
         }
 
-        // Search functionality
+        // Search functionality with debounce
+        let searchTimeout;
         function setupSearch() {
             const searchInput = document.getElementById('searchInput');
 
             searchInput.addEventListener('input', (e) => {
                 const searchTerm = e.target.value;
                 showSearchDropdown(searchTerm);
-                performSearch(searchTerm);
+                
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    performSearch(searchTerm);
+                }, 150); // Small debounce for performance
             });
 
             searchInput.addEventListener('focus', () => {
@@ -2785,12 +2838,24 @@
 
             if (scenepack.thumbnail) {
                 const img = document.createElement('img');
-                // Ensure latest version is fetched if it is a storage URL
-                const isStorageUrl = scenepack.thumbnail.includes('supabase.co/storage');
-                img.src = isStorageUrl ? `${scenepack.thumbnail.split('?')[0]}?t=${Date.now()}` : scenepack.thumbnail;
+                // Removed cache-busting timestamp to enable browser caching for much faster loads
+                img.src = scenepack.thumbnail;
                 img.alt = scenepack.title;
-                img.loading = 'lazy';
+                
+                // Prioritize above-the-fold images
+                if (index < 4) {
+                    img.loading = 'eager';
+                    img.setAttribute('fetchpriority', 'high');
+                } else {
+                    img.loading = 'lazy';
+                }
+                
                 img.decoding = 'async';
+                img.onload = function() {
+                    this.classList.add('loaded');
+                    this.parentElement.style.animation = 'none';
+                    this.parentElement.style.background = 'transparent';
+                };
                 img.onerror = function () {
                     console.warn(`[Thumbnail Error] Failed to load: ${this.src} for scenepack: ${scenepack.id}`);
                     this.parentElement.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
