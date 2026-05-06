@@ -2449,9 +2449,14 @@
                 <a href="auth.html" class="nav-link" id="navLoginBtn">
                     Login <i class="fas fa-sign-in-alt"></i>
                 </a>
-                <div id="userProfile" class="nav-link" style="display: none; gap: 10px; cursor: pointer;">
-                    <span id="userName">User</span>
-                    <img id="userAvatar" src="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+                <div id="userProfile" class="nav-link" style="display: none; gap: 15px; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="window.location.href='index.html'">
+                        <span id="userName">User</span>
+                        <img id="userAvatar" src="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+                    </div>
+                    <a href="#" class="nav-link" id="navLogoutBtn" style="color: #ff4757; font-size: 12px; font-weight: 700; opacity: 0.8;">
+                        Logout <i class="fas fa-sign-out-alt"></i>
+                    </a>
                 </div>
                 <a href="https://discord.gg/eQUpXE2F5N" class="nav-cta" target="_blank">
                     Join Discord <i class="fas fa-arrow-right" style="font-size: 12px;"></i>
@@ -3515,21 +3520,28 @@
             const userProfile = document.getElementById('userProfile');
             const userName = document.getElementById('userName');
             const userAvatar = document.getElementById('userAvatar');
+            const logoutBtn = document.getElementById('navLogoutBtn');
 
             if (user) {
                 if (loginBtn) loginBtn.style.display = 'none';
                 if (userProfile) {
                     userProfile.style.display = 'flex';
-                    userName.textContent = user.displayName || user.username;
-                    userAvatar.src = user.profilePic || 'assets/Spark Logo PFP.jpg';
+                    if (userName) userName.textContent = user.displayName || user.username;
+                    if (userAvatar) userAvatar.src = user.profilePic || 'assets/Spark Logo PFP.jpg';
                     
-                    userProfile.onclick = () => {
-                        if (confirm('Do you want to logout?')) {
-                            localStorage.removeItem('spark_user');
-                            window.location.reload();
-                        }
-                    };
+                    if (logoutBtn) {
+                        logoutBtn.onclick = (e) => {
+                            e.preventDefault();
+                            if (confirm('Are you sure you want to logout?')) {
+                                localStorage.removeItem('spark_user');
+                                window.location.reload();
+                            }
+                        };
+                    }
                 }
+            } else {
+                if (loginBtn) loginBtn.style.display = 'flex';
+                if (userProfile) userProfile.style.display = 'none';
             }
         }
         

@@ -709,6 +709,8 @@
                 // Save to Supabase (assuming users table exists)
                 const { error: dbError } = await supabaseClient.from('users').upsert([userData]);
                 
+                if (dbError) throw dbError;
+
                 // Save to localStorage for instant login
                 localStorage.setItem('spark_user', JSON.stringify(userData));
 
@@ -716,39 +718,62 @@
                 window.location.href = 'index.html';
 
             } catch (err) {
-                console.error(err);
-                // Fallback to localStorage if Supabase table doesn't exist yet
-                const userData = {
-                    username,
-                    displayName,
-                    email,
-                    password,
-                    bio,
-                    profilePic: '',
-                    profileBanner: '',
-                    joinedAt: new Date().toISOString()
-                };
-                localStorage.setItem('spark_user', JSON.stringify(userData));
-                alert('Account created! (Saved locally)');
-                window.location.href = 'index.html';
+                console.error('Registration Error:', err);
+                let msg = 'Failed to create account. Please try again.';
+                if (err.message) msg += '\nError: ' + err.message;
+                if (err.code === '42P01') msg = 'Database error: The "users" table was not found. Please contact the administrator.';
+                
+                alert(msg);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
             }
         });
 
-        // Login Logic (Simplified for now)
-        document.getElementById('loginBtn').addEventListener('click', () => {
-            const email = document.querySelector('#login-form input[placeholder="you@example.com"]').value.trim();
+        // Login Logic (Integrated with Supabase)
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const btn = document.getElementById('loginBtn');
+            const identifier = document.querySelector('#login-form input[placeholder="you@example.com"]').value.trim();
             const password = document.querySelector('#login-form input[placeholder="••••••••"]').value.trim();
 
-            // Mock login check
-            const savedUser = JSON.parse(localStorage.getItem('spark_user'));
-            if (savedUser && (savedUser.email === email || savedUser.username === email) && savedUser.password === password) {
-                alert('Welcome back!');
-                window.location.href = 'index.html';
-            } else {
-                alert('Invalid credentials or account not found locally.');
+            if (!identifier || !password) {
+                alert('Please enter your email/username and password');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+            try {
+                // Check if identifier is email or username
+                const isEmail = identifier.includes('@');
+                const column = isEmail ? 'email' : 'username';
+
+                const { data, error } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq(column, identifier)
+                    .eq('password', password) // Note: Should be hashed in real app
+                    .single();
+
+                if (error) {
+                    if (error.code === 'PGRST116') {
+                        throw new Error('Invalid credentials or account not found.');
+                    }
+                    throw error;
+                }
+
+                if (data) {
+                    localStorage.setItem('spark_user', JSON.stringify(data));
+                    alert('Welcome back, ' + (data.displayName || data.username) + '!');
+                    window.location.href = 'index.html';
+                }
+            } catch (err) {
+                console.error('Login Error:', err);
+                alert(err.message || 'Login failed. Please check your credentials.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
             }
         });
     </script>
