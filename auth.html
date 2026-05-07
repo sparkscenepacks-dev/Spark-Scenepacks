@@ -442,6 +442,92 @@
             background-color: #000 !important;
             opacity: 0.85 !important;
         }
+
+        /* Custom Notification */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .notification-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes scaleUp {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .notification-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-white);
+            color: #000;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 24px;
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .notification-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .notification-message {
+            color: var(--text-grey);
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 32px;
+        }
+
+        .notification-btn {
+            width: 100%;
+            background: var(--accent-white);
+            color: #000;
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            background: #f0f0f0;
+        }
     </style>
 </head>
 
@@ -568,6 +654,18 @@
         </div>
     </div>
 
+    <!-- Notification Modal -->
+    <div id="notificationOverlay" class="notification-overlay">
+        <div class="notification-card">
+            <div class="notification-icon" id="notificationIcon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="notification-title" id="notificationTitle">Success</h3>
+            <p class="notification-message" id="notificationMessage">Action completed successfully.</p>
+            <button class="notification-btn" onclick="closeNotification()">Great!</button>
+        </div>
+    </div>
+
     <script>
         // Supabase Configuration
         const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
@@ -578,6 +676,40 @@
         let bannerFile = null;
         let currentCroppingType = ''; // 'pfp' or 'banner'
         let cropper = null;
+
+        function showNotification(title, message, type = 'success', callback = null) {
+            const overlay = document.getElementById('notificationOverlay');
+            const titleEl = document.getElementById('notificationTitle');
+            const messageEl = document.getElementById('notificationMessage');
+            const iconEl = document.getElementById('notificationIcon');
+            const btnEl = overlay.querySelector('.notification-btn');
+
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            if (type === 'error') {
+                iconEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                iconEl.style.background = '#ff4757';
+                iconEl.style.color = '#fff';
+                btnEl.textContent = 'Try Again';
+            } else {
+                iconEl.innerHTML = '<i class="fas fa-check"></i>';
+                iconEl.style.background = '#fff';
+                iconEl.style.color = '#000';
+                btnEl.textContent = 'Great!';
+            }
+
+            overlay.style.display = 'flex';
+            window.notificationCallback = callback;
+        }
+
+        function closeNotification() {
+            document.getElementById('notificationOverlay').style.display = 'none';
+            if (window.notificationCallback) {
+                window.notificationCallback();
+                window.notificationCallback = null;
+            }
+        }
 
         function switchTab(type) {
             const loginTab = document.querySelector('.tab-login');
@@ -689,7 +821,7 @@
             const bio = document.querySelector('#register-form textarea').value.trim();
 
             if (!username || !password || !email) {
-                alert('Please fill in all required fields');
+                showNotification('Missing Info', 'Please fill in all required fields to continue.', 'error');
                 return;
             }
 
@@ -737,8 +869,9 @@
                 localStorage.setItem('spark_user', JSON.stringify(userData));
                 localStorage.setItem('spark_favorites', JSON.stringify([]));
 
-                alert('Account created successfully!');
-                window.location.href = 'index.html';
+                showNotification('Welcome!', 'Your account has been created successfully. Redirecting you home...', 'success', () => {
+                    window.location.href = 'index.html';
+                });
 
             } catch (err) {
                 console.error('Registration Error:', err);
@@ -746,7 +879,7 @@
                 if (err.message) msg += '\nError: ' + err.message;
                 if (err.code === '42P01') msg = 'Database error: The "users" table was not found. Please contact the administrator.';
 
-                alert(msg);
+                showNotification('Registration Error', msg, 'error');
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
@@ -760,7 +893,7 @@
             const password = document.querySelector('#login-form input[placeholder="••••••••"]').value.trim();
 
             if (!identifier || !password) {
-                alert('Please enter your email/username and password');
+                showNotification('Login Required', 'Please enter your email/username and password to continue.', 'error');
                 return;
             }
 
@@ -789,12 +922,13 @@
                 if (data) {
                     localStorage.setItem('spark_user', JSON.stringify(data));
                     localStorage.setItem('spark_favorites', JSON.stringify(data.favorites || []));
-                    alert('Welcome back, ' + (data.displayName || data.username) + '!');
-                    window.location.href = 'index.html';
+                    showNotification('Welcome Back!', 'Welcome back, ' + (data.displayName || data.username) + '!', 'success', () => {
+                        window.location.href = 'index.html';
+                    });
                 }
             } catch (err) {
                 console.error('Login Error:', err);
-                alert(err.message || 'Login failed. Please check your credentials.');
+                showNotification('Login Failed', err.message || 'Login failed. Please check your credentials.', 'error');
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';

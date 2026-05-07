@@ -2434,6 +2434,107 @@
         body {
             overflow-x: hidden;
         }
+
+        /* Custom Notification */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .notification-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 48px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            transform: scale(0.9);
+            animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes scaleUp {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .notification-icon {
+            width: 72px;
+            height: 72px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 28px;
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .notification-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .notification-message {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .notification-btn {
+            flex: 1;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 16px;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(0.9);
+        }
+
+        .notification-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .notification-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 
@@ -2656,6 +2757,20 @@
         </div>
     </div>
 
+    <!-- Notification Modal -->
+    <div id="notificationOverlay" class="notification-overlay">
+        <div class="notification-card">
+            <div class="notification-icon" id="notificationIcon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="notification-title" id="notificationTitle">Success</h3>
+            <p class="notification-message" id="notificationMessage">Action completed successfully.</p>
+            <div class="notification-actions" id="notificationActions">
+                <button class="notification-btn" onclick="closeNotification()">Great!</button>
+            </div>
+        </div>
+    </div>
+
 
 
     <script>
@@ -2663,6 +2778,54 @@
         const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function showNotification(title, message, type = 'success', callback = null, showCancel = false) {
+            const overlay = document.getElementById('notificationOverlay');
+            const titleEl = document.getElementById('notificationTitle');
+            const messageEl = document.getElementById('notificationMessage');
+            const iconEl = document.getElementById('notificationIcon');
+            const actionsEl = document.getElementById('notificationActions');
+
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            // Reset icon
+            iconEl.style.background = 'var(--accent)';
+            iconEl.style.color = 'var(--primary)';
+
+            if (type === 'error') {
+                iconEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                iconEl.style.background = '#ff4757';
+                iconEl.style.color = '#fff';
+            } else if (type === 'confirm') {
+                iconEl.innerHTML = '<i class="fas fa-question-circle"></i>';
+                iconEl.style.background = 'rgba(255,255,255,0.1)';
+                iconEl.style.color = '#fff';
+            } else {
+                iconEl.innerHTML = '<i class="fas fa-check"></i>';
+            }
+
+            // Build buttons
+            let buttonsHtml = '';
+            if (showCancel) {
+                buttonsHtml += `<button class="notification-btn secondary" onclick="closeNotification()">Cancel</button>`;
+            }
+            buttonsHtml += `<button class="notification-btn" id="confirmBtn">${type === 'confirm' ? 'Confirm' : 'Continue'}</button>`;
+            
+            actionsEl.innerHTML = buttonsHtml;
+            
+            const confirmBtn = document.getElementById('confirmBtn');
+            confirmBtn.onclick = () => {
+                closeNotification();
+                if (callback) callback();
+            };
+
+            overlay.style.display = 'flex';
+        }
+
+        function closeNotification() {
+            document.getElementById('notificationOverlay').style.display = 'none';
+        }
 
         // Scroll listener for nav
         window.addEventListener('scroll', () => {
@@ -3583,11 +3746,11 @@
                     if (logoutBtn) {
                         logoutBtn.onclick = (e) => {
                             e.preventDefault();
-                            if (confirm('Are you sure you want to logout?')) {
+                            showNotification('Logout', 'Are you sure you want to logout of your account?', 'confirm', () => {
                                 localStorage.removeItem('spark_user');
                                 localStorage.removeItem('spark_favorites');
                                 window.location.reload();
-                            }
+                            }, true);
                         };
                     }
                 }
