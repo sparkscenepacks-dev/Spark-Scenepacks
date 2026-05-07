@@ -175,6 +175,66 @@ app.delete(['/api/scenepacks/:id', '/api/scenepacks/:id/', '/scenepacks/:id', '/
 });
 
 
+// --- REQUESTS API ---
+app.post(['/api/requests', '/api/requests/', '/requests', '/requests/'], async (req, res) => {
+    try {
+        const { type, title, description, email, timestamp } = req.body;
+        
+        if (!type || !title || !description || !email) {
+            return res.status(400).json({ error: 'Please fill all required fields.' });
+        }
+
+        const { data, error } = await supabase
+            .from('requests')
+            .insert([{
+                type,
+                title,
+                description,
+                user_email: email,
+                created_at: timestamp || new Date().toISOString(),
+                status: 'pending'
+            }]);
+
+        if (error) throw error;
+        res.json({ message: 'Request submitted successfully' });
+    } catch (err) {
+        console.error('Supabase Request Error:', err);
+        res.status(500).json({ error: 'Failed to save request. Database might be busy.' });
+    }
+});
+
+app.get(['/api/requests', '/api/requests/', '/requests', '/requests/'], isAuthenticated, async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('requests')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        res.json({ requests: data || [] });
+    } catch (err) {
+        console.error('Supabase Fetch Requests Error:', err);
+        res.status(500).json({ error: 'Failed to fetch requests' });
+    }
+});
+
+app.delete(['/api/requests/:id', '/api/requests/:id/'], isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase
+            .from('requests')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+        res.json({ message: 'Request deleted successfully' });
+    } catch (err) {
+        console.error('Supabase Delete Request Error:', err);
+        res.status(500).json({ error: 'Failed to delete request' });
+    }
+});
+
+
 // --- ROUTES & STATIC ---
 
 app.get('/admin', (req, res) => {
