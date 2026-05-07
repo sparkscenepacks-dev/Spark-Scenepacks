@@ -48,8 +48,8 @@ const COOKIE_SECRET = process.env.ADMIN_COOKIE_SECRET || 'spark-scenepacks-admin
 app.use(cookieParser(COOKIE_SECRET));
 
 // Admin Credentials
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'sparkscenepacks';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'spark911';
 
 // Health Check
 app.get(['/api/health', '/health'], (req, res) => {
