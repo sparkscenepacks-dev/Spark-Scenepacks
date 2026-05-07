@@ -281,6 +281,126 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+
+        /* Footer Styles */
+        .footer {
+            background: transparent;
+            padding: 60px 5% 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 40px;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-end;
+            text-align: right;
+        }
+
+        .footer-copyright {
+            color: var(--text-grey);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .footer-made-by {
+            color: var(--text-grey);
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .footer-made-by .creator-name {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .social-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(123, 97, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav a {
+            color: var(--text-grey);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            color: #ffffff;
+        }
+
+        .footer-community {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .footer-right {
+                align-items: center;
+                text-align: center;
+            }
+            .footer-nav {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 
@@ -291,6 +411,8 @@
         </a>
         <div class="nav-links">
             <a href="index.html" class="nav-link">Home</a>
+            <a href="index.html#scenepacks" class="nav-link">Scenepacks</a>
+            <a href="requests.html" class="nav-link" style="color: #fff;">Request</a>
             <a href="donate.html" class="nav-link">Donate</a>
             <a href="auth.html" class="nav-link" id="navLoginBtn">Login</a>
         </div>
@@ -418,6 +540,30 @@
             }, 5000);
         }
     </script>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-socials">
+                    <a href="https://discord.gg/eQUpXE2F5N" class="social-btn" target="_blank" title="Join Discord"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-btn" target="_blank" title="Follow on Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sparkscenepacks@gmail.com" class="social-btn" target="_blank" title="Contact Us"><i class="fas fa-envelope"></i></a>
+                </div>
+                <div class="footer-copyright">© 2026 Spark Scenepacks. All rights reserved.</div>
+                <div class="footer-made-by">Made with <i class="fas fa-heart" style="color: #ff4757;"></i> by <span class="creator-name">Insane</span></div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-nav">
+                    <a href="index.html">Home</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="legal.html">Legal</a>
+                    <a href="requests.html">Request</a>
+                    <a href="donate.html">Donate</a>
+                    <a href="https://discord.gg/eQUpXE2F5N" target="_blank">Discord</a>
+                </div>
+                <div class="footer-community">4K Scenepacks and Editing Community</div>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
