@@ -739,12 +739,14 @@
 
             // Load related items
             if (scenepackId) {
-                fetch('data.json')
+                const DATA_URL = window.location.origin === 'http://127.0.0.1:5500' ? 'http://localhost:5000/api/scenepacks' : '/api/scenepacks';
+                fetch(DATA_URL)
                     .then(response => response.json())
                     .then(data => {
-                        const currentPack = data.find(p => p.id === scenepackId);
+                        const items = data.scenepacks || [];
+                        const currentPack = items.find(p => p.id === scenepackId);
                         if (currentPack) {
-                            const related = data.filter(p => p.id !== scenepackId && p.category === currentPack.category)
+                            const related = items.filter(p => p.id !== scenepackId && p.category === currentPack.category)
                                 .sort(() => 0.5 - Math.random())
                                 .slice(0, 3);
                             if (related.length > 0) {
