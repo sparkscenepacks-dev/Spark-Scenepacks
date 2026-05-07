@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join Spark Community</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@700;900&family=Outfit:wght@700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -82,8 +85,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header {
@@ -160,11 +170,11 @@
             transform: translateX(100%);
         }
 
-        .tab-register.active ~ .tab-indicator {
+        .tab-register.active~.tab-indicator {
             transform: translateX(100%);
         }
 
-        .tab-login.active ~ .tab-indicator {
+        .tab-login.active~.tab-indicator {
             transform: translateX(0);
         }
 
@@ -179,8 +189,15 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Upload Section */
@@ -352,7 +369,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000000f5; /* Near black */
+            background: #000000f5;
+            /* Near black */
             z-index: 5000;
             display: none;
             align-items: center;
@@ -362,7 +380,8 @@
         }
 
         .cropper-container {
-            background: #0a0a0a; /* Deep dark container */
+            background: #0a0a0a;
+            /* Deep dark container */
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 24px;
             width: 100%;
@@ -425,12 +444,14 @@
         }
     </style>
 </head>
+
 <body>
     <div class="bg-glow"></div>
     <div class="bg-glow-2"></div>
 
     <div class="container">
-        <a href="index.html" style="position: absolute; top: 20px; left: 20px; color: var(--text-grey); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+        <a href="index.html"
+            style="position: absolute; top: 20px; left: 20px; color: var(--text-grey); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 8px;">
             <i class="fas fa-arrow-left"></i>
             Back to Home
         </a>
@@ -594,14 +615,14 @@
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = function (event) {
                     const modal = document.getElementById('cropperModal');
                     const img = document.getElementById('cropperImg');
                     img.src = event.target.result;
                     modal.style.display = 'flex';
 
                     if (cropper) cropper.destroy();
-                    
+
                     const aspectRatio = currentCroppingType === 'pfp' ? 1 : 2.5;
                     cropper = new Cropper(img, {
                         aspectRatio: aspectRatio,
@@ -631,7 +652,7 @@
 
         function applyCrop() {
             if (!cropper) return;
-            
+
             const canvas = cropper.getCroppedCanvas({
                 width: currentCroppingType === 'pfp' ? 400 : 1000,
                 height: currentCroppingType === 'pfp' ? 400 : 400
@@ -703,16 +724,18 @@
                     bio,
                     profilePic: pfpUrl,
                     profileBanner: bannerUrl,
-                    joinedAt: new Date().toISOString()
+                    joinedAt: new Date().toISOString(),
+                    favorites: []
                 };
 
                 // Save to Supabase (assuming users table exists)
                 const { error: dbError } = await supabaseClient.from('users').upsert([userData]);
-                
+
                 if (dbError) throw dbError;
 
                 // Save to localStorage for instant login
                 localStorage.setItem('spark_user', JSON.stringify(userData));
+                localStorage.setItem('spark_favorites', JSON.stringify([]));
 
                 alert('Account created successfully!');
                 window.location.href = 'index.html';
@@ -722,7 +745,7 @@
                 let msg = 'Failed to create account. Please try again.';
                 if (err.message) msg += '\nError: ' + err.message;
                 if (err.code === '42P01') msg = 'Database error: The "users" table was not found. Please contact the administrator.';
-                
+
                 alert(msg);
             } finally {
                 btn.disabled = false;
@@ -765,6 +788,7 @@
 
                 if (data) {
                     localStorage.setItem('spark_user', JSON.stringify(data));
+                    localStorage.setItem('spark_favorites', JSON.stringify(data.favorites || []));
                     alert('Welcome back, ' + (data.displayName || data.username) + '!');
                     window.location.href = 'index.html';
                 }
@@ -778,4 +802,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -28,6 +28,8 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         * {
@@ -2657,6 +2659,11 @@
 
 
     <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // Scroll listener for nav
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('mainNav');
@@ -3045,7 +3052,7 @@
             }
         }
         
-        function toggleFavorite(event, id) {
+        async function toggleFavorite(event, id) {
             event.stopPropagation();
             let favorites = JSON.parse(localStorage.getItem('spark_favorites')) || [];
             if (favorites.includes(id)) {
@@ -3054,6 +3061,23 @@
                 favorites.push(id);
             }
             localStorage.setItem('spark_favorites', JSON.stringify(favorites));
+            
+            // Sync with Supabase if logged in
+            const user = JSON.parse(localStorage.getItem('spark_user'));
+            if (user && user.username) {
+                try {
+                    await supabaseClient
+                        .from('users')
+                        .update({ favorites: favorites })
+                        .eq('username', user.username);
+                    
+                    // Update local user object to keep in sync
+                    user.favorites = favorites;
+                    localStorage.setItem('spark_user', JSON.stringify(user));
+                } catch (err) {
+                    console.error('Failed to sync favorites to Supabase:', err);
+                }
+            }
             
             // Re-render to update the hearts, and hide removed items if we are in FAVORITES view
             performSearch(document.getElementById('searchInput').value);
@@ -3545,6 +3569,11 @@
             const logoutBtn = document.getElementById('navLogoutBtn');
 
             if (user) {
+                // Sync favorites from user object if needed
+                if (user.favorites && (!localStorage.getItem('spark_favorites') || localStorage.getItem('spark_favorites') === '[]')) {
+                    localStorage.setItem('spark_favorites', JSON.stringify(user.favorites));
+                }
+
                 if (loginBtn) loginBtn.style.display = 'none';
                 if (userProfile) {
                     userProfile.style.display = 'flex';
@@ -3556,6 +3585,7 @@
                             e.preventDefault();
                             if (confirm('Are you sure you want to logout?')) {
                                 localStorage.removeItem('spark_user');
+                                localStorage.removeItem('spark_favorites');
                                 window.location.reload();
                             }
                         };
