@@ -1,6 +1,6 @@
 [functions]
   directory = "functions"
-  included_files = ["data.json", "admin.html", "index.html"]
+  included_files = ["admin.html", "index.html"]
 
 [[redirects]]
   from = "/api/*"
