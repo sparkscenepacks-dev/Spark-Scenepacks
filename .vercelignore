@@ -1,0 +1,7 @@
+assets/*.mp4
+assets/Zoro.mp4
+node_modules
+scratch
+files_to_update.txt
+netlify.toml
+functions
