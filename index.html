@@ -179,6 +179,12 @@
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
         }
 
+        .nav.nav-hidden {
+            transform: translateX(-50%) translateY(-150%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
         .nav-container {
             display: flex;
             justify-content: space-between;
@@ -2868,17 +2874,31 @@
         }
 
         // Scroll listener for nav and top-bar
+        let lastScroll = 0;
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('mainNav');
             const topBar = document.getElementById('topBar');
+            const currentScroll = window.scrollY;
             
-            if (window.scrollY > 50) {
+            // Handle top-bar and nav styling
+            if (currentScroll > 50) {
                 nav.classList.add('scrolled');
                 if (topBar) topBar.classList.add('hidden');
             } else {
                 nav.classList.remove('scrolled');
                 if (topBar) topBar.classList.remove('hidden');
             }
+
+            // Handle nav visibility (hide on scroll down, show on scroll up)
+            if (currentScroll > lastScroll && currentScroll > 200) {
+                // Scrolling down - hide nav
+                nav.classList.add('nav-hidden');
+            } else {
+                // Scrolling up - show nav
+                nav.classList.remove('nav-hidden');
+            }
+            
+            lastScroll = currentScroll;
         });
 
         // Toggle mobile navigation
