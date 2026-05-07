@@ -2730,6 +2730,11 @@
             <a href="/" class="logo">
                 <img src="assets/Spark Logo No Bg Cropped.png" alt="Spark Logo">
             </a>
+            <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <div class="nav-links" id="navLinks">
                 <a href="donate.html" class="nav-donate">
                     Donate <i class="fas fa-heart"></i>
@@ -3407,6 +3412,13 @@
                     }
                 });
             }
+        }
+
+        function toggleNav() {
+            const navLinks = document.getElementById('navLinks');
+            const navToggle = document.getElementById('navToggle');
+            navLinks.classList.toggle('active');
+            navToggle.classList.toggle('active');
         }
 
         function filterCategory(category) {
