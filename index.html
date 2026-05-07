@@ -2661,14 +2661,12 @@
         }
 
         .notification-title {
-            font-family: 'Space Grotesk', 'Outfit', sans-serif;
-            font-size: 36px;
-            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            font-size: 32px;
+            font-weight: 400;
             margin-bottom: 16px;
-            letter-spacing: -2px;
-            background: linear-gradient(to bottom, #fff, #bbb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            color: #ffffff;
         }
 
         .notification-message {
@@ -2691,12 +2689,12 @@
             border: none;
             border-radius: 20px;
             padding: 22px;
-            font-size: 16px;
-            font-weight: 800;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
         }
 
@@ -2715,6 +2713,7 @@
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: none;
+            font-weight: 500;
         }
 
         .notification-btn.secondary:hover {
@@ -2753,9 +2752,6 @@
                 </a>
                 <a href="#scenepacks" class="nav-link" onclick="toggleNav()">
                     Scenepacks <i class="fas fa-chevron-down"></i>
-                </a>
-                <a href="#" class="nav-link" onclick="openDiscordModal(); toggleNav(); return false;">
-                    Community <i class="fas fa-chevron-down"></i>
                 </a>
                 <a href="auth.html" class="nav-link" id="navLoginBtn">
                     Login <i class="fas fa-sign-in-alt"></i>
