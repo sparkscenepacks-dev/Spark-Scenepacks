@@ -44,13 +44,12 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Secret key for cookie signing
-const COOKIE_SECRET = 'spark-scenepacks-admin-token';
+const COOKIE_SECRET = process.env.ADMIN_COOKIE_SECRET || 'spark-scenepacks-admin-token';
 app.use(cookieParser(COOKIE_SECRET));
 
 // Admin Credentials
-const ADMIN_USERS = [
-    { username: 'admin', password: 'admin123' }
-];
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
 // Health Check
 app.get(['/api/health', '/health'], (req, res) => {
@@ -68,12 +67,12 @@ const isAuthenticated = (req, res, next) => {
 // --- AUTH API ---
 app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
     const { username, password } = req.body;
-    const user = ADMIN_USERS.find(u =>
-        u.username.toLowerCase() === (username || "").toLowerCase().trim() &&
-        u.password === (password || "").trim()
-    );
+    
+    const isValid = 
+        (username || "").toLowerCase().trim() === ADMIN_USERNAME.toLowerCase() &&
+        (password || "").trim() === ADMIN_PASSWORD;
 
-    if (user) {
+    if (isValid) {
         res.cookie('isAdmin', 'true', {
             signed: true,
             httpOnly: true,
@@ -81,8 +80,7 @@ app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
             sameSite: 'none',
             maxAge: 24 * 60 * 60 * 1000
         });
-        res.json({ message: 'Login successful', user: user.username });
-    } else {
+        res.json({ message: 'Login successful', user: ADMIN_USERNAME });    } else {
         res.status(401).json({ error: 'Invalid credentials' });
     }
 });
