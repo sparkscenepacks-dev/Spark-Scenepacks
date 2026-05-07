@@ -253,8 +253,8 @@ app.use((req, res) => {
             method: req.method
         });
     }
-    // If it's a GET request for a non-API route, serve index.html
-    if (req.method === 'GET') {
+    // If it's a GET request for a non-API route, serve index.html (but NOT for assets or files with extensions)
+    if (req.method === 'GET' && !req.path.includes('.') && !req.path.startsWith('/assets/')) {
         return res.sendFile(path.join(__dirname, 'index.html'));
     }
     res.status(404).send('Not Found');
