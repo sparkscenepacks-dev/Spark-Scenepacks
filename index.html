@@ -113,6 +113,13 @@
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid rgba(123, 97, 255, 0.2);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+
+        .top-bar.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .top-bar-content {
@@ -2577,7 +2584,7 @@
     <div class="bg-system"></div>
 
     <!-- Top Announcement Bar -->
-    <div class="top-bar">
+    <div class="top-bar" id="topBar">
         <div class="top-bar-content">
             <span>Support Spark Scenepacks to keep us running!</span>
             <a href="donate.html" class="top-bar-link">Donate Now <i class="fas fa-heart"></i></a>
@@ -2860,13 +2867,17 @@
             document.getElementById('notificationOverlay').style.display = 'none';
         }
 
-        // Scroll listener for nav
+        // Scroll listener for nav and top-bar
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('mainNav');
+            const topBar = document.getElementById('topBar');
+            
             if (window.scrollY > 50) {
                 nav.classList.add('scrolled');
+                if (topBar) topBar.classList.add('hidden');
             } else {
                 nav.classList.remove('scrolled');
+                if (topBar) topBar.classList.remove('hidden');
             }
         });
 
