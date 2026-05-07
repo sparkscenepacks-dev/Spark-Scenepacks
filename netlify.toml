@@ -7,6 +7,38 @@
   to = "/.netlify/functions/server/:splat"
   status = 200
 
+# Serve HTML pages directly (don't let the catch-all swallow them)
+[[redirects]]
+  from = "/requests"
+  to = "/requests.html"
+  status = 200
+
+[[redirects]]
+  from = "/auth"
+  to = "/auth.html"
+  status = 200
+
+[[redirects]]
+  from = "/donate"
+  to = "/donate.html"
+  status = 200
+
+[[redirects]]
+  from = "/legal"
+  to = "/legal.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms"
+  to = "/terms.html"
+  status = 200
+
+[[redirects]]
+  from = "/downloadsite"
+  to = "/downloadsite.html"
+  status = 200
+
+# Catch-all (SPA fallback) - MUST be last
 [[redirects]]
   from = "/*"
   to = "/index.html"

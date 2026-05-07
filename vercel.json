@@ -4,7 +4,12 @@
     { "src": "/api/(.*)", "dest": "/api/index.js" },
     { "handle": "filesystem" },
     { "src": "/admin", "dest": "/admin.html" },
-    { "src": "/(.*)\\.html", "dest": "/$1.html" },
+    { "src": "/requests", "dest": "/requests.html" },
+    { "src": "/auth", "dest": "/auth.html" },
+    { "src": "/donate", "dest": "/donate.html" },
+    { "src": "/legal", "dest": "/legal.html" },
+    { "src": "/terms", "dest": "/terms.html" },
+    { "src": "/downloadsite", "dest": "/downloadsite.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
