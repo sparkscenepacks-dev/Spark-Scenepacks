@@ -46,7 +46,8 @@
             color: var(--text-primary);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
             overflow-x: hidden;
             position: relative;
@@ -195,13 +196,181 @@
             box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
         }
 
-        /* Dashboard Layout */
+        /* Dashboard Layout - TOP PILL NAV */
         #adminDashboard {
             display: none;
-            width: 90%;
-            max-width: 1000px;
-            padding: 40px 0;
+            width: 100%;
+            max-width: 1200px;
+            padding: 120px 20px 40px;
             animation: fadeIn 0.8s ease;
+        }
+
+        /* Floating Nav Styles - MATCHING MAIN SITE */
+        .admin-nav {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 98%;
+            max-width: 1400px;
+            background: rgba(15, 15, 15, 0.3);
+            backdrop-filter: blur(50px) saturate(200%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            padding: 10px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2000;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-left: 15px;
+        }
+
+        .nav-logo img {
+            height: 35px;
+            filter: invert(1);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-logo:hover img {
+            transform: scale(1.05);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 10px 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab-btn i {
+            font-size: 16px;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Mobile Adjustments for Admin Navbar */
+        @media (max-width: 768px) {
+            .admin-nav {
+                width: 95%;
+                padding: 10px 15px;
+                top: 10px;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                height: auto;
+                border-radius: 24px;
+            }
+
+            .nav-left {
+                padding: 0;
+            }
+
+            .nav-logo img {
+                height: 28px;
+            }
+
+            .nav-tabs {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                overflow-x: auto;
+                padding: 10px 0 5px 0;
+                gap: 5px;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                margin-top: 5px;
+            }
+
+            .tab-btn {
+                padding: 8px 14px;
+                font-size: 12px;
+                white-space: nowrap;
+            }
+
+            .nav-right {
+                padding: 0;
+            }
+
+            .admin-badge {
+                padding: 4px 10px 4px 4px;
+                font-size: 11px;
+                gap: 8px;
+            }
+
+            .admin-avatar {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+
+            .badge-text {
+                display: block;
+            }
+        }
+
+        .admin-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 20px 5px 5px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .admin-badge:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 800;
         }
 
         @keyframes fadeIn {
@@ -592,32 +761,7 @@
             transform: translateY(-2px);
         }
 
-        /* Admin Tabs */
-        .admin-tabs {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 15px;
-        }
-
-        .tab-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-secondary);
-            padding: 10px 24px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn.active {
-            background: var(--accent);
-            color: var(--primary);
-            border-color: var(--accent);
-        }
+        /* Admin Tabs - REPLACED BY TOP NAV */
 
         .tab-content {
             display: none;
@@ -736,26 +880,50 @@
 
     <!-- Main Dashboard -->
     <div id="adminDashboard">
-        <div class="header">
-            <h1>Dashboard</h1>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="saveScenepack()" id="saveBtn" style="width: auto; padding: 12px 30px;">
-                    <i class="fas fa-save"></i> Save Element
+        <!-- Floating Pill Navbar -->
+        <nav class="admin-nav">
+            <div class="nav-left">
+                <a href="index.html" class="nav-logo">
+                    <img src="assets/Spark Logo No Bg Cropped.png" alt="Spark Logo">
+                </a>
+            </div>
+
+            <div class="nav-tabs">
+                <button class="tab-btn active" onclick="switchTab('content')">
+                    <i class="fas fa-th-large"></i> Management
                 </button>
-                <button onclick="cancelEdit()" id="cancelBtn"
-                    style="width: auto; padding: 12px 20px; background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid #ff4444; display: none;">
-                    <i class="fas fa-times"></i> Cancel
+                <button class="tab-btn" onclick="switchTab('requests')">
+                    <i class="fas fa-paper-plane"></i> Requests 
+                    <span id="requestCount" style="background: #ff4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; margin-left: 5px; display: none;">0</span>
                 </button>
-                <button onclick="location.href='/'"
-                    style="width: auto; background: transparent; color: #fff; border: 1px solid var(--border);">
-                    View Site
+                <button onclick="location.href='/'" class="tab-btn">
+                    <i class="fas fa-external-link-alt"></i> View Site
                 </button>
             </div>
-        </div>
 
-        <div class="admin-tabs">
-            <button class="tab-btn active" onclick="switchTab('content')">Content Management</button>
-            <button class="tab-btn" onclick="switchTab('requests')">User Requests <span id="requestCount" style="background: #ff4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; margin-left: 5px; display: none;">0</span></button>
+            <div class="nav-right">
+                <div class="admin-badge">
+                    <div class="admin-avatar">A</div>
+                    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.5px;">ADMIN PANEL</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="header" style="margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 25px;">
+            <div>
+                <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -1px;">Dashboard</h1>
+                <p style="color: var(--text-secondary); font-size: 15px; margin-top: 5px;">Managing Spark Scenepacks & Content</p>
+            </div>
+            <div style="display: flex; gap: 15px;">
+                <button onclick="cancelEdit()" id="cancelBtn"
+                    style="width: auto; padding: 12px 25px; background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); display: none; border-radius: 50px;">
+                    <i class="fas fa-times"></i> Cancel Edit
+                </button>
+                <button onclick="saveScenepack()" id="saveBtn" style="width: auto; padding: 12px 35px; border-radius: 50px; font-weight: 800;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
         </div>
 
         <div id="contentTab" class="tab-content active">
@@ -936,7 +1104,7 @@
                 <h3 class="card-title"><i class="fas fa-paper-plane"></i> User Content Requests</h3>
                 <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 25px;">The following requests were submitted by users through the website.</p>
                 
-                <div id="requestsList">
+                <div id="requestsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px;">
                     <!-- Requests will be loaded here -->
                 </div>
             </div>
@@ -1522,7 +1690,10 @@
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.textContent.toLowerCase().includes(tabId));
+                // Improved matching for vertical tabs
+                const isMatch = (tabId === 'content' && btn.textContent.includes('Management')) || 
+                                (tabId === 'requests' && btn.textContent.includes('Requests'));
+                btn.classList.toggle('active', isMatch);
             });
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');

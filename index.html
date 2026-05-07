@@ -2346,30 +2346,23 @@
                 gap: 12px;
             }
 
-            .scenepacks-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-                padding: 0 5px;
-            }
-
-            .hero-title img {
-                max-width: 70% !important;
-            }
-
-            .hero-subtitle {
-                font-size: 0.85rem;
-                padding: 0 20px;
-                line-height: 1.4;
-            }
-
-            .category-bar {
-                padding: 6px 10px;
-                gap: 8px;
-            }
-
             .category-btn {
-                padding: 6px 12px;
-                font-size: 9px;
+                padding: 8px 16px;
+                font-size: 10px;
+            }
+
+            .scenepacks-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                padding: 0;
+            }
+
+            .scenepack-card {
+                border-radius: 20px;
+            }
+
+            .scenepack-card-content {
+                padding: 15px;
             }
 
             .scenepack-card-title {
@@ -2427,64 +2420,58 @@
         }
 
         @media (max-width: 480px) {
-            .nav-link span {
-                display: inline;
+            .hero-title img {
+                max-width: 90% !important;
+            }
+            
+            .scenepacks-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .scenepack-card-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0px;
+            }
+            
+            .scenepack-credit-line {
+                font-size: 9px;
             }
 
-            .nav-link {
-                padding: 12px;
-                background: transparent;
-                font-size: 13px;
+            .view-resource-btn {
+                padding: 6px 10px;
+                font-size: 9px;
+                gap: 5px;
+            }
+
+            .nav {
+                width: 96%;
+                padding: 6px 12px;
+            }
+
+            .logo img {
+                height: 22px;
+            }
+
+            .nav-donate {
+                padding: 6px 12px !important;
+                font-size: 10px !important;
+            }
+
+            .modal-content {
+                width: 98%;
+                height: 96vh;
+                margin: 2vh auto;
             }
 
             .modal-left {
-                padding: 12px 10px;
+                max-height: 35%;
+                padding: 20px 15px;
             }
 
             .modal-poster {
-                max-width: 130px;
-            }
-
-            .modal-title {
-                font-size: 1.05rem;
-            }
-
-            .scenepacks-header {
-                padding: 12px 12px 8px 12px;
-            }
-
-            .scenepacks-container {
-                padding: 8px 12px 12px 12px;
-            }
-
-            .scenepack-item {
-                padding: 10px 5px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 6px;
-            }
-
-            .scenepack-name {
-                font-size: 0.95rem;
-            }
-
-            .scenepack-details {
-                font-size: 0.8rem;
-            }
-
-            .scenepack-download-btn {
-                width: 100%;
-                justify-content: center;
-                padding: 10px;
-                font-size: 11px;
-            }
-
-            .scenepack-item .scenepack-info {
-                width: 100%;
-            }
-
-            .scenepack-download-btn {
-                align-self: flex-end;
+                max-width: 100px;
+                margin-bottom: 10px;
             }
         }
 
@@ -3454,6 +3441,12 @@
         
         async function toggleFavorite(event, id) {
             event.stopPropagation();
+            const user = JSON.parse(localStorage.getItem('spark_user'));
+            if (!user) {
+                showNotification('Login Required', 'Please login to add scenepacks to your favorites.', 'error');
+                return;
+            }
+
             let favorites = JSON.parse(localStorage.getItem('spark_favorites')) || [];
             if (favorites.includes(id)) {
                 favorites = favorites.filter(favId => favId !== id);
@@ -3462,24 +3455,21 @@
             }
             localStorage.setItem('spark_favorites', JSON.stringify(favorites));
             
-            // Sync with Supabase if logged in
-            const user = JSON.parse(localStorage.getItem('spark_user'));
-            if (user && user.username) {
+            // Sync with Supabase
+            if (user.username) {
                 try {
                     await supabaseClient
                         .from('users')
                         .update({ favorites: favorites })
                         .eq('username', user.username);
                     
-                    // Update local user object to keep in sync
                     user.favorites = favorites;
                     localStorage.setItem('spark_user', JSON.stringify(user));
                 } catch (err) {
-                    console.error('Failed to sync favorites to Supabase:', err);
+                    console.error('Failed to sync favorites:', err);
                 }
             }
             
-            // Re-render to update the hearts, and hide removed items if we are in FAVORITES view
             performSearch(document.getElementById('searchInput').value);
         }
 
@@ -3568,10 +3558,14 @@
                 thumbnailDiv.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
             }
             
-            // Favorites logic
-            let favorites = JSON.parse(localStorage.getItem('spark_favorites')) || [];
-            const isFav = favorites.includes(scenepack.id);
-            const favIconHtml = `<button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${scenepack.id}')" title="Add to Favorites"><i class="fas fa-heart"></i></button>`;
+            // Favorites logic - Only show if logged in
+            const user = JSON.parse(localStorage.getItem('spark_user'));
+            let favIconHtml = '';
+            if (user) {
+                let favorites = JSON.parse(localStorage.getItem('spark_favorites')) || [];
+                const isFav = favorites.includes(scenepack.id);
+                favIconHtml = `<button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${scenepack.id}')" title="Add to Favorites"><i class="fas fa-heart"></i></button>`;
+            }
 
             // Badges logic
             let badgeHtml = '';
@@ -3970,6 +3964,8 @@
             const userAvatar = document.getElementById('userAvatar');
             const logoutBtn = document.getElementById('navLogoutBtn');
 
+            const favFilter = document.querySelector('.fav-filter');
+
             if (user) {
                 // Sync favorites from user object if needed
                 if (user.favorites && (!localStorage.getItem('spark_favorites') || localStorage.getItem('spark_favorites') === '[]')) {
@@ -3977,6 +3973,7 @@
                 }
 
                 if (loginBtn) loginBtn.style.display = 'none';
+                if (favFilter) favFilter.style.display = 'block';
                 if (userProfile) {
                     userProfile.style.display = 'block';
                     if (userName) userName.textContent = user.displayName || user.username;
@@ -3999,6 +3996,12 @@
             } else {
                 if (loginBtn) loginBtn.style.display = 'flex';
                 if (userProfile) userProfile.style.display = 'none';
+                if (favFilter) favFilter.style.display = 'none';
+                
+                // Reset to ALL if we were in favorites and logged out
+                if (currentCategory === 'FAVORITES') {
+                    filterCategory('ALL');
+                }
             }
         }
         
