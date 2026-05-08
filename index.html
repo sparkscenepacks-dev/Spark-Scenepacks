@@ -157,33 +157,19 @@
         /* Navigation Redesign */
         .nav {
             position: fixed;
-            top: 55px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
+            width: 92%;
             max-width: 1200px;
-            padding: 10px 24px;
+            padding: 10px 32px;
             z-index: 2000;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(12, 12, 12, 0.85);
             backdrop-filter: blur(25px) saturate(180%);
             -webkit-backdrop-filter: blur(25px) saturate(180%);
             border-radius: 100px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .nav.scrolled {
-            top: 10px;
-            width: 95%;
-            padding: 8px 24px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-        }
-
-        .nav.nav-hidden {
-            transform: translateX(-50%) translateY(-150%);
-            opacity: 0;
-            pointer-events: none;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
         }
 
         .nav-container {
@@ -191,42 +177,33 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            flex-wrap: nowrap;
+            gap: 20px;
         }
 
         .logo {
+            color: #ffffff;
             text-decoration: none;
-            display: flex;
-            align-items: center;
+            font-weight: 900;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
             flex-shrink: 0;
         }
 
-        .logo img {
-            height: 24px;
-            width: auto;
-            transition: transform 0.3s ease;
-            filter: invert(1);
-        }
-
-
         .nav-links {
             display: flex;
-            gap: 30px;
             align-items: center;
-            flex-grow: 1;
-            justify-content: flex-end;
+            gap: 32px; /* Increased spacing as requested */
+            flex-wrap: nowrap;
         }
 
         .nav-link {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 14px;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
             white-space: nowrap;
         }
 
@@ -2732,33 +2709,16 @@
     <!-- Navigation - Final Update v2 -->
     <nav class="nav" id="mainNav">
         <div class="nav-container">
-            <a href="/" class="logo">
-                <img src="/assets/spark-logo.png" alt="Spark Logo">
-            </a>
-            <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="nav-links" id="navLinks">
-                <a href="/donate" class="nav-donate">
-                    Donate <i class="fas fa-heart"></i>
-                </a>
-                <a href="/#home" class="nav-link" onclick="toggleNav()">
-                    Home <i class="fas fa-chevron-down"></i>
-                </a>
-                <a href="/#scenepacks" class="nav-link" onclick="toggleNav()">
-                    Scenepacks <i class="fas fa-chevron-down"></i>
-                </a>
-                <a href="/requests" class="nav-link">
-                    Request <i class="fas fa-paper-plane"></i>
-                </a>
-                <a href="/auth" class="nav-link" id="navLoginBtn">
-                    Login <i class="fas fa-sign-in-alt"></i>
-                </a>
+            <a href="/" class="logo">SPARX</a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/#scenepacks" class="nav-link">Scenepacks</a>
+                <a href="/requests" class="nav-link">Request</a>
+                
+                <!-- Profile -->
                 <div id="userProfile" class="user-dropdown" style="display: none;">
                     <div class="user-trigger" onclick="toggleUserMenu(event)">
-                        <img id="userAvatar" src="" alt="PFP">
+                        <img id="userAvatar" src="/assets/spark-logo-pfp.jpg" alt="PFP">
                         <span id="userName">User</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
@@ -2780,8 +2740,11 @@
                         </a>
                     </div>
                 </div>
-                <a href="https://discord.gg/eQUpXE2F5N" class="nav-cta" target="_blank">
-                    Join Discord <i class="fas fa-arrow-right" style="font-size: 12px;"></i>
+
+                <a href="/auth" class="nav-link" id="navLoginBtn">Login</a>
+
+                <a href="https://discord.gg/eQUpXE2F5N" class="nav-discord" target="_blank">
+                    Join Discord <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>
