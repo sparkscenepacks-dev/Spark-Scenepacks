@@ -610,15 +610,18 @@
         }
 
         function updateProfileUI() {
-            const displayName = currentUser.displayName || currentUser.display_name || currentUser.username;
+            const displayName = currentUser.displayName || currentUser.display_name || currentUser.username || currentUser.user_name || 'Professional Editor';
+            const username = currentUser.username || currentUser.user_name || 'user';
+            const bio = currentUser.bio || currentUser.user_bio || 'No bio yet. Add one in settings!';
+            
             document.getElementById('userDisplayName').textContent = displayName;
-            document.getElementById('userHandle').textContent = `@${currentUser.username}`;
-            document.getElementById('userBio').textContent = currentUser.bio || 'No bio yet. Add one in settings!';
+            document.getElementById('userHandle').textContent = `@${username}`;
+            document.getElementById('userBio').textContent = bio;
             
             // Nav elements
             document.getElementById('navUserName').textContent = displayName;
             
-            const profilePic = currentUser.profilePic || currentUser.profile_pic;
+            const profilePic = currentUser.profilePic || currentUser.profile_pic || currentUser.avatar_url;
             if (profilePic) {
                 document.getElementById('userAvatar').src = profilePic;
                 document.getElementById('navUserAvatar').src = profilePic;
@@ -627,7 +630,7 @@
                 document.getElementById('navUserAvatar').src = '/assets/spark-logo-pfp.jpg';
             }
             
-            const banner = currentUser.bannerPic || currentUser.banner_pic || currentUser.profileBanner || currentUser.profile_banner;
+            const banner = currentUser.bannerPic || currentUser.banner_pic || currentUser.profileBanner || currentUser.profile_banner || currentUser.banner_url;
             if (banner) {
                 document.getElementById('userBanner').style.backgroundImage = `url(${banner})`;
                 document.getElementById('userBanner').style.backgroundSize = 'cover';
@@ -635,8 +638,8 @@
             }
 
             // Fill settings form
-            document.getElementById('editDisplayName').value = currentUser.displayName || currentUser.display_name || '';
-            document.getElementById('editBio').value = currentUser.bio || '';
+            document.getElementById('editDisplayName').value = (currentUser.displayName || currentUser.display_name || currentUser.username || '').replace('Professional Editor', '');
+            document.getElementById('editBio').value = (currentUser.bio || currentUser.user_bio || '').replace('No bio yet. Add one in settings!', '');
         }
 
         function previewImage(input, previewId) {
