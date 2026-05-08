@@ -207,7 +207,36 @@
 
         .nav-discord:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-donate-pill {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #ffffff !important;
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 12px;
+            text-decoration: none !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-donate-pill i {
+            color: #ff4757;
+            font-size: 14px;
+        }
+
+        .nav-donate-pill:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.1);
         }
 
         .nav-discord i {
@@ -653,7 +682,7 @@
                 <a href="/" class="nav-link">Home</a>
                 <a href="/#scenepacks" class="nav-link">Scenepacks</a>
                 <a href="/requests" class="nav-link">Request</a>
-                <a href="/donate" class="nav-link"><i class="fas fa-heart" style="color: #ff4757; margin-right: 5px; font-size: 11px;"></i> Donate</a>
+                <a href="/donate" class="nav-donate-pill">Donate Now <i class="fas fa-heart"></i></a>
                 
                 <!-- Profile -->
                 <div id="userProfile" class="user-dropdown" style="display: none;">
