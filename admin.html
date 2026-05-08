@@ -185,15 +185,28 @@
             color: var(--primary);
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             text-transform: uppercase;
             letter-spacing: 1px;
             font-size: 12px;
+            position: relative;
+            overflow: hidden;
         }
 
         button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.15);
+        }
+
+        #saveBtn {
+            background: #ffffff;
+            color: #000;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #saveBtn:hover {
+            background: #f0f0f0;
+            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.1);
         }
 
         /* Dashboard Layout - TOP PILL NAV */
@@ -926,10 +939,10 @@
             <div style="display: flex; gap: 15px;">
                 <button onclick="cancelEdit()" id="cancelBtn"
                     style="width: auto; padding: 12px 25px; background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); display: none; border-radius: 50px;">
-                    <i class="fas fa-times"></i> Cancel Edit
+                    <i class="fas fa-circle-xmark"></i> Cancel Edit
                 </button>
                 <button onclick="saveScenepack()" id="saveBtn" style="width: auto; padding: 12px 35px; border-radius: 50px; font-weight: 800;">
-                    <i class="fas fa-save"></i> Save Changes
+                    <i class="fas fa-circle-check"></i> Save Changes
                 </button>
             </div>
         </div>
@@ -1010,7 +1023,7 @@
                             onclick="document.getElementById('thumbnailFile').click()"
                             title="Click to replace thumbnail" style="cursor:pointer;">
                             <button class="remove-preview" onclick="removeThumbnail(event)">
-                                <i class="fas fa-times"></i>
+                                <i class="fas fa-circle-xmark"></i>
                             </button>
                             <div
                                 style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;letter-spacing:1px;backdrop-filter:blur(6px);pointer-events:none;text-transform:uppercase;">
@@ -1092,7 +1105,7 @@
                     <h3 class="card-title" style="margin: 0;"><i class="fas fa-tasks"></i> Manage Elements</h3>
                     <button onclick="loadManagementList()"
                         style="width: auto; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); padding: 8px 15px; font-size: 10px;">
-                        <i class="fas fa-sync-alt"></i> REFRESH
+                        <i class="fas fa-rotate"></i> REFRESH
                     </button>
                 </div>
                 <div id="managementList" class="management-list">
@@ -1227,7 +1240,7 @@
         function renderTags() {
             const pills = tags.map((t, i) => `
                 <div class="tag-pill">
-                    ${t} <i class="fas fa-times" onclick="removeTag(${i})"></i>
+                    ${t} <i class="fas fa-circle-xmark" onclick="removeTag(${i})"></i>
                 </div>
             `).join('');
 
@@ -1260,7 +1273,7 @@
             const div = document.createElement('div');
             div.className = 'link-entry';
             div.innerHTML = `
-                <i class="fas fa-times remove-link" onclick="this.parentElement.remove()"></i>
+                <i class="fas fa-circle-xmark remove-link" onclick="this.parentElement.remove()"></i>
                 <div class="input-group" style="margin-bottom: 10px;">
                     <label class="input-label">Link Label (e.g. Part 1)</label>
                     <input type="text" class="link-label" placeholder="Varanasi Official Trailer">
@@ -1502,7 +1515,7 @@
                 alert('Error: ' + error.message);
             } finally {
                 saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Element';
+                saveBtn.innerHTML = '<i class="fas fa-circle-check"></i> Save Element';
             }
         }
 
@@ -1547,7 +1560,7 @@
             removeThumbnail();
 
             // Update UI
-            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-save"></i> Save Element';
+            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-circle-check"></i> Save Element';
             document.getElementById('cancelBtn').style.display = 'none';
             document.getElementById('id').readOnly = false;
 
@@ -1618,7 +1631,7 @@
                     const div = document.createElement('div');
                     div.className = 'link-entry';
                     div.innerHTML = `
-                        <i class="fas fa-times remove-link" onclick="this.parentElement.remove()"></i>
+                        <i class="fas fa-circle-xmark remove-link" onclick="this.parentElement.remove()"></i>
                         <div class="input-group" style="margin-bottom: 10px;">
                             <label class="input-label">Link Label (e.g. Part 1)</label>
                             <input type="text" class="link-label" value="${link.character || ''}" placeholder="Varanasi Official Trailer">
@@ -1647,7 +1660,7 @@
             }
 
             // Update UI
-            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-check-circle"></i> Update Element';
+            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-circle-check"></i> Update Element';
             document.getElementById('cancelBtn').style.display = 'block';
 
             // Scroll to top
