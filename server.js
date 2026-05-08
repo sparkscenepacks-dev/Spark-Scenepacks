@@ -176,7 +176,7 @@ app.delete(['/api/scenepacks/:id', '/api/scenepacks/:id/', '/scenepacks/:id', '/
 
 
 // --- REQUESTS API ---
-app.post(['/api/requests', '/api/requests/', '/requests', '/requests/'], async (req, res) => {
+app.post(['/api/requests', '/api/requests/'], async (req, res) => {
     try {
         const { type, title, description, email, timestamp } = req.body;
         
@@ -203,7 +203,7 @@ app.post(['/api/requests', '/api/requests/', '/requests', '/requests/'], async (
     }
 });
 
-app.get(['/api/requests', '/api/requests/', '/requests', '/requests/'], isAuthenticated, async (req, res) => {
+app.get(['/api/requests', '/api/requests/'], isAuthenticated, async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('requests')
