@@ -9,8 +9,8 @@
     <title>Spark Scenepacks - 4K Scenes</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/webp" href="assets/spark-logo.png">
-    <link rel="shortcut icon" type="image/png" href="assets/spark-logo.png">
+    <link rel="icon" type="image/webp" href="/assets/spark-logo.png">
+    <link rel="shortcut icon" type="image/png" href="/assets/spark-logo.png">
 
 
     <!-- Meta Tags -->
@@ -18,7 +18,7 @@
     <meta property="og:url" content="">
     <meta property="og:title" content="Spark Scenepacks ">
     <meta property="og:description" content="4K Scenes">
-    <meta property="og:image" content="assets/Spark Logo No Bg Not Cropped.png">
+    <meta property="og:image" content="/assets/Spark Logo No Bg Not Cropped.png">
     <meta name="description" content="4K Movies and Shows Scenepacks">
     <meta name="author" content="Spark Scenepacks">
 
@@ -91,7 +91,7 @@
             height: 100%;
             z-index: -10;
             background: #000;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('assets/blackhole.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url('/assets/blackhole.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -2729,7 +2729,7 @@
     <nav class="nav" id="mainNav">
         <div class="nav-container">
             <a href="/" class="logo">
-                <img src="assets/spark-logo.png" alt="Spark Logo">
+                <img src="/assets/spark-logo.png" alt="Spark Logo">
             </a>
             <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
                 <span></span>
@@ -2787,7 +2787,7 @@
     <section class="hero" id="home">
         <div class="hero-content">
             <h1 class="hero-title">
-                <img src="assets/spark-logo.png" alt="Spark Logo"
+                <img src="/assets/spark-logo.png" alt="Spark Logo"
                     style="max-width: 400px; filter: invert(1); mix-blend-mode: screen;">
             </h1>
 
@@ -3989,7 +3989,7 @@
                     if (userName) userName.textContent = user.displayName || user.username;
                     if (menuUserName) menuUserName.textContent = user.displayName || user.username;
                     if (userEmail) userEmail.textContent = user.email || 'Professional Editor';
-                    if (userAvatar) userAvatar.src = user.profilePic || 'assets/Spark Logo PFP.jpg';
+                    if (userAvatar) userAvatar.src = user.profilePic || '/assets/Spark Logo PFP.jpg';
                     
                     if (logoutBtn) {
                         logoutBtn.onclick = (e) => {
@@ -4058,3 +4058,4 @@
     </script>
 </body>
 </html>
+

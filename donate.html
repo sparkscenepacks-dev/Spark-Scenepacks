@@ -7,8 +7,8 @@
     <title>Donate - Spark Scenepacks</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/webp" href="assets/spark-logo.png">
-    <link rel="shortcut icon" type="image/png" href="assets/spark-logo.png">
+    <link rel="icon" type="image/webp" href="/assets/spark-logo.png">
+    <link rel="shortcut icon" type="image/png" href="/assets/spark-logo.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,7 +59,7 @@
             height: 100%;
             z-index: -10;
             background: #000;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('assets/blackhole.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -596,7 +596,7 @@
     <nav class="nav">
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <img src="assets/spark-logo.png" alt="Spark Logo">
+                <img src="/assets/spark-logo.png" alt="Spark Logo">
             </a>
             <div class="nav-links">
                 <a href="index.html" class="nav-link">Home</a>
@@ -637,7 +637,7 @@
 
                 <div class="qr-placeholder" id="qrContainer">
                     <!-- Replace the src with your actual UPI QR Code image -->
-                    <img src="assets/spark-logo.png" alt="UPI QR Code"
+                    <img src="/assets/spark-logo.png" alt="UPI QR Code"
                         style="opacity: 0.2; filter: grayscale(1);">
                     <div
                         style="position: absolute; text-align: center; color: #000; font-weight: 700; font-size: 14px;">
@@ -766,7 +766,7 @@
                 if (userProfile) {
                     userProfile.style.display = 'flex';
                     if (userName) userName.textContent = user.displayName || user.username;
-                    if (userAvatar) userAvatar.src = user.profilePic || 'assets/Spark Logo PFP.jpg';
+                    if (userAvatar) userAvatar.src = user.profilePic || '/assets/Spark Logo PFP.jpg';
 
                     if (logoutBtn) {
                         logoutBtn.onclick = (e) => {
