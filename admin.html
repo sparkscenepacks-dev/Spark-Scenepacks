@@ -884,7 +884,7 @@
         <nav class="admin-nav">
             <div class="nav-left">
                 <a href="index.html" class="nav-logo">
-                    <img src="/assets/Spark Logo No Bg Cropped.png" alt="Spark Logo">
+                    <img src="/assets/spark-logo-cropped.png" alt="Spark Logo">
                 </a>
             </div>
 
@@ -1665,7 +1665,7 @@
                 container.innerHTML = currentScenepacks.map(item => `
                     <div class="manage-item" id="item-${item.id}">
                         <div class="item-info">
-                            <img src="${item.thumbnail || '/assets/placeholder.jpg'}" class="item-thumb" onerror="this.src='/assets/Spark Logo.jpg'; this.onerror=null;">
+                            <img src="${item.thumbnail || '/assets/placeholder.jpg'}" class="item-thumb" onerror="this.src='/assets/spark-logo-main.jpg'; this.onerror=null;">
                             <div class="item-details">
                                 <h4>${item.title}</h4>
                                 <p style="color: #666; font-size: 10px;">ID: ${item.id}</p>
@@ -1857,4 +1857,5 @@
 </body>
 
 </html>
+
 

@@ -755,7 +755,7 @@
                                 const grid = document.getElementById('relatedGrid');
                                 grid.innerHTML = related.map(p => `
                                     <a href="index.html?scenepack=${p.id}" class="related-card">
-                                        <img src="${p.thumbnail || ''}" class="related-thumb" alt="${p.title}" onerror="this.src='/assets/Spark Logo No Bg Cropped.png'">
+                                        <img src="${p.thumbnail || ''}" class="related-thumb" alt="${p.title}" onerror="this.src='/assets/spark-logo-cropped.png'">
                                         <div class="related-info">
                                             <div class="related-name">${p.title}</div>
                                             <div class="related-meta">${p.year || ''} • ${p.category || 'SCENEPACK'}</div>
@@ -772,4 +772,5 @@
 </body>
 
 </html>
+
 
