@@ -73,7 +73,7 @@
             transform: translateX(-50%);
             width: 90%;
             max-width: 1200px;
-            padding: 12px 24px;
+            padding: 10px 30px;
             z-index: 2000;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(25px) saturate(180%);
@@ -88,24 +88,28 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            flex-wrap: nowrap;
         }
 
         .logo {
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            flex-shrink: 0;
         }
 
         .logo img {
-            height: 35px;
+            height: 24px;
+            width: auto;
             filter: invert(1);
         }
 
         .nav-links {
             display: flex;
-            gap: 24px;
+            gap: 30px;
             align-items: center;
+            flex-grow: 1;
+            justify-content: flex-end;
         }
 
         .nav-link {
@@ -114,10 +118,7 @@
             font-weight: 600;
             font-size: 14px;
             transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: #ffffff;
+            white-space: nowrap;
         }
 
         .nav-cta {

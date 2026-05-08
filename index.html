@@ -191,17 +191,18 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            flex-wrap: nowrap;
         }
 
         .logo {
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            flex-shrink: 0;
         }
 
         .logo img {
-            height: 32px;
+            height: 24px;
             width: auto;
             transition: transform 0.3s ease;
             filter: invert(1);
@@ -210,8 +211,10 @@
 
         .nav-links {
             display: flex;
-            gap: 24px;
+            gap: 30px;
             align-items: center;
+            flex-grow: 1;
+            justify-content: flex-end;
         }
 
         .nav-link {
@@ -224,6 +227,7 @@
             align-items: center;
             gap: 6px;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .nav-link:hover {
