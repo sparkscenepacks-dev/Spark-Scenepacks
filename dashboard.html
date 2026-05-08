@@ -590,9 +590,26 @@
             }
 
             currentUser = JSON.parse(userData);
+            
+            // Fetch fresh data from Supabase to ensure images/bio are latest
+            try {
+                const { data, error } = await supabaseClient
+                    .from('users')
+                    .select('*')
+                    .eq('email', currentUser.email)
+                    .single();
+                
+                if (data) {
+                    currentUser = { ...currentUser, ...data };
+                    localStorage.setItem('spark_user', JSON.stringify(currentUser));
+                }
+            } catch (err) {
+                console.warn('Could not fetch fresh profile data:', err);
+            }
+
             updateProfileUI();
             
-            // Load Data
+            // Load Other Data
             await Promise.all([
                 loadScenepacks(),
                 loadUserRequests()
@@ -619,8 +636,8 @@
                 document.getElementById('navUserAvatar').src = '/assets/spark-logo-pfp.jpg';
             }
             
-            if (currentUser.bannerPic || currentUser.banner_pic) {
-                const banner = currentUser.bannerPic || currentUser.banner_pic;
+            const banner = currentUser.bannerPic || currentUser.banner_pic || currentUser.profileBanner || currentUser.profile_banner;
+            if (banner) {
                 document.getElementById('userBanner').style.backgroundImage = `url(${banner})`;
                 document.getElementById('userBanner').style.backgroundSize = 'cover';
                 document.getElementById('userBanner').style.backgroundPosition = 'center';
