@@ -170,7 +170,7 @@
             letter-spacing: 1px;
         }
 
-        .input, .select, .textarea {
+        .input, .textarea {
             width: 100%;
             background: var(--input-bg);
             border: 1px solid var(--glass-border);
@@ -179,18 +179,103 @@
             color: #fff;
             font-size: 1rem;
             outline: none;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .input:focus, .select:focus, .textarea:focus {
+        .input:focus, .textarea:focus {
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.3);
             box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
         }
 
-        .select option {
-            background: #111;
+        /* Custom Select Styling */
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+        }
+
+        .custom-select-trigger {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px 20px;
             color: #fff;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .custom-select-trigger:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .custom-select-wrapper.open .custom-select-trigger {
+            border-color: rgba(255, 255, 255, 0.4);
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-top: none;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .custom-select-wrapper.open .custom-options {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .custom-option {
+            padding: 14px 20px;
+            cursor: pointer;
+            color: var(--text-grey);
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .custom-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            padding-left: 25px;
+        }
+
+        .custom-option.selected {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .custom-option i {
+            width: 18px;
+            text-align: center;
+            opacity: 0.7;
         }
 
         .textarea {
@@ -428,12 +513,24 @@
             <form id="requestForm">
                 <div class="form-group">
                     <label class="label">Request Type</label>
-                    <select class="select" id="requestType" required>
-                        <option value="" disabled selected>Select Type</option>
-                        <option value="scenepack">Scenepack</option>
-                        <option value="preset">Preset (FF, CC, etc.)</option>
-                        <option value="resource">Resource (SFX, Overlay, etc.)</option>
-                    </select>
+                    <div class="custom-select-wrapper" id="requestTypeWrapper">
+                        <div class="custom-select-trigger" id="requestTypeTrigger">
+                            <span>Select Type</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-options">
+                            <div class="custom-option" data-value="scenepack">
+                                <i class="fas fa-film"></i> Scenepack
+                            </div>
+                            <div class="custom-option" data-value="preset">
+                                <i class="fas fa-magic"></i> Preset (FF, CC, etc.)
+                            </div>
+                            <div class="custom-option" data-value="resource">
+                                <i class="fas fa-folder-open"></i> Resource (SFX, Overlay, etc.)
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="requestType" required>
                 </div>
 
                 <div class="form-group">
@@ -472,6 +569,38 @@
 
     <script>
         const API_BASE = window.location.origin === 'http://127.0.0.1:5500' ? 'http://localhost:5000' : '';
+
+        // Custom Select Logic
+        const wrapper = document.getElementById('requestTypeWrapper');
+        const trigger = document.getElementById('requestTypeTrigger');
+        const options = wrapper.querySelectorAll('.custom-option');
+        const hiddenInput = document.getElementById('requestType');
+
+        trigger.addEventListener('click', () => {
+            wrapper.classList.toggle('open');
+        });
+
+        options.forEach(option => {
+            option.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                const text = this.textContent.trim();
+                
+                trigger.querySelector('span').textContent = text;
+                hiddenInput.value = value;
+                
+                options.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                wrapper.classList.remove('open');
+            });
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                wrapper.classList.remove('open');
+            }
+        });
 
         // Auto-fill email if user is logged in
         document.addEventListener('DOMContentLoaded', () => {
