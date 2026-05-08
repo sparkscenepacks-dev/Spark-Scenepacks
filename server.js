@@ -237,13 +237,28 @@ app.delete(['/api/requests/:id', '/api/requests/:id/'], isAuthenticated, async (
 
 // --- ROUTES & STATIC ---
 
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'admin.html'));
-});
+// Serve static assets with long-term caching
+app.use('/assets', express.static(path.join(__dirname, 'assets'), {
+    maxAge: '1d',
+    immutable: true
+}));
 
-app.use(express.static(__dirname));
+// Serve root static files (HTML, etc)
+app.use(express.static(__dirname, {
+    extensions: ['html'],
+    index: 'index.html'
+}));
 
-// Fallback for all other routes
+// Explicit routes for individual pages
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'admin.html')));
+app.get('/requests', (req, res) => res.sendFile(path.join(__dirname, 'requests.html')));
+app.get('/donate', (req, res) => res.sendFile(path.join(__dirname, 'donate.html')));
+app.get('/auth', (req, res) => res.sendFile(path.join(__dirname, 'auth.html')));
+app.get('/legal', (req, res) => res.sendFile(path.join(__dirname, 'legal.html')));
+app.get('/terms', (req, res) => res.sendFile(path.join(__dirname, 'terms.html')));
+app.get('/downloadsite', (req, res) => res.sendFile(path.join(__dirname, 'downloadsite.html')));
+
+// Fallback for all other routes (SPA-style routing)
 app.use((req, res) => {
     const isApiRequest = req.path.startsWith('/api/') || req.path === '/api';
     if (isApiRequest) {
@@ -253,10 +268,15 @@ app.use((req, res) => {
             method: req.method
         });
     }
-    // If it's a GET request for a non-API route, serve index.html (but NOT for assets or files with extensions)
-    if (req.method === 'GET' && !req.path.includes('.') && !req.path.startsWith('/assets/')) {
+    
+    // For non-API GET requests that don't look like files (no dot in the last segment), serve index.html
+    const isFileRequest = req.path.includes('.') || req.path.includes('/assets/');
+    const isKnownPage = ['/admin', '/requests', '/donate', '/auth', '/legal', '/terms', '/downloadsite'].includes(req.path);
+    
+    if (req.method === 'GET' && !isFileRequest && !isKnownPage) {
         return res.sendFile(path.join(__dirname, 'index.html'));
     }
+    
     res.status(404).send('Not Found');
 });
 

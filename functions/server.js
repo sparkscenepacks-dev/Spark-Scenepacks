@@ -1,4 +1,5 @@
 const serverless = require('serverless-http');
+const fs = require('fs');
 
 let handler;
 try {
