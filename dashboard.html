@@ -555,12 +555,18 @@
                     <textarea id="editBio" class="form-input" rows="4" placeholder="Tell us about your editing style..."></textarea>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Profile Picture URL</label>
-                    <input type="text" id="editAvatarUrl" class="form-input" placeholder="https://...">
+                    <label class="form-label">Profile Picture</label>
+                    <input type="file" id="editAvatarFile" class="form-input" accept="image/*" onchange="previewImage(this, 'avatarPreview')">
+                    <div style="margin-top: 10px; width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 1px solid var(--glass-border);">
+                        <img id="avatarPreview" src="/assets/spark-logo-pfp.jpg" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Banner Image URL</label>
-                    <input type="text" id="editBannerUrl" class="form-input" placeholder="https://...">
+                    <label class="form-label">Banner Image</label>
+                    <input type="file" id="editBannerFile" class="form-input" accept="image/*" onchange="previewImage(this, 'bannerPreview')">
+                    <div style="margin-top: 10px; width: 100%; height: 80px; border-radius: 12px; overflow: hidden; border: 1px solid var(--glass-border);">
+                        <img id="bannerPreview" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                    </div>
                 </div>
                 <button class="save-btn" onclick="saveSettings()">Save Changes</button>
             </div>
@@ -613,18 +619,31 @@
                 document.getElementById('navUserAvatar').src = '/assets/spark-logo-pfp.jpg';
             }
             
-            const bannerPic = currentUser.bannerPic || currentUser.profileBanner || currentUser.banner_pic;
-            if (bannerPic) {
-                document.getElementById('userBanner').style.backgroundImage = `url(${bannerPic})`;
+            if (currentUser.bannerPic || currentUser.banner_pic) {
+                const banner = currentUser.bannerPic || currentUser.banner_pic;
+                document.getElementById('userBanner').style.backgroundImage = `url(${banner})`;
                 document.getElementById('userBanner').style.backgroundSize = 'cover';
                 document.getElementById('userBanner').style.backgroundPosition = 'center';
+                document.getElementById('bannerPreview').src = banner;
+                document.getElementById('bannerPreview').style.display = 'block';
             }
 
             // Fill settings form
             document.getElementById('editDisplayName').value = currentUser.displayName || currentUser.display_name || '';
             document.getElementById('editBio').value = currentUser.bio || '';
-            document.getElementById('editAvatarUrl').value = profilePic || '';
-            document.getElementById('editBannerUrl').value = bannerPic || '';
+            document.getElementById('avatarPreview').src = profilePic || '/assets/spark-logo-pfp.jpg';
+        }
+
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         async function loadScenepacks() {
@@ -742,21 +761,36 @@
         }
 
         async function saveSettings() {
+            const saveBtn = document.querySelector('.save-btn');
             const displayName = document.getElementById('editDisplayName').value;
             const bio = document.getElementById('editBio').value;
-            const avatarUrl = document.getElementById('editAvatarUrl').value;
-            const bannerUrl = document.getElementById('editBannerUrl').value;
+            const avatarFile = document.getElementById('editAvatarFile').files[0];
+            const bannerFile = document.getElementById('editBannerFile').files[0];
 
-            // Update local storage
-            currentUser.displayName = displayName;
-            currentUser.bio = bio;
-            currentUser.profilePic = avatarUrl;
-            currentUser.bannerPic = bannerUrl;
-            
-            localStorage.setItem('spark_user', JSON.stringify(currentUser));
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-            // Sync with Supabase
             try {
+                let avatarUrl = currentUser.profilePic || currentUser.profile_pic;
+                let bannerUrl = currentUser.bannerPic || currentUser.banner_pic;
+
+                // Upload Avatar if new one selected
+                if (avatarFile) {
+                    const fileName = `profiles/pfp_${Date.now()}_${currentUser.username}.jpg`;
+                    const { data, error } = await supabaseClient.storage.from('thumbnails').upload(fileName, avatarFile, { cacheControl: '3600', upsert: true });
+                    if (error) throw error;
+                    avatarUrl = supabaseClient.storage.from('thumbnails').getPublicUrl(fileName).data.publicUrl;
+                }
+
+                // Upload Banner if new one selected
+                if (bannerFile) {
+                    const fileName = `profiles/banner_${Date.now()}_${currentUser.username}.jpg`;
+                    const { data, error } = await supabaseClient.storage.from('thumbnails').upload(fileName, bannerFile, { cacheControl: '3600', upsert: true });
+                    if (error) throw error;
+                    bannerUrl = supabaseClient.storage.from('thumbnails').getPublicUrl(fileName).data.publicUrl;
+                }
+
+                // Sync with Supabase
                 const { error } = await supabaseClient
                     .from('users')
                     .update({
@@ -765,15 +799,29 @@
                         profile_pic: avatarUrl,
                         banner_pic: bannerUrl
                     })
-                    .eq('id', currentUser.id);
+                    .eq('email', currentUser.email);
 
                 if (error) throw error;
+
+                // Update local storage
+                currentUser.displayName = displayName;
+                currentUser.display_name = displayName;
+                currentUser.bio = bio;
+                currentUser.profilePic = avatarUrl;
+                currentUser.profile_pic = avatarUrl;
+                currentUser.bannerPic = bannerUrl;
+                currentUser.banner_pic = bannerUrl;
+                
+                localStorage.setItem('spark_user', JSON.stringify(currentUser));
                 
                 alert('Settings saved successfully!');
                 updateProfileUI();
             } catch (err) {
                 console.error('Error saving settings:', err);
-                alert('Saved to local storage, but failed to sync with database.');
+                alert('Error saving settings: ' + err.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'Save Changes';
             }
         }
 
