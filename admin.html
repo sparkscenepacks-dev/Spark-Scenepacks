@@ -1191,6 +1191,8 @@
                     const data = await response.json();
                     document.getElementById('loginShield').style.display = 'none';
                     document.getElementById('adminDashboard').style.display = 'block';
+                    // Switch background to blackhole for the dashboard
+                    document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg')";
                     loadManagementList();
                 } else {
                     const errorMsg = response.status === 401 ? 'Invalid username or password.' :
