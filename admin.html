@@ -889,10 +889,10 @@
             </div>
 
             <div class="nav-tabs">
-                <button class="tab-btn active" id="contentTab" onclick="switchTab('content')">
+                <button class="tab-btn active" id="btn-content" onclick="switchTab('content')">
                     <i class="fas fa-th-large"></i> Management
                 </button>
-                <button class="tab-btn" id="requestsTab" onclick="switchTab('requests')">
+                <button class="tab-btn" id="btn-requests" onclick="switchTab('requests')">
                     <i class="fas fa-paper-plane"></i> Requests 
                     <span id="requestCount" style="background: #ff4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; margin-left: 5px; display: none;">0</span>
                 </button>
@@ -1096,7 +1096,6 @@
                 </div>
             </div>
         </div>
-            </div>
         </div>
 
         <div id="requestsTab" class="tab-content">
@@ -1689,25 +1688,48 @@
         }
 
         function switchTab(tabId) {
+            // Update button states
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                // Improved matching for vertical tabs
-                const isMatch = (tabId === 'content' && btn.textContent.includes('Management')) || 
-                                (tabId === 'requests' && btn.textContent.includes('Requests'));
+                const isMatch = (tabId === 'content' && btn.id === 'btn-content') || 
+                                (tabId === 'requests' && btn.id === 'btn-requests');
                 btn.classList.toggle('active', isMatch);
             });
+
+            // Update content visibility
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
-            document.getElementById(tabId === 'content' ? 'contentTab' : 'requestsTab').classList.add('active');
             
+            const targetContentId = tabId === 'content' ? 'contentTab' : 'requestsTab';
+            const targetContent = document.getElementById(targetContentId);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
+            
+            // Update Header UI
+            const dashboardTitle = document.querySelector('.header h1');
+            const dashboardSubtitle = document.querySelector('.header p');
+            const saveBtn = document.getElementById('saveBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+
             if (tabId === 'requests') {
+                dashboardTitle.textContent = 'User Requests';
+                dashboardSubtitle.textContent = 'Handling content requests from the community';
+                saveBtn.style.display = 'none';
+                cancelBtn.style.display = 'none';
                 loadRequestsList();
+            } else {
+                dashboardTitle.textContent = 'Dashboard';
+                dashboardSubtitle.textContent = 'Managing Spark Scenepacks & Content';
+                saveBtn.style.display = 'block';
+                if (isEditing) cancelBtn.style.display = 'block';
+                loadManagementList();
             }
         }
 
         async function loadRequestsList() {
             const container = document.getElementById('requestsList');
-            container.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin"></i> Loading requests...</div>';
+            container.innerHTML = '<div style="text-align: center; padding: 60px; grid-column: 1/-1;"><i class="fas fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 15px;"></i><p>Fetching latest requests...</p></div>';
 
             try {
                 const response = await fetch(`${API_BASE}/api/requests`, {
@@ -1718,7 +1740,7 @@
                 const data = await response.json();
                 const requests = data.requests || [];
                 
-                // Update counter
+                // Update counter badge
                 const counter = document.getElementById('requestCount');
                 if (requests.length > 0) {
                     counter.textContent = requests.length;
@@ -1728,36 +1750,50 @@
                 }
 
                 if (requests.length === 0) {
-                    container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 40px;">No requests found. Good job!</div>`;
+                    container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 80px; grid-column: 1/-1;">
+                        <i class="fas fa-check-double" style="font-size: 40px; margin-bottom: 15px; opacity: 0.3;"></i>
+                        <p style="font-size: 18px; font-weight: 600;">All caught up!</p>
+                        <p style="font-size: 14px; margin-top: 5px;">No pending content requests at the moment.</p>
+                    </div>`;
                     return;
                 }
 
-                container.innerHTML = requests.map(req => `
-                    <div class="request-item" id="req-${req.id}">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                            <div>
-                                <span class="request-badge badge-${req.type}">${req.type}</span>
-                                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-bottom: 8px;">${req.title}</h3>
-                                <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin-bottom: 12px;">${req.description}</p>
-                                <div style="display: flex; gap: 15px; font-size: 11px; color: #666;">
-                                    <span><i class="fas fa-envelope"></i> ${req.user_email}</span>
-                                    <span><i class="fas fa-clock"></i> ${new Date(req.created_at).toLocaleDateString()}</span>
+                container.innerHTML = requests.map(req => {
+                    const type = (req.type || 'request').toLowerCase();
+                    const badgeClass = `badge-${type}`;
+                    const date = req.created_at ? new Date(req.created_at).toLocaleDateString() : 'Unknown date';
+                    
+                    return `
+                        <div class="request-item" id="req-${req.id}">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <div>
+                                    <span class="request-badge ${badgeClass}">${type}</span>
+                                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; margin-bottom: 8px;">${req.title || 'Untitled Request'}</h3>
+                                    <p style="color: var(--text-secondary); font-size: 13px; line-height: 1.5; margin-bottom: 12px; white-space: pre-wrap;">${req.description || 'No description provided.'}</p>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 11px; color: #666;">
+                                        <span><i class="fas fa-envelope"></i> ${req.user_email || 'Anonymous'}</span>
+                                        <span><i class="fas fa-clock"></i> ${date}</span>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="delete-btn" title="Copy Title" style="background: rgba(255, 255, 255, 0.05); color: #fff; border-color: rgba(255, 255, 255, 0.1);" onclick="copyToClipboard('${(req.title || "").replace(/'/g, "\\'")}')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <button class="delete-btn" style="background: rgba(67, 184, 131, 0.1); color: #43b883; border-color: rgba(67, 184, 131, 0.2);" onclick="deleteRequest('${req.id}')">
+                                        <i class="fas fa-check"></i> DONE
+                                    </button>
                                 </div>
                             </div>
-                            <div style="display: flex; gap: 8px;">
-                                <button class="delete-btn" style="background: rgba(67, 184, 131, 0.1); color: #43b883; border-color: rgba(67, 184, 131, 0.2);" onclick="copyToClipboard('${req.title}')">
-                                    <i class="fas fa-copy"></i>
-                                </button>
-                                <button class="delete-btn" onclick="deleteRequest('${req.id}')">
-                                    <i class="fas fa-check"></i> DONE
-                                </button>
-                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
 
             } catch (error) {
-                container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 40px;">Error loading requests. ${error.message}</div>`;
+                container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 60px; grid-column: 1/-1;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 30px; margin-bottom: 15px;"></i>
+                    <p>Error loading requests: ${error.message}</p>
+                    <button onclick="loadRequestsList()" style="margin-top: 15px; width: auto; padding: 8px 20px;">Retry</button>
+                </div>`;
             }
         }
 
