@@ -3986,10 +3986,11 @@
                 if (favFilter) favFilter.style.display = 'block';
                 if (userProfile) {
                     userProfile.style.display = 'block';
-                    if (userName) userName.textContent = user.displayName || user.username;
-                    if (menuUserName) menuUserName.textContent = user.displayName || user.username;
+                    const displayName = user.displayName || user.display_name || user.username;
+                    if (userName) userName.textContent = displayName;
+                    if (menuUserName) menuUserName.textContent = displayName;
                     if (userEmail) userEmail.textContent = user.email || 'Professional Editor';
-                    if (userAvatar) userAvatar.src = user.profilePic || '/assets/spark-logo-pfp.jpg';
+                    if (userAvatar) userAvatar.src = user.profilePic || user.profile_pic || '/assets/spark-logo-pfp.jpg';
                     
                     if (logoutBtn) {
                         logoutBtn.onclick = (e) => {

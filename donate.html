@@ -773,8 +773,9 @@
                 if (loginBtn) loginBtn.style.display = 'none';
                 if (userProfile) {
                     userProfile.style.display = 'block';
-                    if (userName) userName.textContent = user.displayName || user.username;
-                    if (userAvatar) userAvatar.src = user.profilePic || '/assets/spark-logo-pfp.jpg';
+                    const displayName = user.displayName || user.display_name || user.username;
+                    if (userName) userName.textContent = displayName;
+                    if (userAvatar) userAvatar.src = user.profilePic || user.profile_pic || '/assets/spark-logo-pfp.jpg';
 
                     if (logoutBtn) {
                         logoutBtn.onclick = (e) => {
