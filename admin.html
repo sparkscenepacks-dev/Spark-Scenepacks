@@ -1191,9 +1191,7 @@
                     const data = await response.json();
                     document.getElementById('loginShield').style.display = 'none';
                     document.getElementById('adminDashboard').style.display = 'block';
-                    // Switch background to blackhole for the dashboard
-                    document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg')";
-                    loadManagementList();
+                    switchTab('content');
                 } else {
                     const errorMsg = response.status === 401 ? 'Invalid username or password.' :
                         response.status === 404 ? `Error 404: API route not found. Check your server configuration.` :
@@ -1740,12 +1738,16 @@
                 dashboardSubtitle.textContent = 'Handling content requests from the community';
                 saveBtn.style.display = 'none';
                 cancelBtn.style.display = 'none';
+                // Switch background to Zenitsu for Requests
+                document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('/assets/Zenitsu.jpg')";
                 loadRequestsList();
             } else {
                 dashboardTitle.textContent = 'Dashboard';
                 dashboardSubtitle.textContent = 'Managing Spark Scenepacks & Content';
                 saveBtn.style.display = 'block';
                 if (isEditing) cancelBtn.style.display = 'block';
+                // Switch background to Blackhole for Management
+                document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg')";
                 loadManagementList();
             }
         }
