@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard - Spark Scenepacks</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="/assets/spark-logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0f0e0e;
+            --secondary: #0a0a0a;
+            --tertiary: #1a1a1a;
+            --accent: #ffffff;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --border: rgba(255, 255, 255, 0.1);
+            --purple-accent: #7b61ff;
+            --blue-link: #4A90E2;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Background System */
+        .bg-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background: #000;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .bg-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -200px;
+            right: -200px;
+            z-index: -5;
+            filter: blur(80px);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            padding: 10px 24px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-radius: 100px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 28px;
+            filter: invert(1);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 120px auto 60px;
+            padding: 0 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .profile-banner {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #7b61ff 0%, #00d2ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info-wrapper {
+            padding: 0 40px 40px;
+            margin-top: -60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid var(--primary);
+            background: var(--tertiary);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .profile-handle {
+            color: var(--purple-accent);
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .profile-bio {
+            max-width: 600px;
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 24px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 10px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        /* Dashboard Tabs */
+        .dashboard-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            background: var(--glass-bg);
+            padding: 8px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .dash-tab {
+            padding: 12px 30px;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+        }
+
+        .dash-tab:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .dash-tab.active {
+            background: var(--accent);
+            color: var(--primary);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Favorites Grid */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* Request Items */
+        .request-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .request-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 24px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .request-item:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.01);
+        }
+
+        .request-main {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .request-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(123, 97, 255, 0.1);
+            color: var(--purple-accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .request-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .request-meta {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .request-status {
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-pending { background: rgba(255, 165, 0, 0.1); color: #ffa500; border: 1px solid rgba(255, 165, 0, 0.2); }
+        .status-approved { background: rgba(0, 210, 255, 0.1); color: #00d2ff; border: 1px solid rgba(0, 210, 255, 0.2); }
+        .status-fulfilled { background: rgba(0, 255, 127, 0.1); color: #00ff7f; border: 1px solid rgba(0, 255, 127, 0.2); }
+
+        /* Settings Form */
+        .settings-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 32px;
+            max-width: 800px;
+            margin: 0 auto;
+            backdrop-filter: blur(20px);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--purple-accent);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .save-btn {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 14px 40px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .profile-header { border-radius: 0; margin: 60px -20px 30px; }
+            .profile-banner { height: 150px; }
+            .profile-info-wrapper { padding: 0 20px 30px; }
+            .profile-avatar { width: 100px; height: 100px; }
+            .profile-stats { gap: 20px; }
+            .stat-value { font-size: 20px; }
+            .dashboard-tabs { width: 100%; overflow-x: auto; justify-content: flex-start; }
+            .dash-tab { padding: 12px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-system"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="/assets/spark-logo.png" alt="Spark Logo">
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/requests" class="nav-link">Requests</a>
+                <a href="/donate" class="nav-link">Donate</a>
+                <div id="userProfileNav" style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 12px; background: rgba(255,255,255,0.05); border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);">
+                    <img id="navUserAvatar" src="" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
+                    <span id="navUserName" style="font-weight: 700; font-size: 13px;">User</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard-container">
+        <!-- Profile Header -->
+        <section class="profile-header">
+            <div class="profile-banner" id="userBanner">
+                <!-- Banner Image via JS -->
+            </div>
+            <div class="profile-info-wrapper">
+                <div class="profile-avatar">
+                    <img id="userAvatar" src="/assets/spark-logo-pfp.jpg" alt="Avatar">
+                </div>
+                <h1 class="profile-name" id="userDisplayName">Editor Name</h1>
+                <span class="profile-handle" id="userHandle">@username</span>
+                <p class="profile-bio" id="userBio">No bio yet. Add one in settings!</p>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="favCount">0</span>
+                        <span class="stat-label">Favorites</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="requestCount">0</span>
+                        <span class="stat-label">Requests</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabs -->
+        <div class="dashboard-tabs">
+            <button class="dash-tab active" onclick="switchTab('favorites')">
+                <i class="fas fa-heart"></i> Favorites
+            </button>
+            <button class="dash-tab" onclick="switchTab('requests')">
+                <i class="fas fa-tasks"></i> My Requests
+            </button>
+            <button class="dash-tab" onclick="switchTab('settings')">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+        </div>
+
+        <!-- Favorites Content -->
+        <div id="favoritesContent" class="tab-content active">
+            <div class="favorites-grid" id="favoritesGrid">
+                <!-- Loaded via JS -->
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-heart-broken"></i></div>
+                    <p>You haven't favorited any scenepacks yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requests Content -->
+        <div id="requestsContent" class="tab-content">
+            <div class="request-list" id="requestsList">
+                <!-- Loaded via JS -->
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-clipboard-list"></i></div>
+                    <p>You haven't made any requests yet.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Content -->
+        <div id="settingsContent" class="tab-content">
+            <div class="settings-card">
+                <div class="form-group">
+                    <label class="form-label">Display Name</label>
+                    <input type="text" id="editDisplayName" class="form-input" placeholder="Enter display name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea id="editBio" class="form-input" rows="4" placeholder="Tell us about your editing style..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Profile Picture URL</label>
+                    <input type="text" id="editAvatarUrl" class="form-input" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Banner Image URL</label>
+                    <input type="text" id="editBannerUrl" class="form-input" placeholder="https://...">
+                </div>
+                <button class="save-btn" onclick="saveSettings()">Save Changes</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+        let allScenepacks = [];
+
+        async function initDashboard() {
+            const userData = localStorage.getItem('spark_user');
+            if (!userData) {
+                window.location.href = '/auth';
+                return;
+            }
+
+            currentUser = JSON.parse(userData);
+            updateProfileUI();
+            
+            // Load Data
+            await Promise.all([
+                loadScenepacks(),
+                loadUserRequests()
+            ]);
+            
+            renderFavorites();
+        }
+
+        function updateProfileUI() {
+            const displayName = currentUser.displayName || currentUser.username;
+            document.getElementById('userDisplayName').textContent = displayName;
+            document.getElementById('userHandle').textContent = `@${currentUser.username}`;
+            document.getElementById('userBio').textContent = currentUser.bio || 'No bio yet. Add one in settings!';
+            
+            // Nav elements
+            document.getElementById('navUserName').textContent = displayName;
+            
+            if (currentUser.profilePic) {
+                document.getElementById('userAvatar').src = currentUser.profilePic;
+                document.getElementById('navUserAvatar').src = currentUser.profilePic;
+            } else {
+                document.getElementById('userAvatar').src = '/assets/spark-logo-pfp.jpg';
+                document.getElementById('navUserAvatar').src = '/assets/spark-logo-pfp.jpg';
+            }
+            
+            if (currentUser.bannerPic) {
+                document.getElementById('userBanner').style.backgroundImage = `url(${currentUser.bannerPic})`;
+                document.getElementById('userBanner').style.backgroundSize = 'cover';
+                document.getElementById('userBanner').style.backgroundPosition = 'center';
+            }
+
+            // Fill settings form
+            document.getElementById('editDisplayName').value = currentUser.displayName || '';
+            document.getElementById('editBio').value = currentUser.bio || '';
+            document.getElementById('editAvatarUrl').value = currentUser.profilePic || '';
+            document.getElementById('editBannerUrl').value = currentUser.bannerPic || '';
+        }
+
+        async function loadScenepacks() {
+            try {
+                const response = await fetch('/api/scenepacks');
+                const data = await response.json();
+                allScenepacks = data.scenepacks || [];
+            } catch (err) {
+                console.error('Error loading scenepacks:', err);
+            }
+        }
+
+        async function loadUserRequests() {
+            try {
+                // Fetch requests for this specific user
+                const { data, error } = await supabaseClient
+                    .from('requests')
+                    .select('*')
+                    .eq('user_email', currentUser.email)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                
+                renderRequests(data || []);
+                document.getElementById('requestCount').textContent = data.length;
+            } catch (err) {
+                console.error('Error loading requests:', err);
+            }
+        }
+
+        function renderFavorites() {
+            const favorites = JSON.parse(localStorage.getItem('spark_favorites')) || [];
+            const grid = document.getElementById('favoritesGrid');
+            grid.innerHTML = '';
+            
+            const favPacks = allScenepacks.filter(sp => favorites.includes(sp.id));
+            document.getElementById('favCount').textContent = favPacks.length;
+
+            if (favPacks.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-heart-broken"></i></div>
+                        <p>You haven't favorited any scenepacks yet.</p>
+                        <a href="/" style="color: var(--purple-accent); text-decoration: none; margin-top: 10px; display: inline-block;">Browse Scenepacks</a>
+                    </div>`;
+                return;
+            }
+
+            favPacks.forEach(pack => {
+                const card = document.createElement('div');
+                card.className = 'favorite-card'; // Reuse index.html styles or simplified ones
+                card.style.cssText = `
+                    background: rgba(255,255,255,0.03);
+                    border: 1px solid rgba(255,255,255,0.08);
+                    border-radius: 20px;
+                    overflow: hidden;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                `;
+                card.innerHTML = `
+                    <div style="height: 150px; background: #000; overflow: hidden;">
+                        <img src="${pack.thumbnail}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="padding: 15px;">
+                        <h4 style="font-size: 14px; margin-bottom: 5px;">${pack.title}</h4>
+                        <span style="font-size: 11px; color: var(--text-secondary);">${pack.category}</span>
+                    </div>
+                `;
+                card.onclick = () => window.location.href = `/?scenepack=${pack.id}`;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderRequests(requests) {
+            const list = document.getElementById('requestsList');
+            list.innerHTML = '';
+
+            if (requests.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-clipboard-list"></i></div>
+                        <p>You haven't made any requests yet.</p>
+                        <a href="/requests" style="color: var(--purple-accent); text-decoration: none; margin-top: 10px; display: inline-block;">Make a Request</a>
+                    </div>`;
+                return;
+            }
+
+            requests.forEach(req => {
+                const item = document.createElement('div');
+                item.className = 'request-item';
+                item.innerHTML = `
+                    <div class="request-main">
+                        <div class="request-icon">
+                            <i class="fas ${req.type === 'scenepack' ? 'fa-film' : 'fa-magic'}"></i>
+                        </div>
+                        <div>
+                            <div class="request-title">${req.title}</div>
+                            <div class="request-meta">Requested on ${new Date(req.created_at).toLocaleDateString()}</div>
+                        </div>
+                    </div>
+                    <div class="request-status status-${req.status || 'pending'}">
+                        ${req.status || 'pending'}
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            document.querySelector(`button[onclick="switchTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(`${tabId}Content`).classList.add('active');
+        }
+
+        async function saveSettings() {
+            const displayName = document.getElementById('editDisplayName').value;
+            const bio = document.getElementById('editBio').value;
+            const avatarUrl = document.getElementById('editAvatarUrl').value;
+            const bannerUrl = document.getElementById('editBannerUrl').value;
+
+            // Update local storage
+            currentUser.displayName = displayName;
+            currentUser.bio = bio;
+            currentUser.profilePic = avatarUrl;
+            currentUser.bannerPic = bannerUrl;
+            
+            localStorage.setItem('spark_user', JSON.stringify(currentUser));
+
+            // Sync with Supabase
+            try {
+                const { error } = await supabaseClient
+                    .from('users')
+                    .update({
+                        display_name: displayName,
+                        bio: bio,
+                        profile_pic: avatarUrl,
+                        banner_pic: bannerUrl
+                    })
+                    .eq('id', currentUser.id);
+
+                if (error) throw error;
+                
+                alert('Settings saved successfully!');
+                updateProfileUI();
+            } catch (err) {
+                console.error('Error saving settings:', err);
+                alert('Saved to local storage, but failed to sync with database.');
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('spark_user');
+            localStorage.removeItem('spark_favorites');
+            window.location.href = '/';
+        });
+
+        initDashboard();
+    </script>
+</body>
+
+</html>

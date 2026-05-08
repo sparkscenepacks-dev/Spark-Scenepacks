@@ -9,6 +9,8 @@
     { "source": "/legal", "destination": "/legal.html" },
     { "source": "/terms", "destination": "/terms.html" },
     { "source": "/downloadsite", "destination": "/downloadsite.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+    { "source": "/dashboard.html", "destination": "/dashboard.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

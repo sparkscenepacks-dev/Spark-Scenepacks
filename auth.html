@@ -41,7 +41,7 @@
 
         body {
             background: var(--bg-color);
-            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)), url('/assets/blackhole.jpg');
+            background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)), url('assets/Zenitsu.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -899,8 +899,8 @@
                 localStorage.setItem('spark_user', JSON.stringify(userData));
                 localStorage.setItem('spark_favorites', JSON.stringify([]));
 
-                showNotification('Welcome!', 'Your account has been created successfully. Redirecting you home...', 'success', () => {
-                    window.location.href = 'index.html';
+                showNotification('Welcome!', 'Your account has been created successfully. Redirecting you to your dashboard...', 'success', () => {
+                    window.location.href = 'dashboard.html';
                 });
 
             } catch (err) {
@@ -953,7 +953,7 @@
                     localStorage.setItem('spark_user', JSON.stringify(data));
                     localStorage.setItem('spark_favorites', JSON.stringify(data.favorites || []));
                     showNotification('Welcome Back!', 'Welcome back, ' + (data.displayName || data.username) + '!', 'success', () => {
-                        window.location.href = 'index.html';
+                        window.location.href = 'dashboard.html';
                     });
                 }
             } catch (err) {
