@@ -2014,7 +2014,7 @@
         const adminNav = document.querySelector('.admin-nav');
 
         window.addEventListener('scroll', () => {
-            if (window.scrollY > lastScrollY && window.scrollY > 150) {
+            if (window.scrollY > lastScrollY && window.scrollY > 20) {
                 if (adminNav) adminNav.classList.add('nav-scrolled-down');
             } else if (window.scrollY < lastScrollY) {
                 if (adminNav) adminNav.classList.remove('nav-scrolled-down');
