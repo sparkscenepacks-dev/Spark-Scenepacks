@@ -239,10 +239,10 @@ app.delete(['/api/requests/:id', '/api/requests/:id/'], isAuthenticated, async (
 app.get(['/api/admin/stats', '/api/admin/stats/', '/admin/stats', '/admin/stats/'], isAuthenticated, async (req, res) => {
     try {
         const [scenepacksData, downloadsData, requestsData, pendingData, topData] = await Promise.all([
-            supabase.from('scenepacks').select('*', { count: 'exact', head: true }),
+            supabase.from('scenepacks').select('*', { count: 'exact' }),
             supabase.from('scenepacks').select('downloads'),
-            supabase.from('requests').select('*', { count: 'exact', head: true }),
-            supabase.from('requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+            supabase.from('requests').select('*', { count: 'exact' }),
+            supabase.from('requests').select('*', { count: 'exact' }).eq('status', 'pending'),
             supabase.from('scenepacks').select('title, downloads').order('downloads', { ascending: false }).limit(1).maybeSingle()
         ]);
 
