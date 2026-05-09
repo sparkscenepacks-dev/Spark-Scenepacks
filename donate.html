@@ -975,12 +975,7 @@
                     copy the UPI ID below to make a contribution.</p>
 
                 <div class="qr-placeholder" id="qrContainer">
-                    <!-- Replace the src with your actual UPI QR Code image -->
-                    <img src="/assets/spark-logo.png" alt="UPI QR Code" style="opacity: 0.2; filter: grayscale(1);">
-                    <div
-                        style="position: absolute; text-align: center; color: #000; font-weight: 700; font-size: 14px;">
-                        YOUR QR CODE<br>HERE
-                    </div>
+                    <img src="/assets/upi-qr-new.jpg" alt="UPI QR Code" style="opacity: 1; filter: none;">
                 </div>
                 <div style="text-align: center; margin-top: 10px; margin-bottom: 30px;">
                     <span class="qr-label">Scan to Pay</span>
@@ -1061,11 +1056,15 @@
     </footer>
 
     <script>
-        function copyUPI() {
-            const upiId = document.getElementById('upiId').innerText;
+        async function copyUPI() {
+            const upiIdElement = document.getElementById('upiId');
+            if (!upiIdElement) return;
+            
+            const upiId = upiIdElement.innerText;
             const btn = document.querySelector('.copy-btn');
 
-            navigator.clipboard.writeText(upiId).then(() => {
+            try {
+                await navigator.clipboard.writeText(upiId);
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
                 btn.classList.add('copied');
@@ -1074,20 +1073,49 @@
                     btn.innerHTML = originalText;
                     btn.classList.remove('copied');
                 }, 2000);
-            });
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                // Fallback for browsers that don't support clipboard API
+                const textArea = document.createElement("textarea");
+                textArea.value = upiId;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.innerHTML = '<i class="far fa-copy"></i> Copy ID';
+                        btn.classList.remove('copied');
+                    }, 2000);
+                } catch (copyErr) {
+                    btn.innerHTML = '<i class="fas fa-times"></i> Failed';
+                }
+                document.body.removeChild(textArea);
+            }
         }
 
-        // Add floating animation to QR container
         const qr = document.getElementById('qrContainer');
         let floatY = 0;
         let direction = 1;
+        let animationId;
 
         function animate() {
+            if (!qr) return;
             floatY += 0.05 * direction;
             if (Math.abs(floatY) > 5) direction *= -1;
             qr.style.transform = `translateY(${floatY}px)`;
-            requestAnimationFrame(animate);
+            animationId = requestAnimationFrame(animate);
         }
+        
+        // Start animation only when tab is active
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationId);
+            } else {
+                animate();
+            }
+        });
         animate();
 
         // Auth Check
@@ -1108,12 +1136,14 @@
                     if (userAvatar) userAvatar.src = user.profilePic || user.profile_pic || '/assets/spark-logo-pfp.jpg';
 
                     if (logoutBtn) {
-                        logoutBtn.onclick = (e) => {
+                        // Use addEventListener to prevent multiple bindings if checkAuth runs again
+                        logoutBtn.onclick = null; // Clear old inline onclick if any
+                        logoutBtn.addEventListener('click', (e) => {
                             e.preventDefault();
                             localStorage.removeItem('spark_user');
                             localStorage.removeItem('spark_favorites');
                             window.location.reload();
-                        };
+                        }, { once: true });
                     }
                 }
             } else {

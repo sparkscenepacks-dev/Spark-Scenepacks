@@ -1140,6 +1140,13 @@
                         <i class="fas fa-rotate"></i> REFRESH
                     </button>
                 </div>
+                <div class="input-group" style="margin-bottom: 20px; position: relative;">
+                    <i class="fas fa-search" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 14px;"></i>
+                    <input type="text" id="manageSearch" placeholder="Quick search by title, ID, or category..." onkeyup="filterManagementList()" 
+                        style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 50px; padding: 12px 20px 12px 45px; width: 100%; color: #fff; font-size: 13px; transition: all 0.3s ease; outline: none;"
+                        onfocus="this.style.borderColor='var(--accent)'; this.style.background='rgba(255,255,255,0.08)'"
+                        onblur="this.style.borderColor='var(--border)'; this.style.background='rgba(255,255,255,0.05)'">
+                </div>
                 <div id="managementList" class="management-list">
                     <!-- Items will be loaded here -->
                     <div style="text-align: center; color: var(--text-secondary); padding: 40px;">
@@ -1219,9 +1226,18 @@
         const API_BASE = (window.location.hostname === 'localhost' && window.location.port !== '5000') ? 'http://localhost:5000' : '';
 
         // Supabase client for direct browser-to-storage uploads
-        const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
+        const SUPABASE_URL = 'https://mrndyxetxslvyznqyirx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybmR5eGV0eHNsdnl6bnF5aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMDA4NDksImV4cCI6MjA5Mzg3Njg0OX0.7jY1-_tYTCDj7h3uuHzz7L-neB8DT-MzEvYGesWWJQA';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- PROXY UTILITY ---
+        function getProxyUrl(url) {
+            if (!url) return url;
+            if (url.includes('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public/')) {
+                return url.replace('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
+            }
+            return url;
+        }
 
         // Upload a file directly from the browser to Supabase Storage
         async function uploadThumbnailToSupabase(file, scenepackId, overrideName = null) {
@@ -1376,6 +1392,7 @@
                 </div>
                 <div class="input-group" style="margin-top: 10px;">
                     <label class="input-label">Upload Scenepack File (Optional)</label>
+                    <p style="font-size: 10px; color: #ff4757; margin-bottom: 5px; font-weight: 600;"><i class="fas fa-exclamation-triangle"></i> WARNING: Large video files cause high bandwidth costs. Use MEGA/Drive for large files.</p>
                     <input type="file" class="link-file" accept="video/mp4,video/x-matroska,video/*">
                 </div>
             `;
@@ -1448,8 +1465,8 @@
             if (!cropper) return;
 
             const canvas = cropper.getCroppedCanvas({
-                width: 1280,
-                height: 720
+                width: 800, // Reduced from 1280 to save bandwidth
+                height: 450  // Reduced from 720 to save bandwidth
             });
 
             canvas.toBlob((blob) => {
@@ -1465,7 +1482,10 @@
                 document.getElementById('cropperModal').style.display = 'none';
                 cropper.destroy();
                 cropper = null;
-            }, 'image/jpeg', 0.9);
+                
+                // Show size info for transparency
+                console.log('Optimized Image Size:', (blob.size / 1024).toFixed(2), 'KB');
+            }, 'image/jpeg', 0.6); // Quality reduced to 0.6 for maximum bandwidth savings
         }
 
         function removeThumbnail(e) {
@@ -1785,10 +1805,79 @@
                     </div>
                 `).join('');
 
-            } catch (error) {
-                container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 40px;">Error loading list. Check if server is running.</div>`;
+            } catch (err) {
+                console.error('Error loading management list:', err);
+                container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 40px;">Error loading content. Please try again.</div>`;
             }
         }
+
+        function filterManagementList() {
+            const term = document.getElementById('manageSearch').value.toLowerCase();
+            const items = document.querySelectorAll('.manage-item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(term)) {
+                    item.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // Handle empty search result
+            const container = document.getElementById('managementList');
+            const noResultId = 'manage-no-results';
+            let noResultMsg = document.getElementById(noResultId);
+
+            if (visibleCount === 0 && term !== '') {
+                if (!noResultMsg) {
+                    noResultMsg = document.createElement('div');
+                    noResultMsg.id = noResultId;
+                    noResultMsg.style.cssText = 'text-align: center; color: var(--text-secondary); padding: 40px; width: 100%;';
+                    noResultMsg.innerHTML = `<i class="fas fa-search-minus" style="font-size: 24px; margin-bottom: 10px; opacity: 0.5;"></i><p>No matches found for "${term}"</p>`;
+                    container.appendChild(noResultMsg);
+                }
+            } else if (noResultMsg) {
+                noResultMsg.remove();
+            }
+        }
+
+        // --- REAL-TIME ADMIN UPDATES ---
+        function subscribeToAdminChanges() {
+            try {
+                // Listen for changes on scenepacks
+                supabaseClient
+                    .channel('admin-scenepacks')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'scenepacks' }, (payload) => {
+                        console.log('Scenepack update:', payload.eventType);
+                        const activeTab = document.querySelector('.tab-content.active').id;
+                        if (activeTab === 'contentTab') loadManagementList();
+                        if (activeTab === 'statsTab') loadStats();
+                    })
+                    .subscribe();
+
+                // Listen for changes on requests
+                supabaseClient
+                    .channel('admin-requests')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'requests' }, (payload) => {
+                        console.log('Request update:', payload.eventType);
+                        const activeTab = document.querySelector('.tab-content.active').id;
+                        if (activeTab === 'requestsTab') loadRequestsList();
+                        if (activeTab === 'statsTab') loadStats();
+                        
+                        // Always update request badge
+                        loadRequestsList(true); // Helper to just update badge
+                    })
+                    .subscribe();
+            } catch (err) {
+                console.warn('Real-time setup failed:', err);
+            }
+        }
+
+        // Initialize Real-time
+        subscribeToAdminChanges();
 
         let statsInterval = null;
 
@@ -1856,9 +1945,11 @@
             }
         }
 
-        async function loadRequestsList() {
+        async function loadRequestsList(badgeOnly = false) {
             const container = document.getElementById('requestsList');
-            container.innerHTML = '<div style="text-align: center; padding: 60px; grid-column: 1/-1;"><i class="fas fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 15px;"></i><p>Fetching latest requests...</p></div>';
+            if (!badgeOnly) {
+                container.innerHTML = '<div style="text-align: center; padding: 60px; grid-column: 1/-1;"><i class="fas fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 15px;"></i><p>Fetching latest requests...</p></div>';
+            }
 
             try {
                 const response = await fetch(`${API_BASE}/api/requests`, {
@@ -1877,6 +1968,8 @@
                 } else {
                     counter.style.display = 'none';
                 }
+
+                if (badgeOnly) return;
 
                 if (requests.length === 0) {
                     container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 80px; grid-column: 1/-1;">
@@ -1905,7 +1998,7 @@
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 8px;">
-                                    <button class="delete-btn" title="Reply to User" style="background: rgba(123, 97, 255, 0.1); color: #7b61ff; border-color: rgba(123, 97, 255, 0.2);" onclick="openReplyModal('${req.user_email}', '${(req.title || "").replace(/'/g, "\\'")}')">
+                                    <button class="delete-btn" title="Reply to User" style="background: rgba(123, 97, 255, 0.1); color: #7b61ff; border-color: rgba(123, 97, 255, 0.2);" onclick="openReplyModal('${req.user_email}', \`${(req.title || "").replace(/`/g, "\\`").replace(/\$/g, "\\$")}\`)">
                                         <i class="fas fa-reply"></i>
                                     </button>
                                     <button class="delete-btn" title="Copy Title" style="background: rgba(255, 255, 255, 0.05); color: #fff; border-color: rgba(255, 255, 255, 0.1);" onclick="copyToClipboard('${(req.title || "").replace(/'/g, "\\'")}')">
@@ -2095,7 +2188,6 @@
                 btn.disabled = false;
                 btn.innerHTML = originalHtml;
             }
-        }
         }
 
         // Smart Navigation Hiding Logic

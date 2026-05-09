@@ -12,9 +12,11 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -313,8 +315,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Profile Header */
@@ -470,8 +479,15 @@
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Favorites Grid */
@@ -543,9 +559,23 @@
             letter-spacing: 1px;
         }
 
-        .status-pending { background: rgba(255, 165, 0, 0.1); color: #ffa500; border: 1px solid rgba(255, 165, 0, 0.2); }
-        .status-approved { background: rgba(0, 210, 255, 0.1); color: #00d2ff; border: 1px solid rgba(0, 210, 255, 0.2); }
-        .status-fulfilled { background: rgba(0, 255, 127, 0.1); color: #00ff7f; border: 1px solid rgba(0, 255, 127, 0.2); }
+        .status-pending {
+            background: rgba(255, 165, 0, 0.1);
+            color: #ffa500;
+            border: 1px solid rgba(255, 165, 0, 0.2);
+        }
+
+        .status-approved {
+            background: rgba(0, 210, 255, 0.1);
+            color: #00d2ff;
+            border: 1px solid rgba(0, 210, 255, 0.2);
+        }
+
+        .status-fulfilled {
+            background: rgba(0, 255, 127, 0.1);
+            color: #00ff7f;
+            border: 1px solid rgba(0, 255, 127, 0.2);
+        }
 
         /* Settings Form */
         .settings-card {
@@ -687,14 +717,41 @@
                 right: 0;
             }
 
-            .profile-header { border-radius: 0; margin: 60px -20px 30px; }
-            .profile-banner { height: 150px; }
-            .profile-info-wrapper { padding: 0 20px 30px; }
-            .profile-avatar { width: 100px; height: 100px; }
-            .profile-stats { gap: 20px; }
-            .stat-value { font-size: 20px; }
-            .dashboard-tabs { width: 100%; overflow-x: auto; justify-content: flex-start; }
-            .dash-tab { padding: 12px 20px; }
+            .profile-header {
+                border-radius: 0;
+                margin: 60px -20px 30px;
+            }
+
+            .profile-banner {
+                height: 150px;
+            }
+
+            .profile-info-wrapper {
+                padding: 0 20px 30px;
+            }
+
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+            }
+
+            .profile-stats {
+                gap: 20px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            .dashboard-tabs {
+                width: 100%;
+                overflow-x: auto;
+                justify-content: flex-start;
+            }
+
+            .dash-tab {
+                padding: 12px 20px;
+            }
         }
     </style>
 </head>
@@ -726,7 +783,7 @@
                 <a href="/#scenepacks" class="nav-link">Scenepacks</a>
                 <a href="/requests" class="nav-link">Request</a>
                 <a href="/donate" class="nav-donate-pill">Donate Now <i class="fas fa-heart"></i></a>
-                
+
                 <!-- Profile -->
                 <div id="userProfile" class="user-dropdown">
                     <div class="user-trigger" onclick="toggleUserMenu(event)">
@@ -734,19 +791,32 @@
                         <span id="navUserName">User</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="user-menu" style="position: absolute; top: calc(100% + 15px); right: 0; width: 220px; background: rgba(10,10,10,0.98); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 12px; display: none; z-index: 3000; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-                        <div style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;">
-                            <span id="menuUserName" style="display: block; font-size: 15px; font-weight: 800; color: #fff;">User</span>
-                            <span id="menuUserEmail" style="display: block; font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px;">editor@spark.com</span>
+                    <div class="user-menu"
+                        style="position: absolute; top: calc(100% + 15px); right: 0; width: 220px; background: rgba(10,10,10,0.98); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 12px; display: none; z-index: 3000; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                        <div
+                            style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;">
+                            <span id="menuUserName"
+                                style="display: block; font-size: 15px; font-weight: 800; color: #fff;">User</span>
+                            <span id="menuUserEmail"
+                                style="display: block; font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px;">editor@spark.com</span>
                         </div>
-                        <a href="/" style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                        <a href="/"
+                            style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;"
+                            onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+                            onmouseout="this.style.background='transparent'">
                             <i class="fas fa-home"></i> Back to Home
                         </a>
-                        <a href="/donate" style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                        <a href="/donate"
+                            style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;"
+                            onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+                            onmouseout="this.style.background='transparent'">
                             <i class="fas fa-crown" style="color: #f1c40f;"></i> Support Us
                         </a>
                         <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0;"></div>
-                        <a href="#" id="logoutBtn" style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #ff4757; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,71,87,0.12)'" onmouseout="this.style.background='transparent'">
+                        <a href="#" id="logoutBtn"
+                            style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #ff4757; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;"
+                            onmouseover="this.style.background='rgba(255,71,87,0.12)'"
+                            onmouseout="this.style.background='transparent'">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </div>
@@ -772,7 +842,7 @@
                 <h1 class="profile-name" id="userDisplayName">Editor Name</h1>
                 <span class="profile-handle" id="userHandle">@username</span>
                 <p class="profile-bio" id="userBio">No bio yet. Add one in settings!</p>
-                
+
                 <div class="profile-stats">
                     <div class="stat-item">
                         <span class="stat-value" id="favCount">0</span>
@@ -830,7 +900,8 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Bio</label>
-                    <textarea id="editBio" class="form-input" rows="4" placeholder="Tell us about your editing style..."></textarea>
+                    <textarea id="editBio" class="form-input" rows="4"
+                        placeholder="Tell us about your editing style..."></textarea>
                 </div>
                 <button class="save-btn" onclick="saveSettings()">Save Changes</button>
             </div>
@@ -839,9 +910,18 @@
 
     <script>
         // Supabase Configuration
-        const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
+        const SUPABASE_URL = 'https://mrndyxetxslvyznqyirx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybmR5eGV0eHNsdnl6bnF5aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMDA4NDksImV4cCI6MjA5Mzg3Njg0OX0.7jY1-_tYTCDj7h3uuHzz7L-neB8DT-MzEvYGesWWJQA';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- PROXY UTILITY ---
+        function getProxyUrl(url) {
+            if (!url) return url;
+            if (url.includes('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public/')) {
+                return url.replace('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
+            }
+            return url;
+        }
 
         let currentUser = null;
         let allScenepacks = [];
@@ -861,11 +941,11 @@
             event.stopPropagation();
             const menu = document.querySelector('.user-menu');
             const isVisible = menu.style.display === 'block';
-            
+
             // Close all other menus first if any
-            
+
             menu.style.display = isVisible ? 'none' : 'block';
-            
+
             if (!isVisible) {
                 const closeMenu = (e) => {
                     if (!menu.contains(e.target)) {
@@ -885,10 +965,10 @@
             }
 
             currentUser = JSON.parse(userData);
-            
+
             // Sync UI immediately with cached data
             updateProfileUI();
-            
+
             // Fetch fresh data from Supabase to ensure images/bio are latest
             try {
                 const { data, error } = await supabaseClient
@@ -896,7 +976,7 @@
                     .select('*')
                     .eq('email', currentUser.email)
                     .single();
-                
+
                 if (data) {
                     currentUser = { ...currentUser, ...data };
                     localStorage.setItem('spark_user', JSON.stringify(currentUser));
@@ -911,34 +991,41 @@
                 loadScenepacks(),
                 loadUserRequests()
             ]);
-            
+
             renderFavorites();
+            subscribeToDashboardChanges();
         }
 
         function updateProfileUI() {
-            const displayName = currentUser.displayName || currentUser.display_name || currentUser.username || currentUser.user_name || 'Professional Editor';
+            if (!currentUser) return;
+
+            const displayName = currentUser.displayName || currentUser.display_name || currentUser.username || 'User';
             const username = currentUser.username || currentUser.user_name || 'user';
             const bio = currentUser.bio || currentUser.user_bio || 'No bio yet. Add one in settings!';
             const email = currentUser.email || 'editor@spark.com';
-            
+
             document.getElementById('userDisplayName').textContent = displayName;
             document.getElementById('userHandle').textContent = `@${username}`;
             document.getElementById('userBio').textContent = bio;
-            
+
             // Nav elements
-            document.getElementById('navUserName').textContent = displayName;
-            document.getElementById('menuUserName').textContent = displayName;
+            const navUserName = document.getElementById('navUserName');
+            if (navUserName) navUserName.textContent = displayName;
+            const menuUserName = document.getElementById('menuUserName');
+            if (menuUserName) menuUserName.textContent = displayName;
             document.getElementById('menuUserEmail').textContent = email;
-            
+
             const profilePic = currentUser.profilePic || currentUser.profile_pic || currentUser.avatar_url;
             if (profilePic) {
                 document.getElementById('userAvatar').src = profilePic;
-                document.getElementById('navUserAvatar').src = profilePic;
+                const navUserAvatar = document.getElementById('navUserAvatar');
+                if (navUserAvatar) navUserAvatar.src = profilePic;
             } else {
                 document.getElementById('userAvatar').src = '/assets/spark-logo-pfp.jpg';
-                document.getElementById('navUserAvatar').src = '/assets/spark-logo-pfp.jpg';
+                const navUserAvatar = document.getElementById('navUserAvatar');
+                if (navUserAvatar) navUserAvatar.src = '/assets/spark-logo-pfp.jpg';
             }
-            
+
             const banner = currentUser.bannerPic || currentUser.banner_pic || currentUser.profileBanner || currentUser.profile_banner || currentUser.banner_url;
             if (banner) {
                 document.getElementById('userBanner').style.backgroundImage = `url(${banner})`;
@@ -951,11 +1038,50 @@
             document.getElementById('editBio').value = (currentUser.bio || currentUser.user_bio || '').replace('No bio yet. Add one in settings!', '');
         }
 
+        // --- REAL-TIME DASHBOARD UPDATES ---
+        function subscribeToDashboardChanges() {
+            if (!currentUser || !currentUser.email) return;
+
+            try {
+                // Listen for user profile updates
+                supabaseClient
+                    .channel('user-profile-realtime')
+                    .on('postgres_changes', { 
+                        event: 'UPDATE', 
+                        schema: 'public', 
+                        table: 'users',
+                        filter: `email=eq.${currentUser.email}`
+                    }, (payload) => {
+                        console.log('User profile sync:', payload.eventType);
+                        Object.assign(currentUser, payload.new);
+                        localStorage.setItem('spark_user', JSON.stringify(currentUser));
+                        updateProfileUI();
+                    })
+                    .subscribe();
+
+                // Listen for request status changes
+                supabaseClient
+                    .channel('user-requests-realtime')
+                    .on('postgres_changes', { 
+                        event: '*', 
+                        schema: 'public', 
+                        table: 'requests',
+                        filter: `user_email=eq.${currentUser.email}`
+                    }, (payload) => {
+                        console.log('User request update:', payload.eventType);
+                        loadUserRequests();
+                    })
+                    .subscribe();
+            } catch (err) {
+                console.warn('Dashboard real-time sync failed:', err);
+            }
+        }
+
         function previewImage(input, previewId) {
             const preview = document.getElementById(previewId);
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                 }
@@ -983,7 +1109,7 @@
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
-                
+
                 renderRequests(data || []);
                 document.getElementById('requestCount').textContent = data.length;
             } catch (err) {
@@ -995,7 +1121,7 @@
             const favorites = JSON.parse(localStorage.getItem('spark_favorites')) || [];
             const grid = document.getElementById('favoritesGrid');
             grid.innerHTML = '';
-            
+
             const favPacks = allScenepacks.filter(sp => favorites.includes(sp.id));
             document.getElementById('favCount').textContent = favPacks.length;
 
@@ -1011,7 +1137,7 @@
 
             favPacks.forEach(pack => {
                 const card = document.createElement('div');
-                card.className = 'favorite-card'; 
+                card.className = 'favorite-card';
                 card.style.cssText = `
                     background: rgba(255,255,255,0.03);
                     border: 1px solid rgba(255,255,255,0.08);
@@ -1088,7 +1214,7 @@
         function switchTab(tabId) {
             document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
+
             document.querySelector(`button[onclick="switchTab('${tabId}')"]`).classList.add('active');
             document.getElementById(`${tabId}Content`).classList.add('active');
         }
@@ -1117,9 +1243,9 @@
                 currentUser.displayName = displayName;
                 currentUser.display_name = displayName;
                 currentUser.bio = bio;
-                
+
                 localStorage.setItem('spark_user', JSON.stringify(currentUser));
-                
+
                 alert('Settings saved successfully!');
                 updateProfileUI();
             } catch (err) {

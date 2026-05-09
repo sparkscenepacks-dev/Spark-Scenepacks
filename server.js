@@ -14,8 +14,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Supabase Configuration
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://leafankrwvhdscjstwkf.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+    console.error('CRITICAL ERROR: Supabase credentials missing from environment variables.');
+}
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Static Fallback Creators (Matches your data.json)
@@ -59,8 +64,12 @@ const transporter = nodemailer.createTransport({
 });
 
 // Admin Credentials
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'sparkscenepacks';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'spark911';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
+    console.warn('WARNING: Admin credentials missing from environment variables.');
+}
 
 // Health Check
 app.get(['/api/health', '/health'], (req, res) => {
@@ -160,7 +169,7 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
                     .from('requests')
                     .select('id')
                     .or(`status.eq.pending,status.is.null`)
-                    .ilike('title', searchTitle);
+                    .ilike('title', `%${searchTitle}%`);
 
                 if (matchedRequests && matchedRequests.length > 0) {
                     const ids = matchedRequests.map(r => r.id);

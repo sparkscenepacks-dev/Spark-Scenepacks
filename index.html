@@ -22,15 +22,23 @@
     <meta name="description" content="4K Movies and Shows Scenepacks">
     <meta name="author" content="Spark Scenepacks">
 
-    <!-- Fonts -->
+    <!-- Resource Hints for Speed -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://mrndyxetxslvyznqyirx.supabase.co">
+    <link rel="dns-prefetch" href="https://sparkscenepacks911.sparkscenepacks.workers.dev">
+    
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="/assets/blackhole.jpg" as="image">
+    <link rel="preload" href="/assets/spark-logo.png" as="image">
+    
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+        rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 
     <style>
         * {
@@ -958,6 +966,27 @@
         @keyframes shimmer {
             0% { background-position: -100% 0; }
             100% { background-position: 100% 0; }
+        }
+
+        /* Skeleton Styles */
+        .scenepack-card.skeleton {
+            pointer-events: none;
+            background: #111;
+        }
+        .skeleton-line {
+            height: 15px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .skeleton-line::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shimmer 1.5s infinite;
         }
 
         .scenepack-thumbnail img {
@@ -3025,9 +3054,18 @@
 
     <script>
         // Supabase Configuration
-        const SUPABASE_URL = 'https://leafankrwvhdscjstwkf.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxlYWZhbmtyd3ZoZHNjanN0d2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyNTA3MjksImV4cCI6MjA5MTgyNjcyOX0.WG2bo313fznBlptywKrPnJBHUluftz3S53TYKJnfS6g';
+        const SUPABASE_URL = 'https://mrndyxetxslvyznqyirx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybmR5eGV0eHNsdnl6bnF5aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMDA4NDksImV4cCI6MjA5Mzg3Njg0OX0.7jY1-_tYTCDj7h3uuHzz7L-neB8DT-MzEvYGesWWJQA';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // --- PROXY UTILITY ---
+        function getProxyUrl(url) {
+            if (!url) return url;
+            if (url.includes('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public/')) {
+                return url.replace('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
+            }
+            return url;
+        }
 
         function showNotification(title, message, type = 'success', callback = null, showCancel = false) {
             const overlay = document.getElementById('notificationOverlay');
@@ -3191,28 +3229,39 @@
                 console.warn('Failed to load cache:', e);
             }
         }
-
+        
+        // --- DATA LOADING ---
         async function loadData() {
+            const grid = document.getElementById('scenepacksGrid');
+            if (!grid) return;
+
+            // Show Skeletons
+            grid.innerHTML = Array(8).fill(0).map(() => `
+                <div class="scenepack-card skeleton">
+                    <div class="scenepack-thumbnail" style="animation: shimmer 1.5s infinite;"></div>
+                    <div class="scenepack-card-content">
+                        <div class="skeleton-line" style="width: 80%;"></div>
+                        <div class="skeleton-line" style="width: 40%;"></div>
+                        <div class="skeleton-line" style="width: 60%; margin-top: 15px; height: 35px; border-radius: 50px;"></div>
+                    </div>
+                </div>
+            `).join('');
+
             try {
-                const response = await fetch(`${DATA_URL}${DATA_URL.includes('?') ? '&' : '?'}t=${Date.now()}`);
-                if (!response.ok) {
-                    const text = await response.text();
-                    let errorMessage = `Server error: ${response.status}`;
-                    try {
-                        const json = JSON.parse(text);
-                        errorMessage = json.error || errorMessage;
-                    } catch(e) {}
-                    throw new Error(errorMessage);
-                }
-                const data = await response.json();
-                if (!data || !Array.isArray(data.scenepacks)) {
-                    throw new Error('Invalid data format received from server');
-                }
+                const response = await fetch(getApiUrl('scenepacks'));
+                if (!response.ok) throw new Error('Fetch failed');
                 
-                scenepacks = data.scenepacks;
-                localStorage.setItem('spark_scenepacks_cache', JSON.stringify(data));
-                performSearch(document.getElementById('searchInput').value);
-                return true;
+                const data = await response.json();
+                scenepacks = data.scenepacks || [];
+                filteredScenepacks = [...scenepacks];
+                
+                renderScenepacks();
+                subscribeToChanges();
+                
+                const initialId = getScenepackFromURL();
+                if (initialId) {
+                    setTimeout(() => openModal(initialId), 500);
+                }
             } catch (error) {
                 console.error('Fetch Error:', error);
                 if (scenepacks.length === 0) {
@@ -3226,12 +3275,35 @@
             }
         }
 
+        // --- REAL-TIME UPDATES ---
+        function subscribeToChanges() {
+            try {
+                // Listen for any changes on the scenepacks table
+                supabaseClient
+                    .channel('scenepacks-realtime')
+                    .on('postgres_changes', { 
+                        event: '*', 
+                        schema: 'public', 
+                        table: 'scenepacks' 
+                    }, (payload) => {
+                        console.log('Real-time update received:', payload.eventType);
+                        loadData(); // Refresh data instantly
+                    })
+                    .subscribe((status) => {
+                        console.log('Real-time subscription status:', status);
+                    });
+            } catch (err) {
+                console.error('Failed to setup real-time:', err);
+            }
+        }
+
         // Initialize from cache then fetch fresh
         initCachedData();
         loadData();
+        subscribeToChanges(); // Start real-time listening
 
-        // Real-time updates: Refresh data Every 15 seconds for live feel
-        setInterval(loadData, 15000);
+        // Polling as a robust fallback (Every 60 seconds instead of 15 to save resources)
+        setInterval(loadData, 60000);
 
         // Refresh data when the tab becomes active/visible again
         document.addEventListener('visibilitychange', () => {
@@ -3394,17 +3466,20 @@
 
         // Search functionality with debounce
         let searchTimeout;
+        const debouncedSearch = (searchTerm) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch(searchTerm);
+            }, 150);
+        };
+
         function setupSearch() {
             const searchInput = document.getElementById('searchInput');
 
             searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value;
-                showSearchDropdown(searchTerm);
-                
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    performSearch(searchTerm);
-                }, 150); // Small debounce for performance
+                const term = e.target.value;
+                showSearchDropdown(term);
+                debouncedSearch(term);
             });
 
             searchInput.addEventListener('focus', () => {
@@ -3602,7 +3677,7 @@
             if (scenepack.thumbnail) {
                 const img = document.createElement('img');
                 // Removed cache-busting timestamp to enable browser caching for much faster loads
-                img.src = scenepack.thumbnail;
+                img.src = getProxyUrl(scenepack.thumbnail);
                 img.alt = scenepack.title;
                 
                 // Prioritize above-the-fold images
@@ -3769,7 +3844,7 @@
                 modalPoster.innerHTML = '';
                 if (scenepack.thumbnail) {
                     const img = document.createElement('img');
-                    img.src = scenepack.thumbnail;
+                    img.src = getProxyUrl(scenepack.thumbnail);
                     img.alt = scenepack.title;
                     img.onerror = function () {
                         modalPoster.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
@@ -4088,7 +4163,8 @@
                     if (userAvatar) userAvatar.src = user.profilePic || user.profile_pic || '/assets/spark-logo-pfp.jpg';
                     
                     if (logoutBtn) {
-                        logoutBtn.onclick = (e) => {
+                        logoutBtn.onclick = null;
+                        logoutBtn.addEventListener('click', (e) => {
                             e.preventDefault();
                             showNotification('Logout', 'Are you sure you want to sign out?', 'confirm', () => {
                                 localStorage.removeItem('spark_user');
@@ -4096,7 +4172,7 @@
                                 showNotification('Logged Out', 'Successfully signed out.', 'success');
                                 setTimeout(() => window.location.reload(), 1200);
                             }, true);
-                        };
+                        });
                     }
                 }
             } else {
