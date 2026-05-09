@@ -1230,15 +1230,19 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybmR5eGV0eHNsdnl6bnF5aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMDA4NDksImV4cCI6MjA5Mzg3Njg0OX0.7jY1-_tYTCDj7h3uuHzz7L-neB8DT-MzEvYGesWWJQA';
         
         let supabaseClient;
-        try {
-            if (typeof supabase !== 'undefined') {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            } else {
-                console.error('Supabase library not loaded yet');
+        function initSupabase() {
+            try {
+                if (typeof supabase !== 'undefined' && !supabaseClient) {
+                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    console.log('Supabase initialized successfully');
+                }
+            } catch (e) {
+                console.error('Supabase Init Error:', e);
             }
-        } catch (e) {
-            console.error('Supabase Init Error:', e);
         }
+        
+        // Try initializing on load
+        window.addEventListener('load', initSupabase);
 
         // --- PROXY UTILITY ---
         function getProxyUrl(url) {
@@ -1279,8 +1283,17 @@
 
         // Security - Server-side authentication
         async function checkAccess() {
-            const user = document.getElementById('adminUser').value.trim();
-            const pass = document.getElementById('adminPass').value.trim();
+            console.log('checkAccess called');
+            const userEl = document.getElementById('adminUser');
+            const passEl = document.getElementById('adminPass');
+            
+            if (!userEl || !passEl) {
+                alert('Critical Error: Login fields not found in HTML!');
+                return;
+            }
+
+            const user = userEl.value.trim();
+            const pass = passEl.value.trim();
             const loginError = document.getElementById('loginError');
             const loginBtn = document.querySelector('#loginShield button');
 
@@ -1297,8 +1310,10 @@
 
                 if (response.ok) {
                     const data = await response.json();
+                    console.log('Login success');
                     document.getElementById('loginShield').style.display = 'none';
                     document.getElementById('adminDashboard').style.display = 'block';
+                    initSupabase(); // Ensure it's ready when entering
                     switchTab('content');
                 } else {
                     const errorMsg = response.status === 401 ? 'Invalid username or password.' :
