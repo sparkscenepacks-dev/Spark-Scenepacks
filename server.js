@@ -119,14 +119,18 @@ app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
 
 // EMERGENCY BYPASS ROUTE - VISIT THIS TO LOG IN MANUALLY
 app.get('/api/admin/emergency-login', (req, res) => {
-    res.cookie('isAdmin', 'true', {
-        signed: true,
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        maxAge: 24 * 60 * 60 * 1000
-    });
-    res.send('<h1>✅ Admin Access Granted</h1><p>You are now logged in. <a href="/admin">Click here to go to the Dashboard</a></p>');
+    try {
+        res.cookie('isAdmin', 'true', {
+            signed: true,
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            maxAge: 24 * 60 * 60 * 1000
+        });
+        res.send('<h1>✅ Admin Access Granted</h1><p>You are now logged in. <a href="/admin">Click here to go to the Dashboard</a></p>');
+    } catch (err) {
+        res.status(500).send(`<h1>❌ Emergency Login Failed</h1><p>Error: ${err.message}</p>`);
+    }
 });
 
 app.post(['/api/logout', '/api/logout/', '/logout', '/logout/'], (req, res) => {
