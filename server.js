@@ -73,7 +73,7 @@ if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
 
 // Health Check
 app.get(['/api/health', '/health'], (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    res.json({ status: 'ok', version: '2.0', timestamp: new Date().toISOString() });
 });
 
 // Authentication Middleware
