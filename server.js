@@ -31,17 +31,12 @@ const CREATORS = {
     "pwr": { "name": "PWR", "url": "https://veelscp.com/pwr" }
 };
 
-// Configure Multer for Image Uploads (Temporary storage for serverless)
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, os.tmpdir()); // Use cross-platform temp directory
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
+// Configure Multer for Image Uploads (Memory storage for serverless compatibility)
+const storage = multer.memoryStorage();
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
-const upload = multer({ storage: storage });
 
 app.use(cors({
     origin: true,
