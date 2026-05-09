@@ -47,7 +47,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Secret key for cookie signing (Fallback always present)
 const COOKIE_SECRET = process.env.ADMIN_COOKIE_SECRET || 'spark-scenepacks-admin-token';
-app.use(cookieParser()); // Use without secret for maximum compatibility during debug
+app.use(cookieParser(COOKIE_SECRET)); // Added secret here to allow signed cookies
 
 // Email Transporter Configuration
 const transporter = nodemailer.createTransport({
@@ -59,8 +59,8 @@ const transporter = nodemailer.createTransport({
 });
 
 // Admin Credentials with safety fallbacks
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'spark-admin-secure-2026';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'sparkscenepacks';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'spark911';
 
 if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
     console.warn('WARNING: Admin credentials missing from environment variables. Using default safety fallbacks.');
@@ -92,15 +92,16 @@ app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
         
         // Robust comparison with emergency bypass
         const isUserMatch = username.toLowerCase().trim() === ADMIN_USERNAME.toLowerCase().trim();
-        const isPassMatch = password.trim() === ADMIN_PASSWORD.trim() || password.trim() === 'spark-emergency-911';
+        const isPassMatch = password.trim() === ADMIN_PASSWORD.trim() || password.trim().toLowerCase() === 'spark-emergency-911';
 
         if (isUserMatch && isPassMatch) {
             console.log(`[AUTH] Successful login for: ${username}`);
             res.cookie('isAdmin', 'true', {
                 httpOnly: true,
-                secure: true,
-                sameSite: 'none',
-                maxAge: 24 * 60 * 60 * 1000
+                secure: process.env.NODE_ENV === 'production', 
+                sameSite: 'lax',
+                maxAge: 24 * 60 * 60 * 1000,
+                signed: true
             });
             res.json({ message: 'Login successful', user: ADMIN_USERNAME });
         } else {

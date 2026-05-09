@@ -891,7 +891,7 @@
                 };
 
                 // Save to Supabase (assuming users table exists)
-                const { error: dbError } = await supabaseClient.from('users').upsert([userData]);
+                const { error: dbError } = await supabaseClient.from('users').insert([userData]);
 
                 if (dbError) throw dbError;
 
@@ -900,7 +900,7 @@
                 localStorage.setItem('spark_favorites', JSON.stringify([]));
 
                 showNotification('Welcome!', 'Your account has been created successfully. Redirecting you to your dashboard...', 'success', () => {
-                    window.location.href = 'dashboard.html';
+                    window.location.href = '/dashboard';
                 });
 
             } catch (err) {
@@ -953,7 +953,7 @@
                     localStorage.setItem('spark_user', JSON.stringify(data));
                     localStorage.setItem('spark_favorites', JSON.stringify(data.favorites || []));
                     showNotification('Welcome Back!', 'Welcome back, ' + (data.displayName || data.username) + '!', 'success', () => {
-                        window.location.href = 'dashboard.html';
+                        window.location.href = '/dashboard';
                     });
                 }
             } catch (err) {

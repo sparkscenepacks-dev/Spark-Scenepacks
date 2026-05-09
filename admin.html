@@ -108,41 +108,141 @@
         }
 
 
-        /* Login Shield */
+        /* PREMIUM LOGIN SHIELD */
         #loginShield {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)), url('assets/Zenitsu.jpg');
+            background: #050505;
+            background-image: radial-gradient(circle at 50% 50%, rgba(123, 97, 255, 0.1), transparent), url('assets/Zenitsu.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
-            transition: opacity 0.5s ease;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
         }
 
-        .login-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 40px;
-            border-radius: 32px;
-            width: 100%;
-            max-width: 400px;
+        .premium-login-card {
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px 40px;
+            border-radius: 40px;
+            width: 90%;
+            max-width: 420px;
             text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 
+                        inset 0 0 20px rgba(255, 255, 255, 0.05);
+            position: relative;
+            animation: cardEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .login-title {
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .login-logo {
+            width: 70px;
+            height: 70px;
+            background: #fff;
+            border-radius: 20px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .login-logo img {
+            width: 45px;
+            filter: invert(1);
+        }
+
+        .premium-title {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.3rem;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .premium-subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 13px;
+            margin-bottom: 35px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .key-input-wrapper {
+            position: relative;
             margin-bottom: 25px;
+        }
+
+        .key-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 18px !important;
+            padding: 16px 20px !important;
+            color: #fff !important;
+            font-size: 15px !important;
+            text-align: center !important;
+            letter-spacing: 4px !important;
+            transition: all 0.3s ease !important;
+            outline: none !important;
+        }
+
+        .key-input:focus {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .unlock-btn {
+            background: #ffffff !important;
+            color: #000 !important;
+            height: 56px !important;
+            font-size: 14px !important;
+            font-weight: 800 !important;
+            border-radius: 18px !important;
+            letter-spacing: 1px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 12px !important;
+            margin-top: 10px !important;
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.2) !important;
+            background: #f0f0f0 !important;
+        }
+
+        .glow-orb {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.3) 0%, transparent 70%);
+            z-index: -1;
+            filter: blur(40px);
+            opacity: 0.5;
+            animation: orbPulse 6s infinite ease-in-out;
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.6; }
         }
 
         .input-group {
@@ -212,7 +312,6 @@
             box-shadow: 0 12px 30px rgba(255, 255, 255, 0.1);
         }
 
-        /* Dashboard Layout - TOP PILL NAV */
         #adminDashboard {
             display: none;
             width: 100%;
@@ -908,23 +1007,43 @@
         <div class="orb orb-3"></div>
     </div>
 
-    <!-- Login Section -->
+    <!-- New Premium Login Shield -->
     <div id="loginShield">
-        <div class="login-card">
-            <h2 class="login-title">Admin Entry</h2>
-            <div class="input-group">
-                <label class="input-label">Username</label>
-                <input type="text" id="adminUser" placeholder="Enter username...">
+        <div class="glow-orb" style="top: -50px; right: -50px;"></div>
+        <div class="glow-orb" style="bottom: -50px; left: -50px; animation-delay: -3s;"></div>
+        
+        <div class="premium-login-card">
+            <div class="login-logo">
+                <img src="/assets/spark-logo.png" alt="Spark">
             </div>
-            <div class="input-group" style="position: relative;">
-                <label class="input-label">Password</label>
-                <input type="password" id="adminPass" placeholder="Enter password...">
-                <i class="far fa-eye" id="togglePassword"
-                    style="position: absolute; right: 15px; top: 38px; cursor: pointer; color: var(--text-secondary);"></i>
+            <h1 class="premium-title">Admin Vault</h1>
+            <p class="premium-subtitle">Authorization required to access command center</p>
+            
+            <div class="input-stack" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;">
+                <div class="key-input-wrapper">
+                    <i class="fas fa-user" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.3); font-size: 14px;"></i>
+                    <input type="text" id="adminUser" class="key-input" placeholder="Username" style="padding-left: 50px;" autocomplete="off">
+                </div>
+                
+                <div class="key-input-wrapper">
+                    <i class="fas fa-lock" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.3); font-size: 14px;"></i>
+                    <input type="password" id="adminPass" class="key-input" placeholder="Password" style="padding-left: 50px;" autocomplete="off">
+                    <i class="far fa-eye" id="togglePass" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(255,255,255,0.3); font-size: 14px;"></i>
+                </div>
             </div>
-            <button onclick="checkAccess()">Unlock Dashboard</button>
-            <p id="loginError" style="color: #ff4444; font-size: 12px; margin-top: 15px; display: none;">Access Denied.
-                Try again.</p>
+            
+            <button onclick="checkAccess()" class="unlock-btn" id="unlockBtn">
+                <span>UNLOCK SYSTEM</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            
+            <p id="loginError" style="color: #ff4757; font-size: 12px; margin-top: 25px; font-weight: 700; display: none; text-transform: uppercase; letter-spacing: 1px;">
+                <i class="fas fa-exclamation-circle"></i> Access Denied
+            </p>
+
+            <div id="serverStatus" style="margin-top: 30px; font-size: 10px; color: var(--text-secondary); opacity: 0.5;">
+                <i class="fas fa-circle-notch fa-spin"></i> Checking connection...
+            </div>
         </div>
     </div>
 
@@ -1222,21 +1341,101 @@
     <div id="toast" class="toast">Successfully Saved!</div>
 
     <script>
-        const API_BASE = (window.location.hostname === 'localhost' && window.location.port !== '5000') ? 'http://localhost:5000' : '';
+        const API_BASE = window.location.origin;
 
         document.addEventListener('DOMContentLoaded', function() {
             initSupabase();
-            checkSession(); // Auto-login if session exists
-            
-            // Password visibility toggle
-            const togglePass = document.getElementById('togglePassword');
-            if (togglePass) {
-                togglePass.addEventListener('click', function (e) {
-                    const password = document.getElementById('adminPass');
-                    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-                    password.setAttribute('type', type);
-                    this.classList.toggle('fa-eye-slash');
+            checkSession();
+        });
+
+        async function checkSession() {
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/check-session`, {
+                    credentials: 'include'
                 });
+                if (response.ok) {
+                    document.getElementById('loginShield').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('loginShield').style.display = 'none';
+                        document.getElementById('adminDashboard').style.display = 'block';
+                        loadManagementList();
+                        loadRequestsList(true);
+                    }, 800);
+                } else {
+                    document.getElementById('serverStatus').innerHTML = '<i class="fas fa-check-circle" style="color: #43b883;"></i> Connection Stable';
+                }
+            } catch (err) {
+                document.getElementById('serverStatus').innerHTML = '<i class="fas fa-times-circle" style="color: #ff4444;"></i> Server Offline';
+            }
+        }
+
+        async function checkAccess() {
+            const userEl = document.getElementById('adminUser');
+            const passEl = document.getElementById('adminPass');
+            const btn = document.getElementById('unlockBtn');
+            const errorEl = document.getElementById('loginError');
+            
+            const username = userEl.value.trim();
+            const password = passEl.value.trim();
+
+            if (!username || !password) {
+                alert('Please enter both username and password.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AUTHENTICATING...';
+            errorEl.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    console.log('Login success');
+                    document.getElementById('loginShield').style.opacity = '0';
+                    document.getElementById('loginShield').style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        document.getElementById('loginShield').style.display = 'none';
+                        document.getElementById('adminDashboard').style.display = 'block';
+                        loadManagementList();
+                        loadRequestsList(true);
+                        switchTab('content');
+                    }, 800);
+                } else {
+                    const data = await response.json().catch(() => ({}));
+                    errorEl.style.display = 'block';
+                    errorEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${data.error || 'Access Denied'}`;
+                    passEl.value = '';
+                    passEl.focus();
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                alert('Connection Error: Could not connect to the server. Is it running?');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<span>UNLOCK SYSTEM</span><i class="fas fa-arrow-right"></i>';
+            }
+        }
+
+        // Toggle Password Visibility
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'togglePass') {
+                const input = document.getElementById('adminPass');
+                const isPass = input.type === 'password';
+                input.type = isPass ? 'text' : 'password';
+                e.target.className = isPass ? 'far fa-eye-slash' : 'far fa-eye';
+            }
+        });
+
+        // Add Enter key listener
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && document.getElementById('loginShield').style.display !== 'none') {
+                checkAccess();
             }
         });
 
@@ -1258,23 +1457,6 @@
         
         // Try initializing on load
         window.addEventListener('load', initSupabase);
-
-        async function checkSession() {
-            try {
-                const response = await fetch(`${API_BASE}/api/admin/check-session`, {
-                    credentials: 'include'
-                });
-                if (response.ok) {
-                    console.log('Session active - bypassing login');
-                    document.getElementById('loginShield').style.display = 'none';
-                    document.getElementById('adminDashboard').style.display = 'block';
-                    loadManagementList();
-                    loadRequestsList(true); // Update badge
-                }
-            } catch (err) {
-                console.warn('Session check failed:', err);
-            }
-        }
 
         // --- PROXY UTILITY ---
         function getProxyUrl(url) {
@@ -1312,63 +1494,6 @@
         let currentScenepacks = [];
         let isEditing = false;
         let editingId = null;
-
-        // Security - Server-side authentication
-        async function checkAccess() {
-            console.log('checkAccess called');
-            const userEl = document.getElementById('adminUser');
-            const passEl = document.getElementById('adminPass');
-            
-            if (!userEl || !passEl) {
-                alert('Critical Error: Login fields not found in HTML!');
-                return;
-            }
-
-            const user = userEl.value.trim();
-            const pass = passEl.value.trim();
-            const loginError = document.getElementById('loginError');
-            const loginBtn = document.querySelector('#loginShield button');
-
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
-
-            try {
-                const response = await fetch(`${API_BASE}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include', // Ensure session cookies are sent/saved
-                    body: JSON.stringify({ username: user, password: pass })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Login success');
-                    document.getElementById('loginShield').style.display = 'none';
-                    document.getElementById('adminDashboard').style.display = 'block';
-                    initSupabase(); // Ensure it's ready when entering
-                    switchTab('content');
-                } else {
-                    const errorMsg = response.status === 401 ? 'Invalid username or password.' :
-                        response.status === 404 ? `Error 404: API route not found. Check your server configuration.` :
-                            `Error ${response.status}: Failed to log in.`;
-                    loginError.style.display = 'block';
-                    loginError.textContent = errorMsg;
-                    alert('Login Failed: ' + errorMsg); // Emergency Alert
-                }
-            } catch (error) {
-                loginError.style.display = 'block';
-                // More detailed error checking
-                if (error.message.includes('fetch')) {
-                    loginError.textContent = 'Connection error. The backend might not be running correctly.';
-                } else {
-                    loginError.textContent = 'Error: ' + error.message;
-                }
-                alert('Connection Error: ' + error.message); // Emergency Alert
-            } finally {
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = 'Unlock Dashboard';
-            }
-        }
 
         // Tag System
         const tags = [];
@@ -2064,7 +2189,6 @@
                     `;
                 }).join('');
 
-                }
             } catch (error) {
                 if (!badgeOnly) {
                     container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 60px; grid-column: 1/-1;">
