@@ -1222,10 +1222,23 @@
     <div id="toast" class="toast">Successfully Saved!</div>
 
     <script>
+        const API_BASE = (window.location.hostname === 'localhost' && window.location.port !== '5000') ? 'http://localhost:5000' : '';
+
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Admin Dashboard Initializing...');
             initSupabase();
-        const API_BASE = (window.location.hostname === 'localhost' && window.location.port !== '5000') ? 'http://localhost:5000' : '';
+            
+            // Password visibility toggle
+            const togglePass = document.getElementById('togglePassword');
+            if (togglePass) {
+                togglePass.addEventListener('click', function (e) {
+                    const password = document.getElementById('adminPass');
+                    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                    password.setAttribute('type', type);
+                    this.classList.toggle('fa-eye-slash');
+                });
+            }
+        });
 
         // Supabase client for direct browser-to-storage uploads
         const SUPABASE_URL = 'https://mrndyxetxslvyznqyirx.supabase.co';
@@ -1339,14 +1352,6 @@
                 loginBtn.innerHTML = 'Unlock Dashboard';
             }
         }
-
-        // Password visibility toggle
-        document.getElementById('togglePassword').addEventListener('click', function (e) {
-            const password = document.getElementById('adminPass');
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            this.classList.toggle('fa-eye-slash');
-        });
 
         // Tag System
         const tags = [];
@@ -2235,7 +2240,6 @@
             }
             lastScrollY = window.scrollY;
         }, { passive: true });
-    }); // End DOMContentLoaded
     </script>
     </div> <!-- End adminDashboard -->
     <div id="replyModal" class="cropper-modal-container" style="z-index: 4000;">
