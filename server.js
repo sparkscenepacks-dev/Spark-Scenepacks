@@ -139,6 +139,31 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
             }]);
 
         if (error) throw error;
+
+        // --- AUTOMATED REQUEST STATUS UPDATE ---
+        // When a scenepack is uploaded, we check if any pending requests match the title
+        try {
+            const searchTitle = (scenepackData.title || '').trim();
+            if (searchTitle) {
+                const { data: matchedRequests } = await supabase
+                    .from('requests')
+                    .select('id')
+                    .or(`status.eq.pending,status.is.null`)
+                    .ilike('title', searchTitle);
+
+                if (matchedRequests && matchedRequests.length > 0) {
+                    const ids = matchedRequests.map(r => r.id);
+                    await supabase
+                        .from('requests')
+                        .update({ status: 'completed' })
+                        .in('id', ids);
+                    console.log(`[Automation] Auto-completed ${ids.length} requests for: ${searchTitle}`);
+                }
+            }
+        } catch (autoErr) {
+            console.error('[Automation Error] Failed to auto-complete requests:', autoErr);
+        }
+
         res.json({ message: 'Scenepack saved successfully' });
     } catch (err) {
         console.error('Supabase Save Error:', err);
