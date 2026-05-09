@@ -129,6 +129,8 @@ app.get('/api/admin/emergency-login', (req, res) => {
     res.send('<h1>✅ Admin Access Granted</h1><p>You are now logged in. <a href="/admin">Click here to go to the Dashboard</a></p>');
 });
 
+app.post(['/api/logout', '/api/logout/', '/logout', '/logout/'], (req, res) => {
+    res.clearCookie('isAdmin');
     res.json({ message: 'Logged out successfully' });
 });
 
