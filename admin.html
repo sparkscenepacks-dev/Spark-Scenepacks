@@ -1225,8 +1225,8 @@
         const API_BASE = (window.location.hostname === 'localhost' && window.location.port !== '5000') ? 'http://localhost:5000' : '';
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Admin Dashboard Initializing...');
             initSupabase();
+            checkSession(); // Auto-login if session exists
             
             // Password visibility toggle
             const togglePass = document.getElementById('togglePassword');
@@ -1258,6 +1258,23 @@
         
         // Try initializing on load
         window.addEventListener('load', initSupabase);
+
+        async function checkSession() {
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/check-session`, {
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    console.log('Session active - bypassing login');
+                    document.getElementById('loginShield').style.display = 'none';
+                    document.getElementById('adminDashboard').style.display = 'block';
+                    loadManagementList();
+                    loadRequestsList(true); // Update badge
+                }
+            } catch (err) {
+                console.warn('Session check failed:', err);
+            }
+        }
 
         // --- PROXY UTILITY ---
         function getProxyUrl(url) {

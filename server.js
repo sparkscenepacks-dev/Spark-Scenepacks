@@ -129,9 +129,16 @@ app.get('/api/admin/emergency-login', (req, res) => {
     res.send('<h1>✅ Admin Access Granted</h1><p>You are now logged in. <a href="/admin">Click here to go to the Dashboard</a></p>');
 });
 
-app.post(['/api/logout', '/api/logout/', '/logout', '/logout/'], (req, res) => {
-    res.clearCookie('isAdmin');
     res.json({ message: 'Logged out successfully' });
+});
+
+// Check if user is already logged in
+app.get('/api/admin/check-session', (req, res) => {
+    if (req.signedCookies.isAdmin === 'true') {
+        res.json({ loggedIn: true });
+    } else {
+        res.status(401).json({ loggedIn: false });
+    }
 });
 
 // --- SCENEPACKS API ---
