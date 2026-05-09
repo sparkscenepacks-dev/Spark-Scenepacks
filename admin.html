@@ -224,23 +224,24 @@
         /* Floating Nav Styles - MATCHING MAIN SITE */
         .admin-nav {
             position: fixed;
-            top: 15px;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            width: 98%;
-            max-width: 1400px;
-            background: rgba(15, 15, 15, 0.3);
-            backdrop-filter: blur(50px) saturate(200%);
-            -webkit-backdrop-filter: blur(50px) saturate(200%);
+            width: 95%;
+            max-width: 1300px;
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 100px;
-            padding: 10px 25px;
+            padding: 12px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 2000;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 
+                        inset 0 0 20px rgba(255, 255, 255, 0.02);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .nav-scrolled-down {
@@ -257,13 +258,14 @@
         }
 
         .nav-logo img {
-            height: 35px;
-            filter: invert(1);
-            transition: transform 0.3s ease;
+            height: 38px;
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .nav-logo:hover img {
-            transform: scale(1.05);
+            transform: scale(1.1) rotate(-3deg);
+            filter: brightness(0) invert(1) drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
         }
 
         .nav-tabs {
@@ -273,35 +275,52 @@
         }
 
         .tab-btn {
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 10px 22px;
-            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 10px 24px;
+            border-radius: 100px;
             cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 14px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             align-items: center;
             gap: 10px;
+            text-transform: uppercase;
         }
 
         .tab-btn i {
-            font-size: 16px;
+            font-size: 14px;
+            transition: transform 0.3s ease;
         }
 
         .tab-btn:hover {
             color: #fff;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-btn:hover i {
+            transform: translateY(-1px);
         }
 
         .tab-btn.active {
-            background: rgba(255, 255, 255, 0.12);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
             color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 
+                        inset 0 0 10px rgba(255, 255, 255, 0.05);
+            transform: translateY(0);
+        }
+
+        .tab-btn.active i {
+            color: #7b61ff;
+            filter: drop-shadow(0 0 5px rgba(123, 97, 255, 0.5));
         }
 
         .nav-right {
