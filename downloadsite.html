@@ -718,6 +718,16 @@
             dlBtn.href = downloadUrl;
 
             // Track download in database
+            const getApiUrl = (endpoint) => {
+                const hostname = window.location.hostname;
+                const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
+                if (!isLocal) return `/api/${endpoint}`;
+                if (window.location.port && window.location.port !== '5000') {
+                    return `http://localhost:5000/api/${endpoint}`;
+                }
+                return `/api/${endpoint}`;
+            };
+
             dlBtn.addEventListener('click', async (e) => {
                 if (downloadUrl === '#') {
                     e.preventDefault();
@@ -728,7 +738,7 @@
                 // Call the increment API if ID is present
                 if (scenepackId) {
                     try {
-                        fetch(`/api/scenepacks/${scenepackId}/download`, {
+                        fetch(getApiUrl(`scenepacks/${scenepackId}/download`), {
                             method: 'POST'
                         });
                         console.log('Download tracking ping sent');
@@ -740,16 +750,6 @@
 
             // Load related items
             if (scenepackId) {
-                const getApiUrl = (endpoint) => {
-                    const hostname = window.location.hostname;
-                    const isLocal = hostname === 'localhost' || hostname === '127.0.0.1';
-                    if (!isLocal) return `/api/${endpoint}`;
-                    if (window.location.port && window.location.port !== '5000') {
-                        return `http://localhost:5000/api/${endpoint}`;
-                    }
-                    return `/api/${endpoint}`;
-                };
-
                 fetch(getApiUrl('scenepacks'))
                     .then(response => response.json())
                     .then(data => {
