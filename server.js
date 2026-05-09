@@ -63,12 +63,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Admin Credentials
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+// Admin Credentials with safety fallbacks
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'spark-admin-secure-2026';
 
-if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
-    console.warn('WARNING: Admin credentials missing from environment variables.');
+if (!process.env.ADMIN_USERNAME || !process.env.ADMIN_PASSWORD) {
+    console.warn('WARNING: Admin credentials missing from environment variables. Using default safety fallbacks.');
 }
 
 // Health Check
@@ -86,22 +86,32 @@ const isAuthenticated = (req, res, next) => {
 
 // --- AUTH API ---
 app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
-    const { username, password } = req.body;
-    
-    const isValid = 
-        (username || "").toLowerCase().trim() === ADMIN_USERNAME.toLowerCase() &&
-        (password || "").trim() === ADMIN_PASSWORD;
+    try {
+        const { username, password } = req.body;
+        
+        if (!username || !password) {
+            return res.status(401).json({ error: 'Please enter both username and password.' });
+        }
+        
+        const isValid = 
+            username.toLowerCase().trim() === ADMIN_USERNAME.toLowerCase() &&
+            password.trim() === ADMIN_PASSWORD;
 
-    if (isValid) {
-        res.cookie('isAdmin', 'true', {
-            signed: true,
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            maxAge: 24 * 60 * 60 * 1000
-        });
-        res.json({ message: 'Login successful', user: ADMIN_USERNAME });    } else {
-        res.status(401).json({ error: 'Invalid credentials' });
+        if (isValid) {
+            res.cookie('isAdmin', 'true', {
+                signed: true,
+                httpOnly: true,
+                secure: true,
+                sameSite: 'none',
+                maxAge: 24 * 60 * 60 * 1000
+            });
+            res.json({ message: 'Login successful', user: ADMIN_USERNAME });
+        } else {
+            res.status(401).json({ error: 'Invalid credentials' });
+        }
+    } catch (err) {
+        console.error('Login Error:', err);
+        res.status(500).json({ error: 'Internal server error during login' });
     }
 });
 
@@ -397,6 +407,15 @@ app.use((req, res) => {
     }
     
     res.status(404).send('Not Found');
+});
+
+// --- GLOBAL ERROR HANDLER ---
+app.use((err, req, res, next) => {
+    console.error('SERVER ERROR:', err.stack);
+    res.status(500).json({ 
+        error: 'Internal Server Error',
+        message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong on our end.'
+    });
 });
 
 // Export for Serverless
