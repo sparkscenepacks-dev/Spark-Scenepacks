@@ -1306,6 +1306,7 @@
                             `Error ${response.status}: Failed to log in.`;
                     loginError.style.display = 'block';
                     loginError.textContent = errorMsg;
+                    alert('Login Failed: ' + errorMsg); // Emergency Alert
                 }
             } catch (error) {
                 loginError.style.display = 'block';
@@ -1315,6 +1316,7 @@
                 } else {
                     loginError.textContent = 'Error: ' + error.message;
                 }
+                alert('Connection Error: ' + error.message); // Emergency Alert
             } finally {
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = 'Unlock Dashboard';
