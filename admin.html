@@ -97,16 +97,16 @@
         }
 
         @keyframes orbFloat {
-
-            0%,
-            100% {
-                transform: translate(0, 0) scale(1);
-            }
-
-            50% {
-                transform: translate(50px, -30px) scale(1.1);
-            }
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
         }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
 
         /* Login Shield */
         #loginShield {
@@ -1144,6 +1144,10 @@
         </div>
 
         <div id="statsTab" class="tab-content">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 10px;">
+                <div style="width: 8px; height: 8px; background: #43b883; border-radius: 50%; box-shadow: 0 0 10px #43b883; animation: pulse 2s infinite;"></div>
+                <span style="font-size: 11px; font-weight: 800; color: #43b883; letter-spacing: 1px; text-transform: uppercase;">Live Updates Active</span>
+            </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
                 <div class="admin-card" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;">
                     <div style="width: 60px; height: 60px; background: rgba(123, 97, 255, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
@@ -1767,7 +1771,15 @@
             }
         }
 
+        let statsInterval = null;
+
         function switchTab(tabId) {
+            // Clear existing intervals
+            if (statsInterval) {
+                clearInterval(statsInterval);
+                statsInterval = null;
+            }
+
             // Update button states
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 const isMatch = (tabId === 'content' && btn.id === 'btn-content') || 
@@ -1812,6 +1824,8 @@
                 // Switch background to Purpleish for Stats
                 document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url('/assets/blackhole.jpg')";
                 loadStats();
+                // Refresh every 30 seconds
+                statsInterval = setInterval(loadStats, 30000);
             } else {
                 dashboardTitle.textContent = 'Dashboard';
                 dashboardSubtitle.textContent = 'Managing Spark Scenepacks & Content';
