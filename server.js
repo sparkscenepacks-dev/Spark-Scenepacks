@@ -235,6 +235,42 @@ app.delete(['/api/requests/:id', '/api/requests/:id/'], isAuthenticated, async (
 });
 
 
+// --- ADMIN STATS API ---
+app.get(['/api/admin/stats', '/api/admin/stats/', '/admin/stats', '/admin/stats/'], isAuthenticated, async (req, res) => {
+    try {
+        const [scenepacksData, downloadsData, requestsData, pendingData, topData] = await Promise.all([
+            supabase.from('scenepacks').select('*', { count: 'exact', head: true }),
+            supabase.from('scenepacks').select('downloads'),
+            supabase.from('requests').select('*', { count: 'exact', head: true }),
+            supabase.from('requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+            supabase.from('scenepacks').select('title, downloads').order('downloads', { ascending: false }).limit(1).maybeSingle()
+        ]);
+
+        // Check for errors in any of the queries
+        if (scenepacksData.error) throw scenepacksData.error;
+        if (downloadsData.error) throw downloadsData.error;
+        if (requestsData.error) throw requestsData.error;
+        if (pendingData.error) throw pendingData.error;
+        if (topData.error) throw topData.error;
+
+        const totalDownloads = (downloadsData.data || []).reduce((sum, item) => sum + (item.downloads || 0), 0);
+
+        res.json({
+            stats: {
+                totalScenepacks: scenepacksData.count || 0,
+                totalDownloads,
+                totalRequests: requestsData.count || 0,
+                pendingRequests: pendingData.count || 0,
+                topScenepack: topData.data || { title: 'N/A', downloads: 0 }
+            }
+        });
+    } catch (err) {
+        console.error('Admin Stats Fetch Error:', err);
+        res.status(500).json({ error: 'Failed to fetch dashboard statistics' });
+    }
+});
+
+
 // --- ROUTES & STATIC ---
 
 // Serve static assets with long-term caching

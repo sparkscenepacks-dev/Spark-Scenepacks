@@ -1094,7 +1094,7 @@
                 const { error } = await supabaseClient
                     .from('users')
                     .update({
-                        display_name: displayName,
+                        displayName: displayName,
                         bio: bio
                     })
                     .eq('email', currentUser.email);
