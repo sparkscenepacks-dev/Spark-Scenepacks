@@ -93,11 +93,12 @@ app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
             return res.status(401).json({ error: 'Please enter both username and password.' });
         }
         
-        const isValid = 
-            username.toLowerCase().trim() === ADMIN_USERNAME.toLowerCase() &&
-            password.trim() === ADMIN_PASSWORD;
+        // Robust comparison
+        const isUserMatch = username.toLowerCase().trim() === ADMIN_USERNAME.toLowerCase().trim();
+        const isPassMatch = password.trim() === ADMIN_PASSWORD.trim();
 
-        if (isValid) {
+        if (isUserMatch && isPassMatch) {
+            console.log(`[AUTH] Successful login for: ${username}`);
             res.cookie('isAdmin', 'true', {
                 signed: true,
                 httpOnly: true,
@@ -107,6 +108,7 @@ app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
             });
             res.json({ message: 'Login successful', user: ADMIN_USERNAME });
         } else {
+            console.warn(`[AUTH] Failed login attempt. Provided: "${username}", Expected: "${ADMIN_USERNAME}"`);
             res.status(401).json({ error: 'Invalid credentials' });
         }
     } catch (err) {
