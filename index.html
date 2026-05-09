@@ -514,6 +514,16 @@
 
         /* Mobile Navigation Overlay */
         @media (max-width: 768px) {
+            .top-bar {
+                display: none !important;
+            }
+
+            .nav {
+                top: 20px !important;
+                width: 95% !important;
+                padding: 0 20px !important;
+            }
+
             .nav-toggle {
                 display: flex;
             }
@@ -2775,7 +2785,12 @@
             <a href="/" class="logo">
                 <img src="/assets/spark-logo.png" alt="SPARK Logo">
             </a>
-            <div class="nav-links">
+            <div class="nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/#scenepacks" class="nav-link">Scenepacks</a>
                 <a href="/requests" class="nav-link">Request</a>
@@ -3958,6 +3973,25 @@
         document.addEventListener('DOMContentLoaded', function () {
             const modal = document.getElementById('scenepackModal');
             const discordModal = document.getElementById('discordModal');
+
+            // Mobile Nav Logic
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', () => {
+                    mobileToggle.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+
+                // Close menu when clicking a link
+                navLinks.querySelectorAll('.nav-link, .nav-donate-pill, .nav-discord').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    });
+                });
+            }
 
 
             // Modal controls

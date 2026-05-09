@@ -729,6 +729,82 @@
         }
 
         @media (max-width: 850px) {
+            .top-bar {
+                display: none !important;
+            }
+
+            .nav {
+                top: 20px !important;
+                width: 95% !important;
+                padding: 0 16px !important;
+            }
+
+            .nav-toggle {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                cursor: pointer;
+                z-index: 2100;
+                padding: 10px;
+            }
+
+            .nav-toggle span {
+                display: block;
+                width: 25px;
+                height: 2px;
+                background: #ffffff;
+                border-radius: 2px;
+                transition: all 0.3s ease;
+            }
+
+            /* Hamburger animation */
+            .nav-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .nav-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+
+            .nav-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(5px, -5px);
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(25px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 1050;
+                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+                padding: 40px;
+                gap: 20px;
+                border-left: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-link {
+                display: block !important;
+                color: #ffffff !important;
+                font-size: 1.1rem;
+                width: 100%;
+                padding: 15px;
+                border-radius: 12px;
+                text-align: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
             .donate-section {
                 grid-template-columns: 1fr;
             }
@@ -811,12 +887,17 @@
             <a href="/" class="logo">
                 <img src="/assets/spark-logo.png" alt="SPARK Logo">
             </a>
-            <div class="nav-links">
+            <div class="nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/#scenepacks" class="nav-link">Scenepacks</a>
                 <a href="/requests" class="nav-link">Request</a>
                 <a href="/donate" class="nav-donate-pill">Donate Now <i class="fas fa-heart"></i></a>
-                
+
                 <!-- Profile -->
                 <div id="userProfile" class="user-dropdown" style="display: none;">
                     <div class="user-trigger" onclick="toggleUserMenu(event)">
@@ -824,19 +905,32 @@
                         <span id="userName">User</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="user-menu" style="position: absolute; top: calc(100% + 15px); right: 0; width: 220px; background: rgba(10,10,10,0.98); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 12px; display: none; z-index: 3000; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
-                        <div style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;">
-                            <span id="menuUserName" style="display: block; font-size: 15px; font-weight: 800; color: #fff;">User</span>
-                            <span id="userEmail" style="display: block; font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px;">editor@spark.com</span>
+                    <div class="user-menu"
+                        style="position: absolute; top: calc(100% + 15px); right: 0; width: 220px; background: rgba(10,10,10,0.98); backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 12px; display: none; z-index: 3000; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+                        <div
+                            style="padding: 12px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;">
+                            <span id="menuUserName"
+                                style="display: block; font-size: 15px; font-weight: 800; color: #fff;">User</span>
+                            <span id="userEmail"
+                                style="display: block; font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px;">editor@spark.com</span>
                         </div>
-                        <a href="/dashboard.html" style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                        <a href="/dashboard.html"
+                            style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;"
+                            onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+                            onmouseout="this.style.background='transparent'">
                             <i class="fas fa-user-circle"></i> My Dashboard
                         </a>
-                        <a href="/donate" style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                        <a href="/donate"
+                            style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;"
+                            onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+                            onmouseout="this.style.background='transparent'">
                             <i class="fas fa-crown" style="color: #f1c40f;"></i> Support Us
                         </a>
                         <div style="height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0;"></div>
-                        <a href="#" id="navLogoutBtn" style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #ff4757; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;" onmouseover="this.style.background='rgba(255,71,87,0.12)'" onmouseout="this.style.background='transparent'">
+                        <a href="#" id="navLogoutBtn"
+                            style="display: flex; align-items: center; gap: 12px; padding: 12px; color: #ff4757; text-decoration: none; font-size: 14px; font-weight: 600; border-radius: 12px; transition: 0.3s;"
+                            onmouseover="this.style.background='rgba(255,71,87,0.12)'"
+                            onmouseout="this.style.background='transparent'">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </div>
@@ -870,8 +964,7 @@
 
                 <div class="qr-placeholder" id="qrContainer">
                     <!-- Replace the src with your actual UPI QR Code image -->
-                    <img src="/assets/spark-logo.png" alt="UPI QR Code"
-                        style="opacity: 0.2; filter: grayscale(1);">
+                    <img src="/assets/spark-logo.png" alt="UPI QR Code" style="opacity: 0.2; filter: grayscale(1);">
                     <div
                         style="position: absolute; text-align: center; color: #000; font-weight: 700; font-size: 14px;">
                         YOUR QR CODE<br>HERE
@@ -1031,12 +1124,29 @@
             }
         });
 
-        document.addEventListener('DOMContentLoaded', checkAuth);
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+
+            // Mobile Nav Logic
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            const navLinks = document.getElementById('navLinks');
+
+            if (mobileToggle && navLinks) {
+                mobileToggle.addEventListener('click', () => {
+                    mobileToggle.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+
+                // Close menu when clicking a link
+                navLinks.querySelectorAll('.nav-link, .nav-donate-pill, .nav-discord').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    });
+                });
+            }
+        });
     </script>
 </body>
 
 </html>
-
-
-
-
