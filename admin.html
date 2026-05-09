@@ -2040,12 +2040,16 @@
                     `;
                 }).join('');
 
+                }
             } catch (error) {
-                container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 60px; grid-column: 1/-1;">
-                    <i class="fas fa-exclamation-triangle" style="font-size: 30px; margin-bottom: 15px;"></i>
-                    <p>Error loading requests: ${error.message}</p>
-                    <button onclick="loadRequestsList()" style="margin-top: 15px; width: auto; padding: 8px 20px;">Retry</button>
-                </div>`;
+                if (!badgeOnly) {
+                    container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 60px; grid-column: 1/-1;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 30px; margin-bottom: 15px;"></i>
+                        <p>Error loading requests: ${error.message}</p>
+                        <button onclick="loadRequestsList()" style="margin-top: 15px; width: auto; padding: 8px 20px;">Retry</button>
+                    </div>`;
+                }
+            }
         }
     
         async function loadStats() {
