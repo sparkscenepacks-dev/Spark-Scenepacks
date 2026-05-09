@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const serverless = require('serverless-http');
 const { createClient } = require('@supabase/supabase-js');
 const os = require('os');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,6 +47,15 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Secret key for cookie signing
 const COOKIE_SECRET = process.env.ADMIN_COOKIE_SECRET || 'spark-scenepacks-admin-token';
 app.use(cookieParser(COOKIE_SECRET));
+
+// Email Transporter Configuration
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.GMAIL_USER || 'sparkscenepacks@gmail.com',
+        pass: process.env.GMAIL_APP_PASS 
+    }
+});
 
 // Admin Credentials
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'sparkscenepacks';
@@ -292,6 +302,42 @@ app.get(['/api/admin/stats', '/api/admin/stats/', '/admin/stats', '/admin/stats/
     } catch (err) {
         console.error('Admin Stats Fetch Error:', err);
         res.status(500).json({ error: 'Failed to fetch dashboard statistics' });
+    }
+});
+
+// --- EMAIL API ---
+app.post(['/api/admin/send-email', '/api/admin/send-email/'], isAuthenticated, async (req, res) => {
+    try {
+        const { to, subject, message } = req.body;
+        
+        if (!to || !subject || !message) {
+            return res.status(400).json({ error: 'Missing required fields (to, subject, message)' });
+        }
+
+        const mailOptions = {
+            from: `"Spark Scenepacks" <${process.env.GMAIL_USER || 'sparkscenepacks@gmail.com'}>`,
+            to,
+            subject: subject || "Update on your Spark Scenepacks Request",
+            text: message,
+            html: `
+                <div style="background-color: #0f0e0e; padding: 40px; font-family: 'Inter', sans-serif; color: #ffffff;">
+                    <div style="max-width: 600px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 30px; backdrop-filter: blur(20px);">
+                        <h2 style="color: #7b61ff; font-size: 24px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px;">Spark Scenepacks Update</h2>
+                        <p style="font-size: 16px; line-height: 1.6; color: rgba(255, 255, 255, 0.8);">${message.replace(/\n/g, '<br>')}</p>
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 12px; color: rgba(255, 255, 255, 0.5);">
+                            <p>This is an official response from the Spark Scenepacks Admin Team.</p>
+                            <p>If you have any questions, please reply directly to this email or join our Discord.</p>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+        res.json({ success: true, message: 'Email sent successfully!' });
+    } catch (err) {
+        console.error('Email Send Error:', err);
+        res.status(500).json({ error: 'Failed to send email. Ensure GMAIL_APP_PASS is configured.' });
     }
 });
 
