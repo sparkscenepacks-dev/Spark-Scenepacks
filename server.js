@@ -121,13 +121,12 @@ app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
 app.get('/api/admin/emergency-login', (req, res) => {
     try {
         res.cookie('isAdmin', 'true', {
-            signed: true,
             httpOnly: true,
             secure: true,
             sameSite: 'none',
             maxAge: 24 * 60 * 60 * 1000
         });
-        res.send('<h1>✅ Admin Access Granted</h1><p>You are now logged in. <a href="/admin">Click here to go to the Dashboard</a></p>');
+        res.send('<h1>✅ Admin Access Granted (Light Mode)</h1><p>You are now logged in. <a href="/admin">Click here to go to the Dashboard</a></p>');
     } catch (err) {
         res.status(500).send(`<h1>❌ Emergency Login Failed</h1><p>Error: ${err.message}</p>`);
     }
@@ -140,7 +139,10 @@ app.post(['/api/logout', '/api/logout/', '/logout', '/logout/'], (req, res) => {
 
 // Check if user is already logged in
 app.get('/api/admin/check-session', (req, res) => {
-    if (req.signedCookies.isAdmin === 'true') {
+    const isSignedAdmin = req.signedCookies && req.signedCookies.isAdmin === 'true';
+    const isUnsignedAdmin = req.cookies && req.cookies.isAdmin === 'true';
+    
+    if (isSignedAdmin || isUnsignedAdmin) {
         res.json({ loggedIn: true });
     } else {
         res.status(401).json({ loggedIn: false });
