@@ -521,6 +521,29 @@ app.get(['/api/admin/stats', '/api/admin/stats/', '/admin/stats', '/admin/stats/
     }
 });
 
+// --- DISCORD TEST API ---
+app.post('/api/admin/test-discord', isAuthenticated, async (req, res) => {
+    try {
+        const testScenepack = {
+            id: 'test-preview-id',
+            title: 'Sample Scenepack Update',
+            preview: 'This is a sample notification triggered from the Spark Admin Panel Notifier Bar.',
+            thumbnail: 'https://sparkscenepacks.vercel.app/assets/spark-logo-main.jpg',
+            genre: 'System Test',
+            year: '2026',
+            rating: 'LIVE',
+            runtime: 'N/A',
+            creator: 'Admin',
+            uploader: 'System'
+        };
+        await sendDiscordNotification(testScenepack);
+        res.json({ success: true, message: 'Test notification sent to Discord!' });
+    } catch (err) {
+        console.error('[Discord Test Error]', err);
+        res.status(500).json({ error: 'Failed to send test notification. Check server logs.' });
+    }
+});
+
 // --- EMAIL API ---
 app.post(['/api/admin/send-email', '/api/admin/send-email/'], isAuthenticated, async (req, res) => {
     try {

@@ -434,9 +434,15 @@
         #adminDashboard {
             display: none;
             width: 100%;
-            max-width: 1200px;
-            padding: 120px 20px 40px;
+            max-width: 1300px;
+            padding: 110px 20px 40px;
             animation: fadeIn 0.8s ease;
+        }
+
+        @media (max-width: 768px) {
+            #adminDashboard {
+                padding: 140px 15px 40px;
+            }
         }
 
         /* Floating Nav Styles - PREMIUM REDESIGN */
@@ -644,41 +650,44 @@
         }
 
         /* Mobile Adjustments for Admin Navbar */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
             .admin-nav {
-                width: 95%;
-                padding: 10px 15px;
-                top: 10px;
+                width: 96%;
+                padding: 12px 15px;
+                top: 15px;
                 flex-wrap: wrap;
                 justify-content: space-between;
                 height: auto;
-                border-radius: 24px;
+                border-radius: 28px;
             }
 
             .nav-left {
-                padding: 0;
-            }
-
-            .nav-logo img {
-                height: 28px;
+                margin-bottom: 5px;
             }
 
             .nav-tabs {
                 order: 3;
                 width: 100%;
-                justify-content: center;
+                justify-content: flex-start;
                 overflow-x: auto;
-                padding: 10px 0 5px 0;
-                gap: 5px;
-                border-top: 1px solid rgba(255, 255, 255, 0.05);
-                margin-top: 5px;
+                padding: 8px 5px;
+                gap: 8px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                margin-top: 10px;
+                scrollbar-width: none; /* Hide scrollbar Firefox */
+            }
+
+            .nav-tabs::-webkit-scrollbar {
+                display: none; /* Hide scrollbar Chrome/Safari */
             }
 
             .tab-btn {
-                padding: 8px 14px;
-                font-size: 12px;
+                padding: 10px 18px;
+                font-size: 11px;
                 white-space: nowrap;
+                flex-shrink: 0;
             }
+        }
 
             .nav-right {
                 padding: 0;
@@ -916,9 +925,28 @@
             }
         }
 
-        @media (max-width: 850px) {
+        @media (max-width: 968px) {
             .admin-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .header div:last-child {
+                width: 100%;
+                display: flex;
+                gap: 10px;
+            }
+            
+            #saveBtn, #cancelBtn {
+                flex: 1;
+                text-align: center;
+                justify-content: center;
             }
         }
 
@@ -1220,6 +1248,82 @@
             background: #ff4444;
             color: white;
             box-shadow: 0 0 15px rgba(255, 68, 68, 0.3);
+        }
+        /* Discord Notifier Bar Styles */
+        .notifier-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notifier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .notifier-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 8px 12px;
+            gap: 15px;
+            transition: all 0.3s ease;
+            min-height: 54px;
+        }
+
+        .notifier-icon-box {
+            width: 38px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #43b883; /* Green link icon from user image */
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notifier-link-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 13px;
+            font-family: 'Space Grotesk', sans-serif;
+            outline: none;
+            width: 100%;
+            opacity: 0.7;
+        }
+
+        .notifier-status {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #43b883;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notifier-dot {
+            width: 6px;
+            height: 6px;
+            background: #43b883;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #43b883;
+            animation: pulse 2s infinite;
         }
     </style>
 </head>
@@ -1584,6 +1688,34 @@
         </div>
 
         <div id="statsTab" class="tab-content">
+            <!-- Discord Notifier Section -->
+            <div class="notifier-card">
+                <div class="notifier-header">
+                    <h3 class="card-title" style="margin: 0;"><i class="fab fa-discord"></i> Discord Notifier Bot</h3>
+                    <div class="notifier-status">
+                        <div class="notifier-dot"></div>
+                        <span>Live Connection Active</span>
+                    </div>
+                </div>
+                <p style="color: var(--text-secondary); font-size: 12px; margin-bottom: 20px;">
+                    This bar will automatically update with the link to the newest scenepack after a successful upload and send a notification to your Discord community.
+                </p>
+                <div class="notifier-bar" id="notifierBar">
+                    <div class="notifier-icon-box">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <input type="text" id="latestScenepackLink" class="notifier-link-input" readonly placeholder="Waiting for new upload...">
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="copyNotifierLink()" style="width: auto; padding: 8px 15px; background: rgba(255,255,255,0.05); color: #fff; border-radius: 10px; font-size: 10px; font-weight: 800; border: 1px solid rgba(255,255,255,0.1);">
+                            <i class="fas fa-copy"></i> COPY
+                        </button>
+                        <button onclick="testDiscordBot()" id="testBotBtn" style="width: auto; padding: 8px 15px; background: rgba(123, 97, 255, 0.1); color: #7b61ff; border-radius: 10px; font-size: 10px; font-weight: 800; border: 1px solid rgba(123, 97, 255, 0.2);">
+                            <i class="fab fa-discord"></i> TEST BOT
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 10px;">
                 <div
                     style="width: 8px; height: 8px; background: #43b883; border-radius: 50%; box-shadow: 0 0 10px #43b883; animation: pulse 2s infinite;">
@@ -2229,6 +2361,17 @@
 
                     if (response.ok) {
                         showToast(isEditing ? 'Successfully Updated!' : 'Successfully Saved!');
+                        
+                        // Update Discord Notifier Bar with the new link
+                        const fullLink = `${window.location.origin}/?scenepack=${scenepackId}`;
+                        const linkInput = document.getElementById('latestScenepackLink');
+                        if (linkInput) {
+                            linkInput.value = fullLink;
+                            const bar = document.getElementById('notifierBar');
+                            bar.style.borderColor = 'rgba(67, 184, 131, 0.3)';
+                            bar.style.background = 'rgba(67, 184, 131, 0.05)';
+                        }
+
                         if (isEditing) cancelEdit();
                         loadManagementList();
                     } else {
@@ -2255,6 +2398,42 @@
                 t.textContent = msg;
                 t.style.display = 'block';
                 setTimeout(() => t.style.display = 'none', 3000);
+            }
+
+            function copyNotifierLink() {
+                const linkInput = document.getElementById('latestScenepackLink');
+                if (linkInput && linkInput.value && !linkInput.value.includes('Waiting')) {
+                    navigator.clipboard.writeText(linkInput.value);
+                    showToast('Link copied to clipboard!');
+                } else {
+                    showToast('No link to copy yet!');
+                }
+            }
+
+            async function testDiscordBot() {
+                const btn = document.getElementById('testBotBtn');
+                const originalHtml = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/admin/test-discord`, {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+
+                    if (response.ok) {
+                        showToast('Sample Notification Sent! ✓');
+                    } else {
+                        const err = await response.json();
+                        alert('Error: ' + (err.error || 'Failed to send test. Check server.'));
+                    }
+                } catch (error) {
+                    alert('Connection failed. Is the server running?');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
             }
 
             function cancelEdit() {

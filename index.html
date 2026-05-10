@@ -544,19 +544,31 @@
         .nav-toggle {
             display: none;
             flex-direction: column;
-            gap: 5px;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
             cursor: pointer;
             z-index: 2100;
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
         }
 
         .nav-toggle span {
             display: block;
-            width: 25px;
+            width: 22px;
             height: 2px;
             background: #ffffff;
             border-radius: 2px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: 2.5px 0;
         }
 
         /* Mobile Navigation Overlay */
@@ -566,9 +578,13 @@
             }
 
             .nav {
-                top: 20px !important;
-                width: 95% !important;
+                top: 15px !important;
+                width: 94% !important;
+                height: 65px !important;
                 padding: 0 20px !important;
+                background: rgba(10, 10, 10, 0.6) !important;
+                backdrop-filter: blur(30px) saturate(200%) !important;
+                border: 1px solid rgba(255, 255, 255, 0.15) !important;
             }
 
             .nav-toggle {
@@ -579,20 +595,18 @@
                 position: fixed;
                 top: 0;
                 right: -100%;
-                width: 80%;
-                max-width: 300px;
+                width: 100%;
                 height: 100vh;
-                background: rgba(10, 10, 10, 0.98);
-                backdrop-filter: blur(25px);
+                background: rgba(5, 5, 5, 0.95);
+                backdrop-filter: blur(40px) saturate(200%);
+                -webkit-backdrop-filter: blur(40px) saturate(200%);
                 flex-direction: column;
                 justify-content: center;
-                align-items: center;
-                transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                align-items: flex-start;
+                transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
                 z-index: 1050;
-                box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
-                padding: 40px;
-                gap: 20px;
-                border-left: 1px solid rgba(255, 255, 255, 0.05);
+                padding: 100px 40px;
+                gap: 15px;
             }
 
             .nav-links.active {
@@ -601,39 +615,57 @@
 
             .nav-link {
                 color: #ffffff;
-                font-size: 1.1rem;
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 2rem;
+                font-weight: 800;
                 width: 100%;
-                padding: 15px;
-                border-radius: 12px;
-                justify-content: space-between;
+                padding: 15px 0;
+                border-radius: 0;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                opacity: 0;
+                transform: translateX(30px);
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             }
+
+            .nav-links.active .nav-link {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            .nav-links.active .nav-link:nth-child(1) { transition-delay: 0.1s; }
+            .nav-links.active .nav-link:nth-child(2) { transition-delay: 0.2s; }
+            .nav-links.active .nav-link:nth-child(3) { transition-delay: 0.3s; }
+            .nav-links.active .nav-link:nth-child(4) { transition-delay: 0.4s; }
+            .nav-links.active .nav-link:nth-child(5) { transition-delay: 0.5s; }
 
             .nav-link:hover {
-                background: rgba(0,0,0,0.05);
+                color: var(--purple-accent) !important;
+                padding-left: 10px;
             }
 
-            .nav-cta {
+            .nav-discord, .nav-donate-pill {
                 width: 100%;
                 justify-content: center;
-                margin-top: 10px;
-            }
-
-            .nav-link i {
-                font-size: 1.5rem;
+                margin-top: 20px;
+                padding: 20px !important;
+                font-size: 16px !important;
             }
 
             /* Hamburger animation */
             .nav-toggle.active span:nth-child(1) {
-                transform: rotate(45deg) translate(5px, 5px);
+                transform: translateY(7px) rotate(45deg);
             }
 
             .nav-toggle.active span:nth-child(2) {
                 opacity: 0;
+                transform: scale(0);
             }
 
             .nav-toggle.active span:nth-child(3) {
-                transform: rotate(-45deg) translate(5px, -5px);
+                transform: translateY(-7px) rotate(-45deg);
             }
         }
 
@@ -2395,43 +2427,74 @@
         @media (max-width: 968px) {
             .scenepacks-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 25px;
+                gap: 20px;
             }
 
             /* MOBILE: Stack columns vertically - Poster/metadata on top, scenepacks below */
             .modal-content {
                 flex-direction: column;
-                width: 95%;
-                height: 90vh;
-                margin: 5vh auto;
+                width: 96%;
+                height: 92vh;
+                margin: 4vh auto;
+                border-radius: 24px;
             }
 
             .modal-left {
                 width: 100%;
-                padding: 30px 20px 20px 20px;
-                max-height: 50%;
+                padding: 40px 20px 25px 20px;
+                max-height: 45%;
                 overflow-y: auto;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
 
             .modal-right {
                 width: 100%;
                 border-left: none;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
                 flex: 1;
                 overflow-y: auto;
             }
 
             .modal-poster {
-                max-width: 180px;
-                margin-bottom: 20px;
+                max-width: 140px;
+                margin-bottom: 15px;
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             }
 
             .modal-title {
-                font-size: 1.3rem;
+                font-size: 1.4rem;
+                margin-bottom: 15px;
+            }
+
+            .modal-meta-list {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                text-align: left;
+            }
+
+            .meta-row {
+                padding: 8px 0;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+
+            .meta-label {
+                font-size: 11px;
+                opacity: 0.6;
+            }
+
+            .meta-value {
+                font-size: 12px;
+                margin-left: 0;
+                text-align: left;
             }
 
             .language-toggle-container {
-                padding: 10px 20px 15px 20px;
+                padding: 15px 20px;
             }
 
             .scenepacks-header {
@@ -2445,100 +2508,65 @@
 
         @media (max-width: 768px) {
             .hero {
-                height: 55vh;
+                height: 60vh;
+                padding-top: 100px;
             }
 
-            .nav {
-                padding: 12px 3%;
+            .hero-title img {
+                max-width: 280px !important;
             }
 
             .section {
-                padding: 15px 12px 60px;
+                padding: 30px 15px 80px;
             }
 
-            .controls {
-                margin-bottom: 15px;
-            }
-
-            .search-container {
-                max-width: 100%;
-            }
-
-            .footer-nav {
-                flex-direction: column;
-                gap: 12px;
+            .category-bar {
+                padding: 4px;
+                gap: 4px;
             }
 
             .category-btn {
-                padding: 8px 16px;
-                font-size: 10px;
+                padding: 8px 14px;
+                font-size: 9px;
             }
 
             .scenepacks-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-                padding: 0;
+                gap: 12px;
             }
 
             .scenepack-card {
-                border-radius: 20px;
+                border-radius: 24px;
             }
 
             .scenepack-card-content {
                 padding: 15px;
+                gap: 8px;
             }
 
             .scenepack-card-title {
-                font-size: 0.9rem !important;
+                font-size: 0.85rem !important;
             }
 
-            .footer {
-                padding: 40px 5% 30px;
+            .scenepack-credit-line {
+                font-size: 10px;
             }
+
+            .view-resource-btn {
+                padding: 6px 12px;
+                font-size: 10px;
+            }
+
             .footer-content {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                gap: 30px;
+                gap: 40px;
             }
-            .footer-left, .footer-right {
-                align-items: center;
-                text-align: center;
-            }
+
             .footer-nav {
                 justify-content: center;
-                gap: 20px;
-            }
-
-            .modal-left {
-                padding: 15px 12px 12px 12px;
-            }
-
-            .modal-poster {
-                max-width: 150px;
-            }
-
-            .modal-title {
-                font-size: 1.15rem;
-            }
-
-            .close {
-                top: 8px;
-                right: 8px;
-                padding: 8px;
-                background: rgba(10, 10, 10, 0.9);
-            }
-
-            .scenepacks-header {
-                padding: 15px 15px 10px 15px;
-            }
-
-            .scenepacks-container {
-                padding: 10px 15px 15px 15px;
-            }
-
-            #modalMetaList {
-                display: none !important;
+                gap: 15px;
             }
         }
 

@@ -207,6 +207,17 @@
             margin-bottom: 24px;
         }
 
+        @media (max-width: 480px) {
+            .upload-row {
+                flex-direction: column;
+            }
+            .upload-pfp {
+                width: 100% !important;
+                height: auto !important;
+                aspect-ratio: 1/1;
+            }
+        }
+
         .upload-card {
             background: var(--card-bg);
             border: 1px dashed var(--glass-border);
@@ -566,16 +577,36 @@
     <div class="bg-glow-2"></div>
 
     <div class="container">
-        <a href="/"
-            style="position: absolute; top: 20px; left: 20px; color: var(--text-grey); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-arrow-left"></i>
-            Back to Home
-        </a>
         <div class="header">
             <span class="welcome-back">Welcome Back</span>
             <h1 class="title">Join Spark<br>Community</h1>
             <p class="subtitle">Create your editor profile and start downloading.</p>
         </div>
+
+        <style>
+            @media (max-width: 480px) {
+                .title {
+                    font-size: 36px;
+                }
+                .container {
+                    padding: 80px 20px 40px;
+                }
+                .back-home {
+                    top: 25px !important;
+                    left: 20px !important;
+                    background: rgba(255, 255, 255, 0.05);
+                    padding: 8px 16px;
+                    border-radius: 50px;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                }
+            }
+        </style>
+
+        <a href="/" class="back-home"
+            style="position: absolute; top: 20px; left: 20px; color: var(--text-grey); text-decoration: none; font-size: 13px; display: flex; align-items: center; gap: 8px; transition: 0.3s; z-index: 10;">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
 
         <div class="tabs-container">
             <div class="tab tab-login" onclick="switchTab('login')">Login</div>
