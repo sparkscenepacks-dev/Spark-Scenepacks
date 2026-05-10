@@ -234,20 +234,20 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
         const { data, error } = await supabase
             .from('scenepacks')
             .upsert([{
-                id: scenepackData.id,
-                title: scenepackData.title,
-                preview: scenepackData.preview,
-                description: scenepackData.description,
+                id: (scenepackData.id || '').trim(),
+                title: scenepackData.title || '',
+                preview: scenepackData.preview || '',
+                description: scenepackData.description || '',
                 thumbnail: scenepackData.thumbnail || '',
-                category: scenepackData.category,
-                tags: scenepackData.tags,
-                year: scenepackData.year,
-                director: scenepackData.director,
-                genre: scenepackData.genre,
-                rating: scenepackData.rating,
-                runtime: scenepackData.runtime,
-                cast: scenepackData.cast,
-                download_links: scenepackData.downloadLinks
+                category: scenepackData.category || '',
+                tags: Array.isArray(scenepackData.tags) ? scenepackData.tags.join(', ') : (scenepackData.tags || ''),
+                year: scenepackData.year || '',
+                director: scenepackData.director || '',
+                genre: scenepackData.genre || '',
+                rating: scenepackData.rating || '',
+                runtime: scenepackData.runtime || '',
+                cast: scenepackData.cast || '',
+                download_links: scenepackData.downloadLinks || []
             }]);
 
         if (error) throw error;
