@@ -4,84 +4,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Team - Spark Scenepacks</title>
+    <title>The Team - Spark Scenepacks</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/webp" href="/assets/spark-logo.png">
-    
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        :root {
+            --primary: #050505;
+            --accent: #7b61ff;
+            --accent-glow: rgba(123, 97, 255, 0.5);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --card-bg: rgba(10, 10, 10, 0.6);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #000000;
-            --secondary: #0a0a0a;
-            --accent: #ffffff;
-            --cyan: #00f2fe;
-            --purple: #7b61ff;
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.6);
-            --border: rgba(255, 255, 255, 0.1);
+            user-select: none;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--primary);
-            color: var(--text-primary);
+            background-color: var(--primary);
+            color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
         }
 
         /* Background Effects */
-        .bg-glow {
+        .bg-elements {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(123, 97, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 0% 0%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
-                        radial-gradient(circle at 100% 100%, rgba(123, 97, 255, 0.05) 0%, transparent 40%);
+            overflow: hidden;
         }
 
-        .grid-pattern {
+        .blob {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            filter: blur(80px);
+            opacity: 0.3;
+            border-radius: 50%;
+            animation: move 20s infinite alternate;
+        }
+
+        .blob-1 { top: -100px; left: -100px; }
+        .blob-2 { bottom: -100px; right: -100px; animation-delay: -5s; }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 100px) scale(1.2); }
+        }
+
+        .grid-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
         }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--primary); }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--glass-border); 
+            border-radius: 10px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
         /* Navigation */
-        .nav {
+        .nav-wrapper {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1100px;
-            height: 65px;
-            background: rgba(10, 10, 10, 0.6);
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 70px;
+            background: rgba(10, 10, 10, 0.4);
             backdrop-filter: blur(20px);
-            border-radius: 100px;
-            border: 1px solid var(--border);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 30px;
-            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .logo {
@@ -90,397 +127,578 @@
             gap: 12px;
             text-decoration: none;
             color: #fff;
-            font-weight: 800;
-            font-size: 18px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
         }
 
         .logo img {
-            height: 30px;
-            filter: brightness(0) invert(1);
+            height: 35px;
+            filter: drop-shadow(0 0 10px var(--accent-glow));
         }
 
         .nav-links {
             display: flex;
-            gap: 25px;
+            gap: 30px;
         }
 
         .nav-link {
-            color: var(--text-secondary);
+            color: var(--text-dim);
             text-decoration: none;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
+            position: relative;
         }
 
-        .nav-link:hover {
+        .nav-link:hover, .nav-link.active {
             color: #fff;
         }
 
-        .nav-link.active {
-            color: #fff;
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
-        /* Hero */
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: #fff;
+            color: #000;
+            padding: 10px 24px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 0.85rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-cta:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero Section */
         .hero {
-            padding: 180px 20px 80px;
+            padding: 180px 20px 100px;
             text-align: center;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
 
         .hero h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(3rem, 8vw, 6rem);
             font-weight: 900;
-            margin-bottom: 20px;
-            background: linear-gradient(to bottom, #fff, #888);
+            line-height: 0.9;
+            background: linear-gradient(to bottom, #fff 40%, rgba(255, 255, 255, 0.2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
         }
 
         .hero p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
+            color: var(--text-dim);
+            font-size: 1.1rem;
         }
 
-        /* Team Sections */
-        .team-section {
-            padding: 60px 20px;
+        /* Bento Grid Section */
+        .team-container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px 150px;
         }
 
-        .role-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 40px;
+        .section-header {
+            margin-bottom: 50px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
-        .role-title::after {
-            content: '';
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .line {
             flex: 1;
             height: 1px;
-            background: linear-gradient(90deg, var(--border), transparent);
+            background: linear-gradient(90deg, var(--glass-border), transparent);
         }
 
-        .team-grid {
+        .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 80px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto;
+            gap: 20px;
         }
 
-        /* Team Card */
-        .team-card {
-            background: rgba(15, 15, 15, 0.4);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 30px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .bento-item {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 40px;
             position: relative;
             overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            backdrop-filter: blur(10px);
         }
 
-        .team-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 0%, rgba(123, 97, 255, 0.1), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .team-card:hover {
+        .bento-item:hover {
+            border-color: var(--accent);
             transform: translateY(-10px);
-            border-color: rgba(123, 97, 255, 0.3);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        .team-card:hover::before {
-            opacity: 1;
+        /* Large Card Styles */
+        .bento-item.large {
+            grid-column: span 2;
+            display: flex;
+            align-items: center;
+            gap: 40px;
         }
 
-        .avatar-container {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 20px;
+        .member-avatar-wrapper {
             position: relative;
-            z-index: 1;
+            flex-shrink: 0;
         }
 
-        .avatar-glow {
+        .member-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 40px;
+            object-fit: cover;
+            border: 2px solid var(--glass-border);
+            transition: all 0.5s ease;
+        }
+
+        .bento-item:hover .member-avatar {
+            transform: scale(1.05) rotate(-5deg);
+            border-color: var(--accent);
+        }
+
+        .avatar-glow-effect {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 130px;
-            height: 130px;
-            background: var(--purple);
-            border-radius: 50%;
-            filter: blur(20px);
-            opacity: 0.2;
-            transition: opacity 0.4s ease;
-        }
-
-        .team-card:hover .avatar-glow {
-            opacity: 0.5;
-        }
-
-        .avatar {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #1a1a1a;
-            position: relative;
-            z-index: 2;
+            background: var(--accent);
+            filter: blur(40px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .bento-item:hover .avatar-glow-effect {
+            opacity: 0.3;
         }
 
         .member-info h3 {
-            font-size: 1.4rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
             font-weight: 800;
             margin-bottom: 5px;
         }
 
         .member-role {
-            font-size: 0.9rem;
-            color: var(--purple);
             font-weight: 700;
+            color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
             margin-bottom: 15px;
+            display: block;
         }
 
         .member-bio {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
         }
 
-        .social-links {
+        /* Discord Presence Styles */
+        .member-status-container {
             display: flex;
-            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #43b581; /* Default online green */
+            box-shadow: 0 0 10px rgba(67, 181, 129, 0.5);
+        }
+
+        .status-text {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-dim);
+        }
+
+        .status-online { background: #43b581; box-shadow: 0 0 10px rgba(67, 181, 129, 0.5); }
+        .status-idle { background: #faa61a; box-shadow: 0 0 10px rgba(250, 166, 26, 0.5); }
+        .status-dnd { background: #f04747; box-shadow: 0 0 10px rgba(240, 71, 71, 0.5); }
+        .status-offline { background: #747f8d; box-shadow: none; }
+
+        .discord-activity {
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-style: italic;
+            margin-top: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .discord-activity.visible {
+            opacity: 1;
+        }
+
+        .social-row {
+            display: flex;
             gap: 15px;
         }
 
-        .social-link {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
             text-decoration: none;
-            font-size: 0.9rem;
             transition: all 0.3s ease;
-            border: 1px solid var(--border);
         }
 
-        .social-link:hover {
-            background: var(--purple);
-            border-color: var(--purple);
-            transform: scale(1.1);
+        .social-icon:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-5px);
         }
 
-        /* CTA Section */
-        .join-cta {
-            background: linear-gradient(135deg, rgba(123, 97, 255, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
-            border: 1px solid var(--border);
-            border-radius: 30px;
-            padding: 60px;
+        /* Medium/Small Card Styles */
+        .bento-item.medium {
+            grid-column: span 2;
+        }
+
+        .bento-item.small {
+            grid-column: span 1;
+            padding: 30px;
             text-align: center;
-            margin-bottom: 100px;
+        }
+
+        .small .member-avatar {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .small h3 { font-size: 1.4rem; }
+
+        /* Join Section */
+        .join-section {
+            background: linear-gradient(135deg, rgba(123, 97, 255, 0.1), rgba(0, 0, 0, 0));
+            border: 1px solid var(--glass-border);
+            border-radius: 48px;
+            padding: 80px 40px;
+            text-align: center;
+            margin-top: 50px;
             position: relative;
             overflow: hidden;
         }
 
-        .join-cta h2 {
+        .join-section h2 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .join-btn {
+            background: var(--accent);
+            color: #fff;
+            padding: 18px 45px;
+            border-radius: 20px;
             font-weight: 800;
-            margin-bottom: 15px;
-        }
-
-        .join-cta p {
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-btn {
-            background: #fff;
-            color: #000;
-            padding: 15px 40px;
-            border-radius: 100px;
             text-decoration: none;
-            font-weight: 700;
             display: inline-block;
-            transition: all 0.3s ease;
+            margin-top: 30px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .cta-btn:hover {
+        .join-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(123, 97, 255, 0.3);
         }
 
         /* Footer */
         footer {
-            padding: 60px 20px;
-            border-top: 1px solid var(--border);
+            padding: 100px 20px 50px;
             text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-logo img {
+            height: 40px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .copyright {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
-            .nav {
-                width: 95%;
-                padding: 0 20px;
-            }
-            .nav-links {
-                display: none;
-            }
-            .join-cta {
-                padding: 40px 20px;
-            }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 3.5rem; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-item.large { flex-direction: column; text-align: center; }
+            .bento-item.large, .bento-item.medium, .bento-item.small { grid-column: span 1; }
+            .social-row { justify-content: center; }
         }
     </style>
 </head>
 
 <body>
-    <div class="bg-glow"></div>
-    <div class="grid-pattern"></div>
+    <div class="bg-elements">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="grid-overlay"></div>
+    </div>
 
-    <nav class="nav">
-        <a href="/" class="logo">
-            <img src="/assets/spark-logo.png" alt="Spark">
-            <span>Spark</span>
-        </a>
-        <div class="nav-links">
-            <a href="/" class="nav-link">Home</a>
-            <a href="/team" class="nav-link active">Team</a>
-            <a href="/requests" class="nav-link">Requests</a>
-            <a href="/donate" class="nav-link">Donate</a>
-        </div>
-        <a href="/auth" class="social-link" style="width: auto; padding: 0 20px; border-radius: 100px;">
-            <i class="fas fa-user-circle" style="margin-right: 8px;"></i> Login
-        </a>
-    </nav>
+    <div class="nav-wrapper">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <img src="/assets/spark-logo.png" alt="Spark">
+                <span>SPARK</span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/team" class="nav-link active">Team</a>
+                <a href="/requests" class="nav-link">Requests</a>
+                <a href="/donate" class="nav-link">Donate</a>
+            </div>
+            <a href="/auth" class="nav-cta">GET STARTED</a>
+        </nav>
+    </div>
 
     <header class="hero">
-        <h1>Our Team</h1>
-        <p>The dedicated individuals behind Spark Scenepacks, providing high-quality 4K scenes for the editing community.</p>
+        <div class="hero-badge">The Collective</div>
+        <h1>Meet Our <br>Visionaries</h1>
+        <p>The architects behind the fastest-growing scenepack platform. We're dedicated to providing high-quality assets for editors worldwide.</p>
     </header>
 
-    <main class="team-section">
+    <main class="team-container">
         <!-- Administration -->
-        <h2 class="role-title">Administration</h2>
-        <div class="team-grid">
-            <!-- Spark -->
-            <div class="team-card">
-                <div class="avatar-container">
-                    <div class="avatar-glow"></div>
-                    <img src="https://i.pravatar.cc/300?img=11" alt="Spark" class="avatar">
-                </div>
-                <div class="member-info">
-                    <h3>Spark</h3>
-                    <div class="member-role">Founder & Lead Dev</div>
-                    <p class="member-bio">Leading the vision for Spark Scenepacks and managing technical infrastructure.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Astral -->
-            <div class="team-card">
-                <div class="avatar-container">
-                    <div class="avatar-glow"></div>
-                    <img src="https://i.pravatar.cc/300?img=12" alt="Astral" class="avatar">
-                </div>
-                <div class="member-info">
-                    <h3>son.astral</h3>
-                    <div class="member-role">Co-Founder & Lead Editor</div>
-                    <p class="member-bio">Curating the best scenes and ensuring top-tier quality for all uploads.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="https://tiktok.com/@son.astral" class="social-link"><i class="fab fa-tiktok"></i></a>
-                    </div>
-                </div>
-            </div>
+        <div class="section-header">
+            <h2>Administration</h2>
+            <div class="line"></div>
         </div>
 
-        <!-- Content Team -->
-        <h2 class="role-title">Content Team</h2>
-        <div class="team-grid">
-            <!-- Uploader 1 -->
-            <div class="team-card">
-                <div class="avatar-container">
-                    <div class="avatar-glow"></div>
-                    <img src="https://i.pravatar.cc/300?img=13" alt="tcmmi.ae" class="avatar">
+        <div class="bento-grid">
+            <!-- Insane -->
+            <div class="bento-item large">
+                <div class="member-avatar-wrapper">
+                    <div class="avatar-glow-effect"></div>
+                    <img src="https://i.ibb.co/0XjP6hD/astral-pfp.jpg" onerror="this.src='https://i.pravatar.cc/300?img=12'" alt="Insane" class="member-avatar">
                 </div>
                 <div class="member-info">
-                    <h3>tcmmi.ae</h3>
-                    <div class="member-role">Senior Uploader</div>
-                    <p class="member-bio">Specializing in high-bitrate 4K movie scenepacks.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-tiktok"></i></a>
+                    <div class="member-status-container">
+                        <div class="status-dot status-offline" id="status-dot-insane"></div>
+                        <span class="status-text" id="status-text-insane">Offline</span>
+                    </div>
+                    <span class="member-role">Founder & Creative Lead</span>
+                    <h3>Insane</h3>
+                    <p class="member-bio">Directing the aesthetic vision and quality standards of our content library. Leading the next generation of scenepack curation.</p>
+                    <div class="discord-activity" id="activity-insane"></div>
+                    <div class="social-row">
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
                     </div>
                 </div>
             </div>
 
-            <!-- Uploader 2 -->
-            <div class="team-card">
-                <div class="avatar-container">
-                    <div class="avatar-glow"></div>
-                    <img src="https://i.pravatar.cc/300?img=14" alt="Scenepack Master" class="avatar">
-                </div>
-                <div class="member-info">
-                    <h3>Dennm</h3>
-                    <div class="member-role">Uploader</div>
-                    <p class="member-bio">Bringing the latest anime and show scenes to the platform.</p>
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Join Us -->
-        <section class="join-cta">
-            <h2>Want to join us?</h2>
-            <p>We are always looking for passionate editors and uploaders to help grow the Spark community.</p>
-            <a href="https://discord.gg/sparkscenepacks" class="cta-btn">Join Discord</a>
+        <!-- Join CTA -->
+        <section class="join-section">
+            <div class="hero-badge" style="background: rgba(255,255,255,0.1);">Applications Open</div>
+            <h2>Become Part of the <br>Spark Legacy</h2>
+            <p>We're always looking for talented individuals to help us redefine the editing resource landscape.</p>
+            <a href="https://discord.gg/sparkscenepacks" class="join-btn">APPLY VIA DISCORD</a>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Spark Scenepacks. All rights reserved.</p>
+        <div class="footer-logo">
+            <img src="/assets/spark-logo.png" alt="Spark">
+        </div>
+        <p class="copyright">&copy; 2026 Spark Scenepacks. Designed for the community.</p>
     </footer>
 
     <script>
-        // Subtle parallax on scroll
-        window.addEventListener('scroll', () => {
-            const glow = document.querySelector('.bg-glow');
-            const scrolled = window.pageYOffset;
-            glow.style.transform = `translateY(${scrolled * 0.3}px)`;
+        // Smooth reveal on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.bento-item').forEach(item => {
+            item.style.opacity = "0";
+            item.style.transform = "translateY(30px)";
+            item.style.transition = "all 0.6s cubic-bezier(0.23, 1, 0.32, 1)";
+            observer.observe(item);
         });
+
+        // Parallax effect for blobs
+        window.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            document.querySelector('.blob-1').style.transform = `translate(${x * 50}px, ${y * 50}px)`;
+            document.querySelector('.blob-2').style.transform = `translate(${-x * 50}px, ${-y * 50}px)`;
+        });
+
+        // --- DISCORD PRESENCE (LANYARD) ---
+        const DISCORD_IDS = {
+            insane: "1345635491705520209"
+        };
+
+        async function updatePresence(userId, name) {
+            try {
+                const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`);
+                const { data } = await response.json();
+                
+                if (!data) return;
+
+                // Update Status Dot & Text
+                const dot = document.getElementById(`status-dot-${name}`);
+                const text = document.getElementById(`status-text-${name}`);
+                const activityEl = document.getElementById(`activity-${name}`);
+                const avatarImg = document.querySelector(`.bento-item h3:contains('${name === 'spark' ? 'Spark' : 'Insane'}')`).closest('.bento-item').querySelector('.member-avatar');
+
+                const status = data.discord_status;
+                dot.className = `status-dot status-${status}`;
+                text.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+
+                // Update Avatar from Discord
+                if (data.discord_user.avatar) {
+                    const avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${data.discord_user.avatar}.webp?size=256`;
+                    avatarImg.src = avatarUrl;
+                }
+
+                // Update Activity
+                const activity = data.activities.find(a => a.type === 0); // Type 0 is "Playing"
+                if (activity) {
+                    activityEl.textContent = `Playing ${activity.name}`;
+                    activityEl.classList.add('visible');
+                } else {
+                    activityEl.classList.remove('visible');
+                }
+
+            } catch (err) {
+                console.error(`Failed to fetch Discord presence for ${name}:`, err);
+            }
+        }
+
+        // Helper to find element by text (since we don't have unique IDs on all elements)
+        // Re-implementing updatePresence with safer selectors
+        async function fetchLanyard() {
+            for (const [name, id] of Object.entries(DISCORD_IDS)) {
+                if (id.length > 10) { // Simple check if ID is provided
+                    updateMemberUI(name, id);
+                }
+            }
+        }
+
+        async function updateMemberUI(name, userId) {
+            try {
+                const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`);
+                const json = await response.json();
+                const data = json.data;
+
+                const dot = document.getElementById(`status-dot-${name}`);
+                const text = document.getElementById(`status-text-${name}`);
+                const activityEl = document.getElementById(`activity-${name}`);
+                const avatarImg = dot.closest('.bento-item').querySelector('.member-avatar');
+
+                const status = data.discord_status;
+                dot.className = `status-dot status-${status}`;
+                text.textContent = status === 'dnd' ? 'Do Not Disturb' : status.charAt(0).toUpperCase() + status.slice(1);
+
+                if (data.discord_user.avatar) {
+                    avatarImg.src = `https://cdn.discordapp.com/avatars/${userId}/${data.discord_user.avatar}.webp?size=256`;
+                }
+
+                const activity = data.activities.find(a => a.type === 0);
+                if (activity) {
+                    activityEl.textContent = `🎮 ${activity.name}`;
+                    activityEl.classList.add('visible');
+                } else if (data.discord_status !== 'offline') {
+                    activityEl.textContent = "Chilling on Discord";
+                    activityEl.classList.add('visible');
+                } else {
+                    activityEl.classList.remove('visible');
+                }
+            } catch (e) {}
+        }
+
+        // Initial fetch and set interval
+        fetchLanyard();
+        setInterval(fetchLanyard, 30000); // Update every 30s
     </script>
 </body>
 

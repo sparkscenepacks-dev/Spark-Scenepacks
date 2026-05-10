@@ -216,8 +216,8 @@ app.get(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'], 
             creators: CREATORS,
             scenepacks: (data || []).map(item => ({
                 ...item,
-                creator: item.creator || (item.download_links?.[0]?.sc_creator) || 'son.astral',
-                uploader: item.uploader || (item.download_links?.[0]?.sc_uploader) || 'tcmmi.ae',
+                creator: item.creator || (item.download_links?.[0]?.sc_creator) || 'Insane',
+                uploader: item.uploader || (item.download_links?.[0]?.sc_uploader) || 'Insane',
                 downloadLinks: item.download_links
             }))
         });
@@ -327,7 +327,7 @@ async function sendDiscordNotification(scenepack) {
                 { name: `${emojis.rating} Rating`, value: `\`${scenepack.rating || "N/A"}\``, inline: true },
                 { name: `${emojis.runtime} Runtime`, value: `\`${scenepack.runtime || "N/A"}\``, inline: true },
                 { name: `${emojis.genre} Genres`, value: `${scenepack.genre || "Action, Drama"}`, inline: false },
-                { name: `${emojis.creator} Creator`, value: `[${scenepack.creator || 'son.astral'}](https://tiktok.com/@${scenepack.creator || 'son.astral'})`, inline: true },
+                { name: `${emojis.creator} Creator`, value: `[${scenepack.creator || 'Insane'}](https://tiktok.com/@${scenepack.creator || 'Insane'})`, inline: true },
                 { name: `${emojis.uploader} Uploader`, value: `\`${scenepack.uploader || 'Admin'}\``, inline: true }
             ],
             footer: { 
