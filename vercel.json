@@ -46,6 +46,10 @@
       "destination": "/team.html"
     },
     {
+      "source": "/apply",
+      "destination": "/apply.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

@@ -581,6 +581,7 @@ app.get('/downloadsite', (req, res) => res.sendFile(path.join(__dirname, 'downlo
 app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'dashboard.html')));
 app.get('/dashboard.html', (req, res) => res.sendFile(path.join(__dirname, 'dashboard.html')));
 app.get('/team', (req, res) => res.sendFile(path.join(__dirname, 'team.html')));
+app.get('/apply', (req, res) => res.sendFile(path.join(__dirname, 'apply.html')));
 
 // Fallback for all other routes (SPA-style routing)
 app.use((req, res) => {
@@ -595,7 +596,7 @@ app.use((req, res) => {
 
     // For non-API GET requests that don't look like files (no dot in the last segment), serve index.html
     const isFileRequest = req.path.includes('.') || req.path.includes('/assets/');
-    const isKnownPage = ['/admin', '/requests', '/donate', '/auth', '/legal', '/terms', '/downloadsite', '/dashboard', '/team'].includes(req.path);
+    const isKnownPage = ['/admin', '/requests', '/donate', '/auth', '/legal', '/terms', '/downloadsite', '/dashboard', '/team', '/apply'].includes(req.path);
 
     if (req.method === 'GET' && !isFileRequest && !isKnownPage) {
         return res.sendFile(path.join(__dirname, 'index.html'));
