@@ -251,26 +251,16 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
             download_links: scenepackData.downloadLinks || []
         };
 
-        // Check if it already exists to avoid duplication
-        const { data: existing } = await supabase
+        // Nuclear fix for duplication: Delete any existing record with this ID first, then insert.
+        // This ensures an "update" behavior even if the DB schema is missing primary keys or unique constraints.
+        await supabase
             .from('scenepacks')
-            .select('id')
-            .eq('id', targetId)
-            .maybeSingle();
+            .delete()
+            .eq('id', targetId);
 
-        let result;
-        if (existing) {
-            // Update existing record
-            result = await supabase
-                .from('scenepacks')
-                .update(payload)
-                .eq('id', targetId);
-        } else {
-            // Insert new record
-            result = await supabase
-                .from('scenepacks')
-                .insert([payload]);
-        }
+        const result = await supabase
+            .from('scenepacks')
+            .insert([payload]);
 
         if (result.error) throw result.error;
 
