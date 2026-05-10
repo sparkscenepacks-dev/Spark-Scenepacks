@@ -248,7 +248,7 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
                 runtime: scenepackData.runtime,
                 cast: scenepackData.cast,
                 download_links: scenepackData.downloadLinks
-            }]);
+            }], { onConflict: 'id' });
 
         if (error) throw error;
 

@@ -2084,6 +2084,28 @@
                 return `${urlData.publicUrl}?t=${Date.now()}`;
             }
 
+            // --- ID SANITIZATION ---
+            function sanitizeId(str) {
+                if (!str) return '';
+                return str.toLowerCase()
+                    .replace(/[^a-z0-9]/g, '-')
+                    .replace(/-+/g, '-')
+                    .replace(/^-|-$/g, '');
+            }
+
+            // Auto-slugify Title to ID for new items
+            document.getElementById('title').addEventListener('input', function () {
+                if (!isEditing) {
+                    const idField = document.getElementById('id');
+                    idField.value = sanitizeId(this.value);
+                }
+            });
+
+            // Sanitize ID field directly
+            document.getElementById('id').addEventListener('input', function () {
+                this.value = sanitizeId(this.value);
+            });
+
             // Global store for scenepacks to enable easy editing
             let currentScenepacks = [];
             let isEditing = false;
@@ -2315,7 +2337,16 @@
                         .map(cb => cb.value)
                         .join(',');
 
-                    const scenepackId = document.getElementById('id').value || Date.now().toString();
+                    // Determine stable ID
+                    let scenepackId = document.getElementById('id').value.trim();
+                    if (isEditing && editingId) {
+                        scenepackId = editingId; // Force use of original ID during edit
+                    } else if (!scenepackId) {
+                        scenepackId = sanitizeId(document.getElementById('title').value) || Date.now().toString();
+                    }
+                    
+                    // Update field in case it was empty
+                    document.getElementById('id').value = scenepackId;
 
                     // Determine thumbnail URL
                     let thumbnailUrl = document.getElementById('thumbnail').value || '';

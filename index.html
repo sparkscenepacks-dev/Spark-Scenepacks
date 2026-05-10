@@ -1096,7 +1096,7 @@
             background: rgba(255,71,87,0.1);
         }
 
-        .badge-new, .badge-hot {
+        .badge-hot {
             position: absolute;
             top: 15px;
             left: 15px;
@@ -1110,10 +1110,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         
-        .badge-new {
-            background: linear-gradient(135deg, #00b894, #00cec9);
-            animation: pulse 2s infinite;
-        }
+
         
         .badge-hot {
             background: linear-gradient(135deg, #ff7675, #d63031);
@@ -3814,13 +3811,7 @@
 
             // Badges logic
             let badgeHtml = '';
-            if (scenepack.created_at) {
-                const createdDate = new Date(scenepack.created_at);
-                const now = new Date();
-                const diffTime = Math.abs(now - createdDate);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                if (diffDays <= 7) badgeHtml = '<div class="badge-new">NEW</div>';
-            }
+            /* Removed NEW badge logic */
             if (!badgeHtml && scenepack.downloads && parseInt(scenepack.downloads) >= 200) {
                  badgeHtml = '<div class="badge-hot"><i class="fas fa-fire"></i> HOT</div>';
             }
