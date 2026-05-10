@@ -303,18 +303,6 @@ app.post('/api/scenepacks/:id/download', async (req, res) => {
     }
 });
 
-app.post(['/api/scenepacks/:id/download', '/scenepacks/:id/download'], async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { data: current } = await supabase.from('scenepacks').select('downloads').eq('id', id).single();
-        const newCount = (current?.downloads || 0) + 1;
-        await supabase.from('scenepacks').update({ downloads: newCount }).eq('id', id);
-        res.json({ success: true, downloads: newCount });
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to increment downloads' });
-    }
-});
-
 app.delete(['/api/scenepacks/:id', '/api/scenepacks/:id/', '/scenepacks/:id', '/scenepacks/:id/'], isAuthenticated, async (req, res) => {
     try {
         const { id } = req.params;
