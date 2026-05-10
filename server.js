@@ -146,6 +146,47 @@ app.get('/api/admin/check-session', (req, res) => {
     }
 });
 
+// --- IMDb PROXY ---
+app.get('/api/admin/imdb/:id', isAuthenticated, async (req, res) => {
+    try {
+        const { id } = req.params;
+        let OMDB_KEY = process.env.OMDB_API_KEY;
+
+        // Safety: Extract key if user pasted the whole URL by mistake
+        if (OMDB_KEY && OMDB_KEY.includes('apikey=')) {
+            OMDB_KEY = OMDB_KEY.split('apikey=')[1].split('&')[0].replace(/["']/g, '').trim();
+        } else if (OMDB_KEY) {
+            OMDB_KEY = OMDB_KEY.replace(/["']/g, '').trim();
+        }
+
+        if (!OMDB_KEY) {
+            return res.status(500).json({ error: 'OMDb API Key is missing. Add it to your .env file.' });
+        }
+
+        const response = await fetch(`http://www.omdbapi.com/?apikey=${OMDB_KEY}&i=${id}&plot=full`);
+        const data = await response.json();
+
+        if (data.Response === 'False') {
+            return res.status(404).json({ error: data.Error || 'Movie not found' });
+        }
+
+        res.json({
+            title: data.Title,
+            year: data.Year,
+            description: data.Plot,
+            rating: data.imdbRating,
+            genres: data.Genre,
+            poster: data.Poster,
+            director: data.Director,
+            cast: data.Actors,
+            runtime: data.Runtime
+        });
+    } catch (err) {
+        console.error('IMDb Fetch Error:', err);
+        res.status(500).json({ error: 'Failed to fetch data from IMDb' });
+    }
+});
+
 // --- SCENEPACKS API ---
 app.get(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'], async (req, res) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
