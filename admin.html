@@ -2039,6 +2039,9 @@
                     if (typeof supabase !== 'undefined' && !supabaseClient) {
                         supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                         console.log('Supabase initialized successfully');
+                        
+                        // Start Real-time after client is ready
+                        subscribeToAdminChanges();
                     }
                 } catch (e) {
                     console.error('Supabase Init Error:', e);
@@ -2694,7 +2697,8 @@
             }
 
             // Initialize Real-time
-            subscribeToAdminChanges();
+            // Removed immediate call to subscribeToAdminChanges();
+            // It is now called inside initSupabase() to ensure client is ready.
 
             let statsInterval = null;
 
@@ -3097,7 +3101,9 @@
                     `).join('');
 
                 } catch (err) {
-                    console.error('Error loading applications:', err);
+                    console.warn('Applications load failed:', err.message);
+                    const container = document.getElementById('applicationsList');
+                    if (container) container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 40px; width: 100%;">Waiting for connection...</div>`;
                 }
             }
 

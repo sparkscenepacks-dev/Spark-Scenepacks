@@ -541,6 +541,14 @@ app.get(['/api/admin/stats', '/api/admin/stats/', '/admin/stats', '/admin/stats/
 
 // --- DISCORD TEST API ---
 app.post('/api/admin/test-discord', isAuthenticated, async (req, res) => {
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    if (!webhookUrl) {
+        return res.status(400).json({ 
+            error: 'Webhook Not Configured', 
+            details: 'Please add DISCORD_WEBHOOK_URL to your environment variables on Vercel.' 
+        });
+    }
+
     try {
         const testScenepack = {
             id: 'test-preview-id',
@@ -558,7 +566,11 @@ app.post('/api/admin/test-discord', isAuthenticated, async (req, res) => {
         res.json({ success: true, message: 'Test notification sent to Discord!' });
     } catch (err) {
         console.error('[Discord Test Error]', err);
-        res.status(500).json({ error: 'Failed to send test notification. Check server logs.' });
+        res.status(500).json({ 
+            error: 'Discord API Error', 
+            details: err.message,
+            webhookExists: !!process.env.DISCORD_WEBHOOK_URL 
+        });
     }
 });
 
