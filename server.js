@@ -333,10 +333,10 @@ async function sendDiscordNotification(scenepack) {
                 { name: `${emojis.download} Download`, value: `[Direct Link](${downloadUrl})`, inline: true },
                 { name: `${emojis.website} Website`, value: `[Visit Spark](${siteUrl})`, inline: true }
             ],
-            thumbnail: { url: 'https://sparkscenepacks.vercel.app/assets/spark-logo.png' },
+            thumbnail: { url: logoUrl },
             footer: { 
                 text: 'Spark Scenepacks | Premium Quality Scenes',
-                icon_url: 'https://sparkscenepacks.vercel.app/assets/spark-logo-main.jpg'
+                icon_url: logoUrl
             },
             timestamp: new Date()
         };
@@ -568,7 +568,7 @@ app.post('/api/admin/test-discord', isAuthenticated, async (req, res) => {
             id: 'test-preview-id',
             title: 'Sample Scenepack Update',
             preview: 'This is a sample notification triggered from the Spark Admin Panel Notifier Bar.',
-            thumbnail: 'https://sparkscenepacks.vercel.app/assets/spark-logo-main.jpg',
+            thumbnail: 'https://sparkscenepacks.vercel.app/assets/logo.gif',
             genre: 'System Test',
             year: '2026',
             rating: 'LIVE',
