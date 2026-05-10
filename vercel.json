@@ -11,6 +11,7 @@
     { "source": "/downloadsite", "destination": "/downloadsite.html" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/dashboard.html", "destination": "/dashboard.html" },
+    { "source": "/team", "destination": "/team.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
