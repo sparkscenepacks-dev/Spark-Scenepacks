@@ -1106,6 +1106,14 @@
             border: 1px solid var(--border);
         }
 
+        /* Read-only protection styles */
+        .id-field:read-only {
+            background: rgba(255, 255, 255, 0.03) !important;
+            color: rgba(255, 255, 255, 0.4) !important;
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
         /* Management List Styles */
         .management-section {
             margin-top: 40px;
@@ -1488,7 +1496,7 @@
 
                     <div class="input-group">
                         <label class="input-label">Unique ID (URL-friendly)</label>
-                        <input type="text" id="id" placeholder="e.g. john-wick-4k">
+                        <input type="text" id="id" placeholder="e.g. john-wick-4k" class="id-field">
                     </div>
 
                     <div class="input-group">

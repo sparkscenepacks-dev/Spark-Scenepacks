@@ -231,26 +231,48 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
     try {
         if (!supabase) throw new Error('Supabase client not initialized');
         const scenepackData = req.body;
-        const { data, error } = await supabase
-            .from('scenepacks')
-            .upsert([{
-                id: (scenepackData.id || '').trim(),
-                title: scenepackData.title || '',
-                preview: scenepackData.preview || '',
-                description: scenepackData.description || '',
-                thumbnail: scenepackData.thumbnail || '',
-                category: scenepackData.category || '',
-                tags: Array.isArray(scenepackData.tags) ? scenepackData.tags.join(', ') : (scenepackData.tags || ''),
-                year: scenepackData.year || '',
-                director: scenepackData.director || '',
-                genre: scenepackData.genre || '',
-                rating: scenepackData.rating || '',
-                runtime: scenepackData.runtime || '',
-                cast: scenepackData.cast || '',
-                download_links: scenepackData.downloadLinks || []
-            }]);
+        const targetId = (scenepackData.id || '').trim();
+        
+        // Prepare payload
+        const payload = {
+            id: targetId,
+            title: scenepackData.title || '',
+            preview: scenepackData.preview || '',
+            description: scenepackData.description || '',
+            thumbnail: scenepackData.thumbnail || '',
+            category: scenepackData.category || '',
+            tags: Array.isArray(scenepackData.tags) ? scenepackData.tags.join(', ') : (scenepackData.tags || ''),
+            year: scenepackData.year || '',
+            director: scenepackData.director || '',
+            genre: scenepackData.genre || '',
+            rating: scenepackData.rating || '',
+            runtime: scenepackData.runtime || '',
+            cast: scenepackData.cast || '',
+            download_links: scenepackData.downloadLinks || []
+        };
 
-        if (error) throw error;
+        // Check if it already exists to avoid duplication
+        const { data: existing } = await supabase
+            .from('scenepacks')
+            .select('id')
+            .eq('id', targetId)
+            .maybeSingle();
+
+        let result;
+        if (existing) {
+            // Update existing record
+            result = await supabase
+                .from('scenepacks')
+                .update(payload)
+                .eq('id', targetId);
+        } else {
+            // Insert new record
+            result = await supabase
+                .from('scenepacks')
+                .insert([payload]);
+        }
+
+        if (result.error) throw result.error;
 
         // --- AUTOMATED REQUEST STATUS UPDATE ---
         // When a scenepack is uploaded, we check if any pending requests match the title
