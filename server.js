@@ -331,7 +331,7 @@ async function sendDiscordNotification(scenepack) {
                 { name: `\u200b`, value: `\u200b`, inline: true }, // Spacer
                 { name: `${emojis.download} Download`, value: `[Direct Link](${downloadUrl})`, inline: true },
                 { name: `${emojis.website} Website`, value: `[Visit Spark](${siteUrl})`, inline: true },
-                { name: '\u200b', value: `**🔗 Link Bar**\n\`\`\`${downloadUrl}\`\`\`` }
+                { name: '\u200b', value: `\` 🔗 \` **${downloadUrl}**` }
             ],
             footer: { 
                 text: 'Spark Scenepacks | Premium Quality Scenes',
