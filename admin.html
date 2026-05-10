@@ -2429,7 +2429,7 @@
                         showToast('Sample Notification Sent! ✓');
                     } else {
                         const err = await response.json();
-                        alert('Error: ' + (err.error || 'Failed to send test. Check server.'));
+                        alert('Error: ' + (err.error || 'Failed to send test.') + '\nDetails: ' + (err.details || 'Check server logs.'));
                     }
                 } catch (error) {
                     alert('Connection failed. Is the server running?');

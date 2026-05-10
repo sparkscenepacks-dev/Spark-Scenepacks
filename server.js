@@ -290,8 +290,9 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
 
 
 async function sendDiscordNotification(scenepack) {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    let webhookUrl = process.env.DISCORD_WEBHOOK_URL;
     if (!webhookUrl) return;
+    webhookUrl = webhookUrl.trim();
 
     try {
         // Load custom emojis
@@ -340,50 +341,63 @@ async function sendDiscordNotification(scenepack) {
             timestamp: new Date()
         };
 
-        const response = await fetch(webhookUrl, {
+        const payload = {
+            content: `### ${emojis.spark} **New Upload Alert!**`,
+            embeds: [embed],
+            components: [
+                {
+                    type: 1,
+                    components: [
+                        {
+                            type: 2,
+                            label: "Download Scenepack",
+                            style: 5,
+                            url: downloadUrl,
+                            emoji: { name: "📥" }
+                        },
+                        {
+                            type: 2,
+                            label: "View on Website",
+                            style: 5,
+                            url: siteUrl,
+                            emoji: { name: "🌐" }
+                        },
+                        {
+                            type: 2,
+                            label: "Direct Link",
+                            style: 5,
+                            url: downloadUrl,
+                            emoji: { name: "🔗" }
+                        }
+                    ]
+                }
+            ]
+        };
+
+        let response = await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content: `### ${emojis.spark} **New Upload Alert!**`,
-                embeds: [embed],
-                components: [
-                    {
-                        type: 1,
-                        components: [
-                            {
-                                type: 2,
-                                label: "Download Scenepack",
-                                style: 5,
-                                url: downloadUrl,
-                                emoji: { name: "📥" }
-                            },
-                            {
-                                type: 2,
-                                label: "View on Website",
-                                style: 5,
-                                url: siteUrl,
-                                emoji: { name: "🌐" }
-                            },
-                            {
-                                type: 2,
-                                label: "Direct Link",
-                                style: 5,
-                                url: downloadUrl,
-                                emoji: { name: "🔗" }
-                            }
-                        ]
-                    }
-                ]
-            })
+            body: JSON.stringify(payload)
         });
+
+        // Fallback: If Discord rejects with components (common for standard webhooks), try without them
+        if (!response.ok && response.status === 400) {
+            console.warn('[Discord] Payload rejected, retrying without interactive components...');
+            delete payload.components;
+            response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        }
 
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`[Discord Error] HTTP ${response.status}: ${errorText}`);
-            throw new Error(`Discord API returned ${response.status}`);
+            throw new Error(`Discord returned ${response.status}: ${errorText}`);
         }
 
-        console.log('[Discord] Premium notification with buttons sent successfully');
+        console.log('[Discord] Notification sent successfully');
     } catch (err) {
         console.error('[Discord Error] Failed to send notification:', err);
         throw err;
