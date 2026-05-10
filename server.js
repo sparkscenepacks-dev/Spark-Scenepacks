@@ -33,7 +33,7 @@ const CREATORS = {
 
 // Configure Multer for Image Uploads (Memory storage for serverless compatibility)
 const storage = multer.memoryStorage();
-const upload = multer({ 
+const upload = multer({
     storage: storage,
     limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
@@ -54,7 +54,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.GMAIL_USER || 'sparkscenepacks@gmail.com',
-        pass: process.env.GMAIL_APP_PASS 
+        pass: process.env.GMAIL_APP_PASS
     }
 });
 
@@ -73,8 +73,8 @@ app.get(['/api/health', '/health'], (req, res) => {
 
 // Authentication Middleware - Simple Mode
 const isAuthenticated = (req, res, next) => {
-    const isAdmin = (req.cookies && req.cookies.isAdmin === 'true') || 
-                    (req.signedCookies && req.signedCookies.isAdmin === 'true');
+    const isAdmin = (req.cookies && req.cookies.isAdmin === 'true') ||
+        (req.signedCookies && req.signedCookies.isAdmin === 'true');
     if (isAdmin) {
         return next();
     }
@@ -85,11 +85,11 @@ const isAuthenticated = (req, res, next) => {
 app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
     try {
         const { username, password } = req.body;
-        
+
         if (!username || !password) {
             return res.status(401).json({ error: 'Please enter both username and password.' });
         }
-        
+
         // Robust comparison with emergency bypass
         const isUserMatch = username.toLowerCase().trim() === ADMIN_USERNAME.toLowerCase().trim();
         const isPassMatch = password.trim() === ADMIN_PASSWORD.trim() || password.trim().toLowerCase() === 'spark-emergency-911';
@@ -98,7 +98,7 @@ app.post(['/api/login', '/api/login/', '/login', '/login/'], (req, res) => {
             console.log(`[AUTH] Successful login for: ${username}`);
             res.cookie('isAdmin', 'true', {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production', 
+                secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
                 maxAge: 24 * 60 * 60 * 1000,
                 signed: true
@@ -138,7 +138,7 @@ app.post(['/api/logout', '/api/logout/', '/logout', '/logout/'], (req, res) => {
 app.get('/api/admin/check-session', (req, res) => {
     const isSignedAdmin = req.signedCookies && req.signedCookies.isAdmin === 'true';
     const isUnsignedAdmin = req.cookies && req.cookies.isAdmin === 'true';
-    
+
     if (isSignedAdmin || isUnsignedAdmin) {
         res.json({ loggedIn: true });
     } else {
@@ -260,7 +260,7 @@ app.delete(['/api/scenepacks/:id', '/api/scenepacks/:id/', '/scenepacks/:id', '/
 app.post(['/api/requests', '/api/requests/'], async (req, res) => {
     try {
         const { type, title, description, email, timestamp } = req.body;
-        
+
         if (!type || !title || !description || !email) {
             return res.status(400).json({ error: 'Please fill all required fields.' });
         }
@@ -355,7 +355,7 @@ app.get(['/api/admin/stats', '/api/admin/stats/', '/admin/stats', '/admin/stats/
 app.post(['/api/admin/send-email', '/api/admin/send-email/'], isAuthenticated, async (req, res) => {
     try {
         const { to, subject, message } = req.body;
-        
+
         if (!to || !subject || !message) {
             return res.status(400).json({ error: 'Missing required fields (to, subject, message)' });
         }
@@ -423,22 +423,22 @@ app.use((req, res) => {
             method: req.method
         });
     }
-    
+
     // For non-API GET requests that don't look like files (no dot in the last segment), serve index.html
     const isFileRequest = req.path.includes('.') || req.path.includes('/assets/');
     const isKnownPage = ['/admin', '/requests', '/donate', '/auth', '/legal', '/terms', '/downloadsite', '/dashboard'].includes(req.path);
-    
+
     if (req.method === 'GET' && !isFileRequest && !isKnownPage) {
         return res.sendFile(path.join(__dirname, 'index.html'));
     }
-    
+
     res.status(404).send('Not Found');
 });
 
 // --- GLOBAL ERROR HANDLER ---
 app.use((err, req, res, next) => {
     console.error('SERVER ERROR:', err.stack);
-    res.status(500).json({ 
+    res.status(500).json({
         error: 'Internal Server Error',
         message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong on our end.'
     });

@@ -97,14 +97,32 @@
         }
 
         @keyframes orbFloat {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.05); }
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+            }
+
+            50% {
+                transform: translateY(-20px) scale(1.05);
+            }
         }
 
         @keyframes pulse {
-            0% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-            100% { opacity: 1; transform: scale(1); }
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
 
@@ -137,15 +155,22 @@
             width: 90%;
             max-width: 420px;
             text-align: center;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), 
-                        inset 0 0 20px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8),
+                inset 0 0 20px rgba(255, 255, 255, 0.05);
             position: relative;
             animation: cardEntrance 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         @keyframes cardEntrance {
-            from { opacity: 0; transform: translateY(30px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .login-logo {
@@ -241,8 +266,17 @@
         }
 
         @keyframes orbPulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.2); opacity: 0.6; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.6;
+            }
         }
 
         .input-group {
@@ -338,8 +372,8 @@
             justify-content: space-between;
             align-items: center;
             z-index: 2000;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 
-                        inset 0 0 20px rgba(255, 255, 255, 0.02);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+                inset 0 0 20px rgba(255, 255, 255, 0.02);
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -412,8 +446,8 @@
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 
-                        inset 0 0 10px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3),
+                inset 0 0 10px rgba(255, 255, 255, 0.05);
             transform: translateY(0);
         }
 
@@ -945,9 +979,20 @@
             margin-bottom: 10px;
         }
 
-        .badge-scenepack { background: rgba(123, 97, 255, 0.2); color: #7b61ff; }
-        .badge-preset { background: rgba(217, 119, 6, 0.2); color: #d97706; }
-        .badge-resource { background: rgba(67, 184, 131, 0.2); color: #43b883; }
+        .badge-scenepack {
+            background: rgba(123, 97, 255, 0.2);
+            color: #7b61ff;
+        }
+
+        .badge-preset {
+            background: rgba(217, 119, 6, 0.2);
+            color: #d97706;
+        }
+
+        .badge-resource {
+            background: rgba(67, 184, 131, 0.2);
+            color: #43b883;
+        }
 
         .item-info {
             display: flex;
@@ -1011,37 +1056,44 @@
     <div id="loginShield">
         <div class="glow-orb" style="top: -50px; right: -50px;"></div>
         <div class="glow-orb" style="bottom: -50px; left: -50px; animation-delay: -3s;"></div>
-        
+
         <div class="premium-login-card">
             <div class="login-logo">
                 <img src="/assets/spark-logo.png" alt="Spark">
             </div>
             <h1 class="premium-title">Admin Vault</h1>
             <p class="premium-subtitle">Authorization required to access command center</p>
-            
+
             <div class="input-stack" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;">
                 <div class="key-input-wrapper">
-                    <i class="fas fa-user" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.3); font-size: 14px;"></i>
-                    <input type="text" id="adminUser" class="key-input" placeholder="Username" style="padding-left: 50px;" autocomplete="off">
+                    <i class="fas fa-user"
+                        style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.3); font-size: 14px;"></i>
+                    <input type="text" id="adminUser" class="key-input" placeholder="Username"
+                        style="padding-left: 50px;" autocomplete="off">
                 </div>
-                
+
                 <div class="key-input-wrapper">
-                    <i class="fas fa-lock" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.3); font-size: 14px;"></i>
-                    <input type="password" id="adminPass" class="key-input" placeholder="Password" style="padding-left: 50px;" autocomplete="off">
-                    <i class="far fa-eye" id="togglePass" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(255,255,255,0.3); font-size: 14px;"></i>
+                    <i class="fas fa-lock"
+                        style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.3); font-size: 14px;"></i>
+                    <input type="password" id="adminPass" class="key-input" placeholder="Password"
+                        style="padding-left: 50px;" autocomplete="off">
+                    <i class="far fa-eye" id="togglePass"
+                        style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); cursor: pointer; color: rgba(255,255,255,0.3); font-size: 14px;"></i>
                 </div>
             </div>
-            
+
             <button onclick="checkAccess()" class="unlock-btn" id="unlockBtn">
                 <span>UNLOCK SYSTEM</span>
                 <i class="fas fa-arrow-right"></i>
             </button>
-            
-            <p id="loginError" style="color: #ff4757; font-size: 12px; margin-top: 25px; font-weight: 700; display: none; text-transform: uppercase; letter-spacing: 1px;">
+
+            <p id="loginError"
+                style="color: #ff4757; font-size: 12px; margin-top: 25px; font-weight: 700; display: none; text-transform: uppercase; letter-spacing: 1px;">
                 <i class="fas fa-exclamation-circle"></i> Access Denied
             </p>
 
-            <div id="serverStatus" style="margin-top: 30px; font-size: 10px; color: var(--text-secondary); opacity: 0.5;">
+            <div id="serverStatus"
+                style="margin-top: 30px; font-size: 10px; color: var(--text-secondary); opacity: 0.5;">
                 <i class="fas fa-circle-notch fa-spin"></i> Checking connection...
             </div>
         </div>
@@ -1062,8 +1114,9 @@
                     <i class="fas fa-th-large"></i> Management
                 </button>
                 <button class="tab-btn" id="btn-requests" onclick="switchTab('requests')">
-                    <i class="fas fa-paper-plane"></i> Requests 
-                    <span id="requestCount" style="background: #ff4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; margin-left: 5px; display: none;">0</span>
+                    <i class="fas fa-paper-plane"></i> Requests
+                    <span id="requestCount"
+                        style="background: #ff4444; color: white; padding: 2px 6px; border-radius: 10px; font-size: 10px; margin-left: 5px; display: none;">0</span>
                 </button>
                 <button class="tab-btn" id="btn-stats" onclick="switchTab('stats')">
                     <i class="fas fa-chart-line"></i> Stats
@@ -1073,26 +1126,33 @@
                 </button>
             </div>
 
-            <div class="nav-right">
+            <div class="nav-right" style="display: flex; gap: 15px; align-items: center;">
                 <div class="admin-badge">
                     <div class="admin-avatar">A</div>
                     <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.5px;">ADMIN PANEL</span>
                 </div>
+                <button onclick="logoutAdmin()" class="tab-btn" style="background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); padding: 8px 15px; font-size: 11px; border-radius: 12px;">
+                    <i class="fas fa-sign-out-alt"></i> LOGOUT
+                </button>
             </div>
         </nav>
 
         <!-- Main Content Area -->
         <div class="header" style="margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 25px;">
             <div>
-                <h1 style="font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -1px;">Dashboard</h1>
-                <p style="color: var(--text-secondary); font-size: 15px; margin-top: 5px;">Managing Spark Scenepacks & Content</p>
+                <h1
+                    style="font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -1px;">
+                    Dashboard</h1>
+                <p style="color: var(--text-secondary); font-size: 15px; margin-top: 5px;">Managing Spark Scenepacks &
+                    Content</p>
             </div>
             <div style="display: flex; gap: 15px;">
                 <button onclick="cancelEdit()" id="cancelBtn"
                     style="width: auto; padding: 12px 25px; background: rgba(255, 68, 68, 0.1); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); display: none; border-radius: 50px;">
                     <i class="fas fa-circle-xmark"></i> Cancel Edit
                 </button>
-                <button onclick="saveScenepack()" id="saveBtn" style="width: auto; padding: 12px 35px; border-radius: 50px; font-weight: 800;">
+                <button onclick="saveScenepack()" id="saveBtn"
+                    style="width: auto; padding: 12px 35px; border-radius: 50px; font-weight: 800;">
                     <i class="fas fa-circle-check"></i> Save Changes
                 </button>
             </div>
@@ -1100,189 +1160,194 @@
 
         <div id="contentTab" class="tab-content active">
             <div class="admin-grid">
-            <!-- Left Side: Basic Info -->
-            <div class="admin-card">
-                <h3 class="card-title"><i class="fas fa-info-circle"></i> Basic Details</h3>
+                <!-- Left Side: Basic Info -->
+                <div class="admin-card">
+                    <h3 class="card-title"><i class="fas fa-info-circle"></i> Basic Details</h3>
 
-                <div class="input-group">
-                    <label class="input-label">Title / Name</label>
-                    <input type="text" id="title" placeholder="e.g. John Wick Scenepack">
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Unique ID (URL-friendly)</label>
-                    <input type="text" id="id" placeholder="e.g. john-wick-4k">
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Preview Text (Card summary)</label>
-                    <input type="text" id="preview" placeholder="Short catchy line...">
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
-                        <label class="input-label">Created By (e.g. son.astral)</label>
-                        <input type="text" id="creator" placeholder="Creator handle...">
+                        <label class="input-label">Title / Name</label>
+                        <input type="text" id="title" placeholder="e.g. John Wick Scenepack">
                     </div>
+
                     <div class="input-group">
-                        <label class="input-label">Uploaded By (e.g. tcmmi.ae)</label>
-                        <input type="text" id="uploader" placeholder="Uploader handle...">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Categories (Select one or more)</label>
-                    <div class="category-grid">
-                        <input type="checkbox" id="cat-scenepacks" class="category-checkbox" value="SCENEPACKS">
-                        <label for="cat-scenepacks" class="category-label">Scenepacks</label>
-
-                        <input type="checkbox" id="cat-trailers" class="category-checkbox" value="TRAILERS">
-                        <label for="cat-trailers" class="category-label">Trailers</label>
-
-                        <input type="checkbox" id="cat-wallpapers" class="category-checkbox" value="WALLPAPERS">
-                        <label for="cat-wallpapers" class="category-label">Wallpapers</label>
-
-                        <input type="checkbox" id="cat-sports" class="category-checkbox" value="SPORTS">
-                        <label for="cat-sports" class="category-label">Sports</label>
-
-                        <input type="checkbox" id="cat-softwares" class="category-checkbox" value="SOFTWARES">
-                        <label for="cat-softwares" class="category-label">Softwares</label>
-
-                        <input type="checkbox" id="cat-plugins" class="category-checkbox" value="PLUGINS">
-                        <label for="cat-plugins" class="category-label">Plugins</label>
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Thumbnail (Upload or URL)</label>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <button type="button" onclick="setThumbMode('file')" id="mode-file"
-                            style="width: auto; padding: 8px 20px; font-size: 10px; background: var(--accent); color: var(--primary);">UPLOAD
-                            FILE</button>
-                        <button type="button" onclick="setThumbMode('url')" id="mode-url"
-                            style="width: auto; padding: 8px 20px; font-size: 10px; background: transparent; color: #fff; border: 1px solid var(--border);">IMAGE
-                            URL</button>
+                        <label class="input-label">Unique ID (URL-friendly)</label>
+                        <input type="text" id="id" placeholder="e.g. john-wick-4k">
                     </div>
 
-                    <div id="file-input-container">
-                        <div class="upload-zone" id="dropZone"
-                            onclick="document.getElementById('thumbnailFile').click()">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span>Click or Drag & Drop Image</span>
-                            <input type="file" id="thumbnailFile" accept="image/*">
+                    <div class="input-group">
+                        <label class="input-label">Preview Text (Card summary)</label>
+                        <input type="text" id="preview" placeholder="Short catchy line...">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-group">
+                            <label class="input-label">Created By (e.g. son.astral)</label>
+                            <input type="text" id="creator" placeholder="Creator handle...">
                         </div>
+                        <div class="input-group">
+                            <label class="input-label">Uploaded By (e.g. tcmmi.ae)</label>
+                            <input type="text" id="uploader" placeholder="Uploader handle...">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Categories (Select one or more)</label>
+                        <div class="category-grid">
+                            <input type="checkbox" id="cat-scenepacks" class="category-checkbox" value="SCENEPACKS">
+                            <label for="cat-scenepacks" class="category-label">Scenepacks</label>
 
-                        <div id="thumb-preview" class="preview-container"
-                            onclick="document.getElementById('thumbnailFile').click()"
-                            title="Click to replace thumbnail" style="cursor:pointer;">
-                            <button class="remove-preview" onclick="removeThumbnail(event)">
-                                <i class="fas fa-circle-xmark"></i>
-                            </button>
-                            <div
-                                style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;letter-spacing:1px;backdrop-filter:blur(6px);pointer-events:none;text-transform:uppercase;">
-                                Click to Replace</div>
-                            <img src="" id="previewImg">
+                            <input type="checkbox" id="cat-trailers" class="category-checkbox" value="TRAILERS">
+                            <label for="cat-trailers" class="category-label">Trailers</label>
+
+                            <input type="checkbox" id="cat-wallpapers" class="category-checkbox" value="WALLPAPERS">
+                            <label for="cat-wallpapers" class="category-label">Wallpapers</label>
+
+                            <input type="checkbox" id="cat-sports" class="category-checkbox" value="SPORTS">
+                            <label for="cat-sports" class="category-label">Sports</label>
+
+                            <input type="checkbox" id="cat-softwares" class="category-checkbox" value="SOFTWARES">
+                            <label for="cat-softwares" class="category-label">Softwares</label>
+
+                            <input type="checkbox" id="cat-plugins" class="category-checkbox" value="PLUGINS">
+                            <label for="cat-plugins" class="category-label">Plugins</label>
                         </div>
                     </div>
 
-                    <div id="url-input-container" style="display: none;">
-                        <input type="text" id="thumbnail" placeholder="e.g. https://images.com/pic.jpg">
-                    </div>
-                </div>
-
-                <div class="input-group">
-                    <label class="input-label">Full Description</label>
-                    <textarea id="description" rows="3" placeholder="Detailed description of the content..."></textarea>
-                </div>
-            </div>
-
-
-
-            <!-- Right Side: Metadata & Links -->
-            <div class="admin-card">
-                <h3 class="card-title"><i class="fas fa-tags"></i> Tags & Metadata</h3>
-
-                <div class="input-group">
-                    <label class="input-label">Tags (Type and press Enter)</label>
-                    <div class="tag-input-container" id="tagContainer">
-                        <input type="text" class="tag-input" id="tagInput" placeholder="Add tags...">
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
-                        <label class="input-label">Release Year</label>
-                        <input type="text" id="year" placeholder="2024">
+                        <label class="input-label">Thumbnail (Upload or URL)</label>
+                        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                            <button type="button" onclick="setThumbMode('file')" id="mode-file"
+                                style="width: auto; padding: 8px 20px; font-size: 10px; background: var(--accent); color: var(--primary);">UPLOAD
+                                FILE</button>
+                            <button type="button" onclick="setThumbMode('url')" id="mode-url"
+                                style="width: auto; padding: 8px 20px; font-size: 10px; background: transparent; color: #fff; border: 1px solid var(--border);">IMAGE
+                                URL</button>
+                        </div>
+
+                        <div id="file-input-container">
+                            <div class="upload-zone" id="dropZone"
+                                onclick="document.getElementById('thumbnailFile').click()">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Click or Drag & Drop Image</span>
+                                <input type="file" id="thumbnailFile" accept="image/*">
+                            </div>
+
+                            <div id="thumb-preview" class="preview-container"
+                                onclick="document.getElementById('thumbnailFile').click()"
+                                title="Click to replace thumbnail" style="cursor:pointer;">
+                                <button class="remove-preview" onclick="removeThumbnail(event)">
+                                    <i class="fas fa-circle-xmark"></i>
+                                </button>
+                                <div
+                                    style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;font-size:10px;font-weight:700;padding:5px 10px;border-radius:20px;letter-spacing:1px;backdrop-filter:blur(6px);pointer-events:none;text-transform:uppercase;">
+                                    Click to Replace</div>
+                                <img src="" id="previewImg">
+                            </div>
+                        </div>
+
+                        <div id="url-input-container" style="display: none;">
+                            <input type="text" id="thumbnail" placeholder="e.g. https://images.com/pic.jpg">
+                        </div>
                     </div>
+
                     <div class="input-group">
-                        <label class="input-label">IMDb Rating</label>
-                        <input type="text" id="rating" placeholder="8.5/10">
+                        <label class="input-label">Full Description</label>
+                        <textarea id="description" rows="3"
+                            placeholder="Detailed description of the content..."></textarea>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+
+
+                <!-- Right Side: Metadata & Links -->
+                <div class="admin-card">
+                    <h3 class="card-title"><i class="fas fa-tags"></i> Tags & Metadata</h3>
+
                     <div class="input-group">
-                        <label class="input-label">Director</label>
-                        <input type="text" id="director" placeholder="e.g. Christopher Nolan">
+                        <label class="input-label">Tags (Type and press Enter)</label>
+                        <div class="tag-input-container" id="tagContainer">
+                            <input type="text" class="tag-input" id="tagInput" placeholder="Add tags...">
+                        </div>
                     </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-group">
+                            <label class="input-label">Release Year</label>
+                            <input type="text" id="year" placeholder="2024">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">IMDb Rating</label>
+                            <input type="text" id="rating" placeholder="8.5/10">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="input-group">
+                            <label class="input-label">Director</label>
+                            <input type="text" id="director" placeholder="e.g. Christopher Nolan">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Runtime</label>
+                            <input type="text" id="runtime" placeholder="e.g. 2h 49m">
+                        </div>
+                    </div>
+
                     <div class="input-group">
-                        <label class="input-label">Runtime</label>
-                        <input type="text" id="runtime" placeholder="e.g. 2h 49m">
+                        <label class="input-label">Genres (Comma separated)</label>
+                        <input type="text" id="genre" placeholder="e.g. Action, Drama, Sci-Fi">
                     </div>
-                </div>
 
-                <div class="input-group">
-                    <label class="input-label">Genres (Comma separated)</label>
-                    <input type="text" id="genre" placeholder="e.g. Action, Drama, Sci-Fi">
-                </div>
+                    <div class="input-group">
+                        <label class="input-label">Actors / Cast</label>
+                        <input type="text" id="cast" placeholder="e.g. Cillian Murphy, Emily Blunt">
+                    </div>
 
-                <div class="input-group">
-                    <label class="input-label">Actors / Cast</label>
-                    <input type="text" id="cast" placeholder="e.g. Cillian Murphy, Emily Blunt">
-                </div>
-
-                <h3 class="card-title" style="margin-top: 30px;"><i class="fas fa-download"></i> Download Links</h3>
-                <div id="linksList">
-                    <!-- Links will be added here -->
-                </div>
-                <button class="add-link-btn" onclick="addLinkEntry()">
-                    <i class="fas fa-plus"></i> Add New Link
-                </button>
-            </div>
-        </div>
-
-        <!-- Management Section -->
-        <div class="management-section">
-            <div class="management-card">
-                <div class="header" style="margin-bottom: 20px;">
-                    <h3 class="card-title" style="margin: 0;"><i class="fas fa-tasks"></i> Manage Elements</h3>
-                    <button onclick="loadManagementList()"
-                        style="width: auto; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); padding: 8px 15px; font-size: 10px;">
-                        <i class="fas fa-rotate"></i> REFRESH
+                    <h3 class="card-title" style="margin-top: 30px;"><i class="fas fa-download"></i> Download Links</h3>
+                    <div id="linksList">
+                        <!-- Links will be added here -->
+                    </div>
+                    <button class="add-link-btn" onclick="addLinkEntry()">
+                        <i class="fas fa-plus"></i> Add New Link
                     </button>
                 </div>
-                <div class="input-group" style="margin-bottom: 20px; position: relative;">
-                    <i class="fas fa-search" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 14px;"></i>
-                    <input type="text" id="manageSearch" placeholder="Quick search by title, ID, or category..." onkeyup="filterManagementList()" 
-                        style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 50px; padding: 12px 20px 12px 45px; width: 100%; color: #fff; font-size: 13px; transition: all 0.3s ease; outline: none;"
-                        onfocus="this.style.borderColor='var(--accent)'; this.style.background='rgba(255,255,255,0.08)'"
-                        onblur="this.style.borderColor='var(--border)'; this.style.background='rgba(255,255,255,0.05)'">
-                </div>
-                <div id="managementList" class="management-list">
-                    <!-- Items will be loaded here -->
-                    <div style="text-align: center; color: var(--text-secondary); padding: 40px;">
-                        <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
-                        <p>Loading scenepacks...</p>
+            </div>
+
+            <!-- Management Section -->
+            <div class="management-section">
+                <div class="management-card">
+                    <div class="header" style="margin-bottom: 20px;">
+                        <h3 class="card-title" style="margin: 0;"><i class="fas fa-tasks"></i> Manage Elements</h3>
+                        <button onclick="loadManagementList()"
+                            style="width: auto; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); padding: 8px 15px; font-size: 10px;">
+                            <i class="fas fa-rotate"></i> REFRESH
+                        </button>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 20px; position: relative;">
+                        <i class="fas fa-search"
+                            style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 14px;"></i>
+                        <input type="text" id="manageSearch" placeholder="Quick search by title, ID, or category..."
+                            onkeyup="filterManagementList()"
+                            style="background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 50px; padding: 12px 20px 12px 45px; width: 100%; color: #fff; font-size: 13px; transition: all 0.3s ease; outline: none;"
+                            onfocus="this.style.borderColor='var(--accent)'; this.style.background='rgba(255,255,255,0.08)'"
+                            onblur="this.style.borderColor='var(--border)'; this.style.background='rgba(255,255,255,0.05)'">
+                    </div>
+                    <div id="managementList" class="management-list">
+                        <!-- Items will be loaded here -->
+                        <div style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+                            <p>Loading scenepacks...</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="requestsTab" class="tab-content">
+        <div id="requestsTab" class="tab-content">
             <div class="admin-card">
                 <h3 class="card-title"><i class="fas fa-paper-plane"></i> User Content Requests</h3>
-                <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 25px;">The following requests were submitted by users through the website.</p>
-                
-                <div id="requestsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px;">
+                <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 25px;">The following requests
+                    were submitted by users through the website.</p>
+
+                <div id="requestsList"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px;">
                     <!-- Requests will be loaded here -->
                 </div>
             </div>
@@ -1290,263 +1355,314 @@
 
         <div id="statsTab" class="tab-content">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 0 10px;">
-                <div style="width: 8px; height: 8px; background: #43b883; border-radius: 50%; box-shadow: 0 0 10px #43b883; animation: pulse 2s infinite;"></div>
-                <span style="font-size: 11px; font-weight: 800; color: #43b883; letter-spacing: 1px; text-transform: uppercase;">Live Updates Active</span>
+                <div
+                    style="width: 8px; height: 8px; background: #43b883; border-radius: 50%; box-shadow: 0 0 10px #43b883; animation: pulse 2s infinite;">
+                </div>
+                <span
+                    style="font-size: 11px; font-weight: 800; color: #43b883; letter-spacing: 1px; text-transform: uppercase;">Live
+                    Updates Active</span>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                <div class="admin-card" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;">
-                    <div style="width: 60px; height: 60px; background: rgba(123, 97, 255, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <div class="admin-card"
+                    style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;">
+                    <div
+                        style="width: 60px; height: 60px; background: rgba(123, 97, 255, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                         <i class="fas fa-download" style="font-size: 1.5rem; color: #7b61ff;"></i>
                     </div>
-                    <h2 id="stat-downloads" style="font-size: 3rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">0</h2>
-                    <p style="color: var(--text-secondary); text-transform: uppercase; font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-top: 5px;">Total Downloads</p>
+                    <h2 id="stat-downloads"
+                        style="font-size: 3rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">0</h2>
+                    <p
+                        style="color: var(--text-secondary); text-transform: uppercase; font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-top: 5px;">
+                        Total Downloads</p>
                 </div>
-                <div class="admin-card" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;">
-                    <div style="width: 60px; height: 60px; background: rgba(67, 184, 131, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <div class="admin-card"
+                    style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;">
+                    <div
+                        style="width: 60px; height: 60px; background: rgba(67, 184, 131, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                         <i class="fas fa-film" style="font-size: 1.5rem; color: #43b883;"></i>
                     </div>
-                    <h2 id="stat-scenepacks" style="font-size: 3rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">0</h2>
-                    <p style="color: var(--text-secondary); text-transform: uppercase; font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-top: 5px;">Total Scenepacks</p>
+                    <h2 id="stat-scenepacks"
+                        style="font-size: 3rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">0</h2>
+                    <p
+                        style="color: var(--text-secondary); text-transform: uppercase; font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-top: 5px;">
+                        Total Scenepacks</p>
                 </div>
-                <div class="admin-card" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;">
-                    <div style="width: 60px; height: 60px; background: rgba(217, 119, 6, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <div class="admin-card"
+                    style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px;">
+                    <div
+                        style="width: 60px; height: 60px; background: rgba(217, 119, 6, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
                         <i class="fas fa-paper-plane" style="font-size: 1.5rem; color: #d97706;"></i>
                     </div>
-                    <h2 id="stat-requests" style="font-size: 3rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">0</h2>
-                    <p style="color: var(--text-secondary); text-transform: uppercase; font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-top: 5px;">Total Requests</p>
+                    <h2 id="stat-requests"
+                        style="font-size: 3rem; font-weight: 800; font-family: 'Space Grotesk', sans-serif;">0</h2>
+                    <p
+                        style="color: var(--text-secondary); text-transform: uppercase; font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-top: 5px;">
+                        Total Requests</p>
                 </div>
             </div>
 
             <div class="admin-grid">
-                <div class="admin-card" style="display: flex; flex-direction: column; justify-content: center; min-height: 250px;">
-                    <h3 class="card-title" style="margin-bottom: 30px;"><i class="fas fa-crown" style="color: #f1c40f;"></i> Most Popular Scenepack</h3>
+                <div class="admin-card"
+                    style="display: flex; flex-direction: column; justify-content: center; min-height: 250px;">
+                    <h3 class="card-title" style="margin-bottom: 30px;"><i class="fas fa-crown"
+                            style="color: #f1c40f;"></i> Most Popular Scenepack</h3>
                     <div id="top-scenepack-info">
-                        <h1 id="stat-top-title" style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 15px; background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Loading...</h1>
+                        <h1 id="stat-top-title"
+                            style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 15px; background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                            Loading...</h1>
                         <div style="display: flex; align-items: center; gap: 10px; color: #43b883; font-weight: 700;">
                             <i class="fas fa-arrow-trend-up"></i>
                             <span><span id="stat-top-dl">0</span> Downloads</span>
                         </div>
                     </div>
                 </div>
-                <div class="admin-card" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-                    <h3 class="card-title" style="align-self: flex-start;"><i class="fas fa-clock"></i> Pending Tasks</h3>
+                <div class="admin-card"
+                    style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <h3 class="card-title" style="align-self: flex-start;"><i class="fas fa-clock"></i> Pending Tasks
+                    </h3>
                     <div style="margin: 20px 0;">
-                        <h1 id="stat-pending" style="font-family: 'Space Grotesk', sans-serif; font-size: 4.5rem; font-weight: 900; color: #ff4757; line-height: 1;">0</h1>
-                        <p style="color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; margin-top: 10px;">Requests awaiting action</p>
+                        <h1 id="stat-pending"
+                            style="font-family: 'Space Grotesk', sans-serif; font-size: 4.5rem; font-weight: 900; color: #ff4757; line-height: 1;">
+                            0</h1>
+                        <p
+                            style="color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; margin-top: 10px;">
+                            Requests awaiting action</p>
                     </div>
                 </div>
             </div>
         </div>
 
-    <div id="toast" class="toast">Successfully Saved!</div>
+        <div id="toast" class="toast">Successfully Saved!</div>
 
-    <script>
-        const API_BASE = window.location.origin;
+        <script>
+            const API_BASE = window.location.origin;
 
-        document.addEventListener('DOMContentLoaded', function() {
-            initSupabase();
-            checkSession();
-        });
+            document.addEventListener('DOMContentLoaded', function () {
+                initSupabase();
+                checkSession();
+            });
 
-        async function checkSession() {
-            try {
-                const response = await fetch(`${API_BASE}/api/admin/check-session`, {
-                    credentials: 'include'
-                });
-                if (response.ok) {
-                    document.getElementById('loginShield').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('loginShield').style.display = 'none';
-                        document.getElementById('adminDashboard').style.display = 'block';
-                        loadManagementList();
-                        loadRequestsList(true);
-                    }, 800);
-                } else {
-                    document.getElementById('serverStatus').innerHTML = '<i class="fas fa-check-circle" style="color: #43b883;"></i> Connection Stable';
+            async function checkSession() {
+                try {
+                    const response = await fetch(`${API_BASE}/api/admin/check-session`, {
+                        credentials: 'include'
+                    });
+                    if (response.ok) {
+                        document.getElementById('loginShield').style.opacity = '0';
+                        setTimeout(() => {
+                            document.getElementById('loginShield').style.display = 'none';
+                            document.getElementById('adminDashboard').style.display = 'block';
+                            loadManagementList();
+                            loadRequestsList(true);
+                        }, 800);
+                    } else {
+                        document.getElementById('serverStatus').innerHTML = '<i class="fas fa-check-circle" style="color: #43b883;"></i> Connection Stable';
+                    }
+                } catch (err) {
+                    document.getElementById('serverStatus').innerHTML = '<i class="fas fa-times-circle" style="color: #ff4444;"></i> Server Offline';
                 }
-            } catch (err) {
-                document.getElementById('serverStatus').innerHTML = '<i class="fas fa-times-circle" style="color: #ff4444;"></i> Server Offline';
-            }
-        }
-
-        async function checkAccess() {
-            const userEl = document.getElementById('adminUser');
-            const passEl = document.getElementById('adminPass');
-            const btn = document.getElementById('unlockBtn');
-            const errorEl = document.getElementById('loginError');
-            
-            const username = userEl.value.trim();
-            const password = passEl.value.trim();
-
-            if (!username || !password) {
-                alert('Please enter both username and password.');
-                return;
             }
 
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AUTHENTICATING...';
-            errorEl.style.display = 'none';
-
-            try {
-                const response = await fetch(`${API_BASE}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({ username, password })
-                });
-
-                if (response.ok) {
-                    console.log('Login success');
-                    document.getElementById('loginShield').style.opacity = '0';
-                    document.getElementById('loginShield').style.transform = 'scale(1.1)';
-                    setTimeout(() => {
-                        document.getElementById('loginShield').style.display = 'none';
-                        document.getElementById('adminDashboard').style.display = 'block';
-                        loadManagementList();
-                        loadRequestsList(true);
-                        switchTab('content');
-                    }, 800);
-                } else {
-                    const data = await response.json().catch(() => ({}));
-                    errorEl.style.display = 'block';
-                    errorEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${data.error || 'Access Denied'}`;
-                    passEl.value = '';
-                    passEl.focus();
+            async function logoutAdmin() {
+                if (!confirm('Are you sure you want to log out of the Admin Vault?')) return;
+                
+                try {
+                    const response = await fetch(`${API_BASE}/api/logout`, {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                    
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Logout failed on server. Clearing session locally.');
+                        location.reload();
+                    }
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    location.reload();
                 }
-            } catch (err) {
-                console.error('Login error:', err);
-                alert('Connection Error: Could not connect to the server. Is it running?');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<span>UNLOCK SYSTEM</span><i class="fas fa-arrow-right"></i>';
             }
-        }
 
-        // Toggle Password Visibility
-        document.addEventListener('click', (e) => {
-            if (e.target.id === 'togglePass') {
-                const input = document.getElementById('adminPass');
-                const isPass = input.type === 'password';
-                input.type = isPass ? 'text' : 'password';
-                e.target.className = isPass ? 'far fa-eye-slash' : 'far fa-eye';
-            }
-        });
+            async function checkAccess() {
+                const userEl = document.getElementById('adminUser');
+                const passEl = document.getElementById('adminPass');
+                const btn = document.getElementById('unlockBtn');
+                const errorEl = document.getElementById('loginError');
 
-        // Add Enter key listener
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && document.getElementById('loginShield').style.display !== 'none') {
-                checkAccess();
-            }
-        });
+                const username = userEl.value.trim();
+                const password = passEl.value.trim();
 
-        // Supabase client for direct browser-to-storage uploads
-        const SUPABASE_URL = 'https://mrndyxetxslvyznqyirx.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybmR5eGV0eHNsdnl6bnF5aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMDA4NDksImV4cCI6MjA5Mzg3Njg0OX0.7jY1-_tYTCDj7h3uuHzz7L-neB8DT-MzEvYGesWWJQA';
-        
-        let supabaseClient;
-        function initSupabase() {
-            try {
-                if (typeof supabase !== 'undefined' && !supabaseClient) {
-                    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                    console.log('Supabase initialized successfully');
+                if (!username || !password) {
+                    alert('Please enter both username and password.');
+                    return;
                 }
-            } catch (e) {
-                console.error('Supabase Init Error:', e);
-            }
-        }
-        
-        // Try initializing on load
-        window.addEventListener('load', initSupabase);
 
-        // --- PROXY UTILITY ---
-        function getProxyUrl(url) {
-            if (!url) return url;
-            if (url.includes('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public/')) {
-                return url.replace('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
-            }
-            return url;
-        }
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AUTHENTICATING...';
+                errorEl.style.display = 'none';
 
-        // Upload a file directly from the browser to Supabase Storage
-        async function uploadThumbnailToSupabase(file, scenepackId, overrideName = null) {
-            const ext = overrideName ? overrideName.split('.').pop() : file.name.split('.').pop();
-            const sanitizedId = scenepackId.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
-            const fileName = `${sanitizedId}.${ext}`;
+                try {
+                    const response = await fetch(`${API_BASE}/api/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ username, password })
+                    });
 
-            const { data, error } = await supabaseClient.storage
-                .from('thumbnails')
-                .upload(fileName, file, { contentType: file.type, upsert: true });
-
-            if (error) {
-                console.error('Supabase direct upload failed:', error);
-                throw new Error('Image upload failed: ' + (error.message || error));
-            }
-
-            const { data: urlData } = supabaseClient.storage
-                .from('thumbnails')
-                .getPublicUrl(fileName);
-
-            // Add cache-buster to ensure the browser sees the new image immediately
-            return `${urlData.publicUrl}?t=${Date.now()}`;
-        }
-
-        // Global store for scenepacks to enable easy editing
-        let currentScenepacks = [];
-        let isEditing = false;
-        let editingId = null;
-
-        // Tag System
-        const tags = [];
-        const tagInput = document.getElementById('tagInput');
-        const tagContainer = document.getElementById('tagContainer');
-
-        tagInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && tagInput.value.trim()) {
-                const tag = tagInput.value.trim();
-                if (!tags.includes(tag)) {
-                    tags.push(tag);
-                    renderTags();
+                    if (response.ok) {
+                        console.log('Login success');
+                        document.getElementById('loginShield').style.opacity = '0';
+                        document.getElementById('loginShield').style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            document.getElementById('loginShield').style.display = 'none';
+                            document.getElementById('adminDashboard').style.display = 'block';
+                            loadManagementList();
+                            loadRequestsList(true);
+                            switchTab('content');
+                        }, 800);
+                    } else {
+                        const data = await response.json().catch(() => ({}));
+                        errorEl.style.display = 'block';
+                        errorEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${data.error || 'Access Denied'}`;
+                        passEl.value = '';
+                        passEl.focus();
+                    }
+                } catch (err) {
+                    console.error('Login error:', err);
+                    alert('Connection Error: Could not connect to the server. Is it running?');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<span>UNLOCK SYSTEM</span><i class="fas fa-arrow-right"></i>';
                 }
-                tagInput.value = '';
             }
-        });
 
-        function renderTags() {
-            const pills = tags.map((t, i) => `
+            // Toggle Password Visibility
+            document.addEventListener('click', (e) => {
+                if (e.target.id === 'togglePass') {
+                    const input = document.getElementById('adminPass');
+                    const isPass = input.type === 'password';
+                    input.type = isPass ? 'text' : 'password';
+                    e.target.className = isPass ? 'far fa-eye-slash' : 'far fa-eye';
+                }
+            });
+
+            // Add Enter key listener
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && document.getElementById('loginShield').style.display !== 'none') {
+                    checkAccess();
+                }
+            });
+
+            // Supabase client for direct browser-to-storage uploads
+            const SUPABASE_URL = 'https://mrndyxetxslvyznqyirx.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybmR5eGV0eHNsdnl6bnF5aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMDA4NDksImV4cCI6MjA5Mzg3Njg0OX0.7jY1-_tYTCDj7h3uuHzz7L-neB8DT-MzEvYGesWWJQA';
+
+            let supabaseClient;
+            function initSupabase() {
+                try {
+                    if (typeof supabase !== 'undefined' && !supabaseClient) {
+                        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                        console.log('Supabase initialized successfully');
+                    }
+                } catch (e) {
+                    console.error('Supabase Init Error:', e);
+                }
+            }
+
+            // Try initializing on load
+            window.addEventListener('load', initSupabase);
+
+            // --- PROXY UTILITY ---
+            function getProxyUrl(url) {
+                if (!url) return url;
+                if (url.includes('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public/')) {
+                    return url.replace('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
+                }
+                return url;
+            }
+
+            // Upload a file directly from the browser to Supabase Storage
+            async function uploadThumbnailToSupabase(file, scenepackId, overrideName = null) {
+                const ext = overrideName ? overrideName.split('.').pop() : file.name.split('.').pop();
+                const sanitizedId = scenepackId.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+                const fileName = `${sanitizedId}.${ext}`;
+
+                const { data, error } = await supabaseClient.storage
+                    .from('thumbnails')
+                    .upload(fileName, file, { contentType: file.type, upsert: true });
+
+                if (error) {
+                    console.error('Supabase direct upload failed:', error);
+                    throw new Error('Image upload failed: ' + (error.message || error));
+                }
+
+                const { data: urlData } = supabaseClient.storage
+                    .from('thumbnails')
+                    .getPublicUrl(fileName);
+
+                // Add cache-buster to ensure the browser sees the new image immediately
+                return `${urlData.publicUrl}?t=${Date.now()}`;
+            }
+
+            // Global store for scenepacks to enable easy editing
+            let currentScenepacks = [];
+            let isEditing = false;
+            let editingId = null;
+
+            // Tag System
+            const tags = [];
+            const tagInput = document.getElementById('tagInput');
+            const tagContainer = document.getElementById('tagContainer');
+
+            tagInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && tagInput.value.trim()) {
+                    const tag = tagInput.value.trim();
+                    if (!tags.includes(tag)) {
+                        tags.push(tag);
+                        renderTags();
+                    }
+                    tagInput.value = '';
+                }
+            });
+
+            function renderTags() {
+                const pills = tags.map((t, i) => `
                 <div class="tag-pill">
                     ${t} <i class="fas fa-circle-xmark" onclick="removeTag(${i})"></i>
                 </div>
             `).join('');
 
-            // Keep input at the end
-            const inputHtml = `<input type="text" class="tag-input" id="tagInput" placeholder="Add tags...">`;
-            tagContainer.innerHTML = pills + inputHtml;
+                // Keep input at the end
+                const inputHtml = `<input type="text" class="tag-input" id="tagInput" placeholder="Add tags...">`;
+                tagContainer.innerHTML = pills + inputHtml;
 
-            // Re-bind listener after innerHTML update
-            document.getElementById('tagInput').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    const val = e.target.value.trim();
-                    if (val && !tags.includes(val)) {
-                        tags.push(val);
-                        renderTags();
+                // Re-bind listener after innerHTML update
+                document.getElementById('tagInput').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        const val = e.target.value.trim();
+                        if (val && !tags.includes(val)) {
+                            tags.push(val);
+                            renderTags();
+                        }
+                        e.target.value = '';
                     }
-                    e.target.value = '';
-                }
-            });
-            document.getElementById('tagInput').focus();
-        }
+                });
+                document.getElementById('tagInput').focus();
+            }
 
-        function removeTag(index) {
-            tags.splice(index, 1);
-            renderTags();
-        }
+            function removeTag(index) {
+                tags.splice(index, 1);
+                renderTags();
+            }
 
-        // Link System
-        function addLinkEntry() {
-            const container = document.getElementById('linksList');
-            const div = document.createElement('div');
-            div.className = 'link-entry';
-            div.innerHTML = `
+            // Link System
+            function addLinkEntry() {
+                const container = document.getElementById('linksList');
+                const div = document.createElement('div');
+                div.className = 'link-entry';
+                div.innerHTML = `
                 <i class="fas fa-circle-xmark remove-link" onclick="this.parentElement.remove()"></i>
                 <div class="input-group" style="margin-bottom: 10px;">
                     <label class="input-label">Link Label (e.g. Part 1)</label>
@@ -1558,357 +1674,352 @@
                         <input type="text" class="link-quality" placeholder="1080P HEVC">
                     </div>
                     <div class="input-group">
-                        <label class="input-label">Size (or Upload below)</label>
-                        <input type="text" class="link-size" placeholder="Auto if uploaded">
+                        <label class="input-label">File Size</label>
+                        <input type="text" class="link-size" placeholder="e.g. 1.2 GB">
                     </div>
                     <div class="input-group">
-                        <label class="input-label">URL (or Upload below)</label>
-                        <input type="text" class="link-url" placeholder="https://...">
+                        <label class="input-label">Download URL</label>
+                        <input type="text" class="link-url" placeholder="https://mega.nz/...">
                     </div>
                 </div>
-                <div class="input-group" style="margin-top: 10px;">
-                    <label class="input-label">Upload Scenepack File (Optional)</label>
-                    <p style="font-size: 10px; color: #ff4757; margin-bottom: 5px; font-weight: 600;"><i class="fas fa-exclamation-triangle"></i> WARNING: Large video files cause high bandwidth costs. Use MEGA/Drive for large files.</p>
-                    <input type="file" class="link-file" accept="video/mp4,video/x-matroska,video/*">
-                </div>
             `;
-            container.appendChild(div);
-        }
-
-        // Auto-add first link
-        addLinkEntry();
-
-        // Image Upload & Preview System
-        let thumbMode = 'file';
-
-        function setThumbMode(mode) {
-            thumbMode = mode;
-            const fileBtn = document.getElementById('mode-file');
-            const urlBtn = document.getElementById('mode-url');
-            const fileCont = document.getElementById('file-input-container');
-            const urlCont = document.getElementById('url-input-container');
-
-            if (mode === 'file') {
-                fileBtn.style.background = 'var(--accent)';
-                fileBtn.style.color = 'var(--primary)';
-                urlBtn.style.background = 'transparent';
-                urlBtn.style.color = '#fff';
-                fileCont.style.display = 'block';
-                urlCont.style.display = 'none';
-            } else {
-                urlBtn.style.background = 'var(--accent)';
-                urlBtn.style.color = 'var(--primary)';
-                fileBtn.style.background = 'transparent';
-                fileBtn.style.color = '#fff';
-                fileCont.style.display = 'none';
-                urlCont.style.display = 'block';
+                container.appendChild(div);
             }
-        }
 
-        let cropper;
-        let croppedBlob = null;
-
-        function handleFileSelect(file) {
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const cropperModal = document.getElementById('cropperModal');
-                    const cropperImg = document.getElementById('cropperImg');
-                    cropperImg.src = e.target.result;
-                    cropperModal.style.display = 'flex';
-
-                    if (cropper) cropper.destroy();
-                    cropper = new Cropper(cropperImg, {
-                        aspectRatio: 1.8 / 1, // Matches the website card ratio
-                        viewMode: 1,
-                        guides: true,
-                        background: false,
-                        autoCropArea: 1,
-                        zoomable: true
-                    });
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function closeCropper() {
-            document.getElementById('cropperModal').style.display = 'none';
-            if (cropper) cropper.destroy();
-            document.getElementById('thumbnailFile').value = '';
-        }
-
-        function applyCrop() {
-            if (!cropper) return;
-
-            const canvas = cropper.getCroppedCanvas({
-                width: 800, // Reduced from 1280 to save bandwidth
-                height: 450  // Reduced from 720 to save bandwidth
-            });
-
-            canvas.toBlob((blob) => {
-                croppedBlob = blob;
-                const url = URL.createObjectURL(blob);
-
-                const preview = document.getElementById('thumb-preview');
-                const previewImg = document.getElementById('previewImg');
-                previewImg.src = url;
-                preview.style.display = 'block';
-                document.getElementById('dropZone').style.display = 'none';
-
-                document.getElementById('cropperModal').style.display = 'none';
-                cropper.destroy();
-                cropper = null;
-                
-                // Show size info for transparency
-                console.log('Optimized Image Size:', (blob.size / 1024).toFixed(2), 'KB');
-            }, 'image/jpeg', 0.6); // Quality reduced to 0.6 for maximum bandwidth savings
-        }
-
-        function removeThumbnail(e) {
-            if (e) e.stopPropagation();
-            document.getElementById('thumbnailFile').value = '';
-            document.getElementById('thumbnail').value = '';
-            croppedBlob = null;
-            document.getElementById('thumb-preview').style.display = 'none';
-            document.getElementById('dropZone').style.display = 'flex';
-        }
-
-        // Setup Drag & Drop
-        const dropZone = document.getElementById('dropZone');
-
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, e => {
-                e.preventDefault();
-                e.stopPropagation();
-            }, false);
-        });
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-active'), false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-active'), false);
-        });
-
-        dropZone.addEventListener('drop', e => {
-            const dt = e.dataTransfer;
-            const file = dt.files[0];
-            if (file && file.type.startsWith('image/')) {
-                document.getElementById('thumbnailFile').files = dt.files;
-                handleFileSelect(file);
-            }
-        });
-
-        document.getElementById('thumbnailFile').addEventListener('change', function () {
-            handleFileSelect(this.files[0]);
-        });
-
-        // Save Function
-        async function saveScenepack() {
-            const saveBtn = document.getElementById('saveBtn');
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
-            try {
-                // Collect links data
-                const linkEntries = Array.from(document.querySelectorAll('.link-entry'));
-                const links = linkEntries.map(entry => ({
-                    character: entry.querySelector('.link-label').value,
-                    movie: document.getElementById('title').value,
-                    quality: entry.querySelector('.link-quality').value,
-                    size: entry.querySelector('.link-size').value || "",
-                    encoder: "Admin",
-                    url: entry.querySelector('.link-url').value
-                }));
-
-                const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
-                    .map(cb => cb.value)
-                    .join(',');
-
-                const scenepackId = document.getElementById('id').value || Date.now().toString();
-
-                // Determine thumbnail URL
-                let thumbnailUrl = document.getElementById('thumbnail').value || '';
-
-                if (croppedBlob) {
-                    // Upload the cropped blob directly
-                    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading Cropped Image...';
-                    thumbnailUrl = await uploadThumbnailToSupabase(croppedBlob, scenepackId, "cropped-thumb.jpg");
-                    document.getElementById('previewImg').src = thumbnailUrl;
-                    document.getElementById('thumbnail').value = thumbnailUrl;
-                    croppedBlob = null; // reset
-                } else if (document.getElementById('thumbnailFile').files[0]) {
-                    // Fallback to original file if no crop was applied (shouldn't happen with current UI)
-                    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading Original Image...';
-                    thumbnailUrl = await uploadThumbnailToSupabase(document.getElementById('thumbnailFile').files[0], scenepackId);
-                    document.getElementById('previewImg').src = thumbnailUrl;
-                    document.getElementById('thumbnail').value = thumbnailUrl;
-                }
-
-                const data = {
-                    id: scenepackId,
-                    title: document.getElementById('title').value,
-                    preview: document.getElementById('preview').value,
-                    description: document.getElementById('description').value,
-                    thumbnail: thumbnailUrl,
-                    category: selectedCategories,
-                    tags: tags,
-                    year: document.getElementById('year').value,
-                    director: document.getElementById('director').value || "N/A",
-                    genre: document.getElementById('genre').value || tags.slice(0, 3).join(', '),
-                    rating: document.getElementById('rating').value,
-                    runtime: document.getElementById('runtime').value || "N/A",
-                    cast: document.getElementById('cast').value || "N/A",
-                    creator: document.getElementById('creator').value || "son.astral",
-                    uploader: document.getElementById('uploader').value || "tcmmi.ae",
-                    downloadLinks: links
-                };
-
-                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
-                const response = await fetch(`${API_BASE}/api/scenepacks`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify(data)
-                });
-
-                if (response.ok) {
-                    showToast(isEditing ? 'Successfully Updated!' : 'Successfully Saved!');
-                    if (isEditing) cancelEdit();
-                    loadManagementList();
-                } else {
-                    let errorMessage = 'Failed to save.';
-                    try {
-                        const err = await response.json();
-                        errorMessage = err.error || errorMessage;
-                    } catch (e) {
-                        errorMessage = `Server Error (${response.status}): The database might be unreachable.`;
-                    }
-                    console.error('Save Error:', errorMessage);
-                    alert('Error: ' + errorMessage);
-                }
-            } catch (error) {
-                alert('Error: ' + error.message);
-            } finally {
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fas fa-circle-check"></i> Save Element';
-            }
-        }
-
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
-        }
-
-        function cancelEdit() {
-            isEditing = false;
-            editingId = null;
-
-            // Reset form
-            document.getElementById('title').value = '';
-            document.getElementById('id').value = '';
-            document.getElementById('preview').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('year').value = '';
-            document.getElementById('rating').value = '';
-            document.getElementById('director').value = '';
-            document.getElementById('runtime').value = '';
-            document.getElementById('genre').value = '';
-            document.getElementById('cast').value = '';
-            document.getElementById('creator').value = '';
-            document.getElementById('uploader').value = '';
-            document.getElementById('thumbnail').value = '';
-
-            // Clear categories
-            document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
-
-            // Clear tags
-            tags.length = 0;
-            renderTags();
-
-            // Clear links and add first empty one
-            document.getElementById('linksList').innerHTML = '';
+            // Auto-add first link
             addLinkEntry();
 
-            // Reset thumbnail preview
-            removeThumbnail();
+            // Image Upload & Preview System
+            let thumbMode = 'file';
 
-            // Update UI
-            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-circle-check"></i> Save Element';
-            document.getElementById('cancelBtn').style.display = 'none';
-            document.getElementById('id').readOnly = false;
+            function setThumbMode(mode) {
+                thumbMode = mode;
+                const fileBtn = document.getElementById('mode-file');
+                const urlBtn = document.getElementById('mode-url');
+                const fileCont = document.getElementById('file-input-container');
+                const urlCont = document.getElementById('url-input-container');
 
-            showToast('Form Reset');
-        }
+                if (mode === 'file') {
+                    fileBtn.style.background = 'var(--accent)';
+                    fileBtn.style.color = 'var(--primary)';
+                    urlBtn.style.background = 'transparent';
+                    urlBtn.style.color = '#fff';
+                    fileCont.style.display = 'block';
+                    urlCont.style.display = 'none';
+                } else {
+                    urlBtn.style.background = 'var(--accent)';
+                    urlBtn.style.color = 'var(--primary)';
+                    fileBtn.style.background = 'transparent';
+                    fileBtn.style.color = '#fff';
+                    fileCont.style.display = 'none';
+                    urlCont.style.display = 'block';
+                }
+            }
 
-        function editScenepack(id) {
-            const item = currentScenepacks.find(s => s.id === id);
-            if (!item) return;
+            let cropper;
+            let croppedBlob = null;
 
-            isEditing = true;
-            editingId = id;
+            function handleFileSelect(file) {
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const cropperModal = document.getElementById('cropperModal');
+                        const cropperImg = document.getElementById('cropperImg');
+                        cropperImg.src = e.target.result;
+                        cropperModal.style.display = 'flex';
 
-            // Fill basic info
-            document.getElementById('title').value = item.title || '';
-            document.getElementById('id').value = item.id;
-            document.getElementById('id').readOnly = true; // Protect ID during edit
-            document.getElementById('preview').value = item.preview || '';
-            document.getElementById('description').value = item.description || '';
-            document.getElementById('year').value = item.year || '';
-            document.getElementById('rating').value = item.rating || '';
-            document.getElementById('director').value = item.director || '';
-            document.getElementById('runtime').value = item.runtime || '';
-            document.getElementById('genre').value = item.genre || '';
-            document.getElementById('cast').value = item.cast || '';
-            document.getElementById('creator').value = item.creator || '';
-            document.getElementById('uploader').value = item.uploader || '';
+                        if (cropper) cropper.destroy();
+                        cropper = new Cropper(cropperImg, {
+                            aspectRatio: 1.8 / 1, // Matches the website card ratio
+                            viewMode: 1,
+                            guides: true,
+                            background: false,
+                            autoCropArea: 1,
+                            zoomable: true
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
 
-            // Categories
-            const activeCats = (item.category || '').split(',').map(c => c.trim());
-            document.querySelectorAll('.category-checkbox').forEach(cb => {
-                cb.checked = activeCats.includes(cb.value);
+            function closeCropper() {
+                document.getElementById('cropperModal').style.display = 'none';
+                if (cropper) cropper.destroy();
+                document.getElementById('thumbnailFile').value = '';
+            }
+
+            function applyCrop() {
+                if (!cropper) return;
+
+                const canvas = cropper.getCroppedCanvas({
+                    width: 800, // Reduced from 1280 to save bandwidth
+                    height: 450  // Reduced from 720 to save bandwidth
+                });
+
+                canvas.toBlob((blob) => {
+                    croppedBlob = blob;
+                    const url = URL.createObjectURL(blob);
+
+                    const preview = document.getElementById('thumb-preview');
+                    const previewImg = document.getElementById('previewImg');
+                    previewImg.src = url;
+                    preview.style.display = 'block';
+                    document.getElementById('dropZone').style.display = 'none';
+
+                    document.getElementById('cropperModal').style.display = 'none';
+                    cropper.destroy();
+                    cropper = null;
+
+                    // Show size info for transparency
+                    console.log('Optimized Image Size:', (blob.size / 1024).toFixed(2), 'KB');
+                }, 'image/jpeg', 0.6); // Quality reduced to 0.6 for maximum bandwidth savings
+            }
+
+            function removeThumbnail(e) {
+                if (e) e.stopPropagation();
+                document.getElementById('thumbnailFile').value = '';
+                document.getElementById('thumbnail').value = '';
+                croppedBlob = null;
+                document.getElementById('thumb-preview').style.display = 'none';
+                document.getElementById('dropZone').style.display = 'flex';
+            }
+
+            // Setup Drag & Drop
+            const dropZone = document.getElementById('dropZone');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
             });
 
-            // Tags
-            tags.length = 0;
-            if (item.tags) {
-                if (Array.isArray(item.tags)) tags.push(...item.tags);
-                else if (typeof item.tags === 'string') tags.push(...item.tags.split(',').map(t => t.trim()));
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-active'), false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-active'), false);
+            });
+
+            dropZone.addEventListener('drop', e => {
+                const dt = e.dataTransfer;
+                const file = dt.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    document.getElementById('thumbnailFile').files = dt.files;
+                    handleFileSelect(file);
+                }
+            });
+
+            document.getElementById('thumbnailFile').addEventListener('change', function () {
+                handleFileSelect(this.files[0]);
+            });
+
+            // Save Function
+            async function saveScenepack() {
+                const saveBtn = document.getElementById('saveBtn');
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                try {
+                    // Collect links data
+                    const linkEntries = Array.from(document.querySelectorAll('.link-entry'));
+                    const links = linkEntries.map(entry => ({
+                        character: entry.querySelector('.link-label').value,
+                        movie: document.getElementById('title').value,
+                        quality: entry.querySelector('.link-quality').value,
+                        size: entry.querySelector('.link-size').value || "",
+                        encoder: "Admin",
+                        url: entry.querySelector('.link-url').value
+                    }));
+
+                    const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
+                        .map(cb => cb.value)
+                        .join(',');
+
+                    const scenepackId = document.getElementById('id').value || Date.now().toString();
+
+                    // Determine thumbnail URL
+                    let thumbnailUrl = document.getElementById('thumbnail').value || '';
+
+                    if (croppedBlob) {
+                        // Upload the cropped blob directly
+                        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading Cropped Image...';
+                        thumbnailUrl = await uploadThumbnailToSupabase(croppedBlob, scenepackId, "cropped-thumb.jpg");
+                        document.getElementById('previewImg').src = thumbnailUrl;
+                        document.getElementById('thumbnail').value = thumbnailUrl;
+                        croppedBlob = null; // reset
+                    } else if (document.getElementById('thumbnailFile').files[0]) {
+                        // Fallback to original file if no crop was applied (shouldn't happen with current UI)
+                        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading Original Image...';
+                        thumbnailUrl = await uploadThumbnailToSupabase(document.getElementById('thumbnailFile').files[0], scenepackId);
+                        document.getElementById('previewImg').src = thumbnailUrl;
+                        document.getElementById('thumbnail').value = thumbnailUrl;
+                    }
+
+                    const data = {
+                        id: scenepackId,
+                        title: document.getElementById('title').value,
+                        preview: document.getElementById('preview').value,
+                        description: document.getElementById('description').value,
+                        thumbnail: thumbnailUrl,
+                        category: selectedCategories,
+                        tags: tags,
+                        year: document.getElementById('year').value,
+                        director: document.getElementById('director').value || "N/A",
+                        genre: document.getElementById('genre').value || tags.slice(0, 3).join(', '),
+                        rating: document.getElementById('rating').value,
+                        runtime: document.getElementById('runtime').value || "N/A",
+                        cast: document.getElementById('cast').value || "N/A",
+                        creator: document.getElementById('creator').value || "son.astral",
+                        uploader: document.getElementById('uploader').value || "tcmmi.ae",
+                        downloadLinks: links
+                    };
+
+                    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+                    const response = await fetch(`${API_BASE}/api/scenepacks`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        showToast(isEditing ? 'Successfully Updated!' : 'Successfully Saved!');
+                        if (isEditing) cancelEdit();
+                        loadManagementList();
+                    } else {
+                        let errorMessage = 'Failed to save.';
+                        try {
+                            const err = await response.json();
+                            errorMessage = err.error || errorMessage;
+                        } catch (e) {
+                            errorMessage = `Server Error (${response.status}): The database might be unreachable.`;
+                        }
+                        console.error('Save Error:', errorMessage);
+                        alert('Error: ' + errorMessage);
+                    }
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = '<i class="fas fa-circle-check"></i> Save Element';
+                }
             }
-            renderTags();
 
-            // Thumbnail
-            if (item.thumbnail && !item.thumbnail.includes('placeholder')) {
-                // Show the existing thumbnail in the preview, but keep file mode so a new file can be uploaded
-                setThumbMode('file');
-                const previewImg = document.getElementById('previewImg');
-                const thumbPreview = document.getElementById('thumb-preview');
-                const dropZone = document.getElementById('dropZone');
-                previewImg.src = item.thumbnail;
-                thumbPreview.style.display = 'block';
-                dropZone.style.display = 'none';
-                // Store the existing URL so it is preserved if no new file is uploaded
-                document.getElementById('thumbnail').value = item.thumbnail;
-            } else {
-                removeThumbnail();
+            function showToast(msg) {
+                const t = document.getElementById('toast');
+                t.textContent = msg;
+                t.style.display = 'block';
+                setTimeout(() => t.style.display = 'none', 3000);
             }
 
-            // Download Links
-            const linksList = document.getElementById('linksList');
-            linksList.innerHTML = '';
+            function cancelEdit() {
+                isEditing = false;
+                editingId = null;
 
-            const links = item.download_links || item.downloadLinks || [];
-            if (links.length === 0) {
+                // Reset form
+                document.getElementById('title').value = '';
+                document.getElementById('id').value = '';
+                document.getElementById('preview').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('year').value = '';
+                document.getElementById('rating').value = '';
+                document.getElementById('director').value = '';
+                document.getElementById('runtime').value = '';
+                document.getElementById('genre').value = '';
+                document.getElementById('cast').value = '';
+                document.getElementById('creator').value = '';
+                document.getElementById('uploader').value = '';
+                document.getElementById('thumbnail').value = '';
+
+                // Clear categories
+                document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
+
+                // Clear tags
+                tags.length = 0;
+                renderTags();
+
+                // Clear links and add first empty one
+                document.getElementById('linksList').innerHTML = '';
                 addLinkEntry();
-            } else {
-                links.forEach(link => {
-                    const div = document.createElement('div');
-                    div.className = 'link-entry';
-                    div.innerHTML = `
+
+                // Reset thumbnail preview
+                removeThumbnail();
+
+                // Update UI
+                document.getElementById('saveBtn').innerHTML = '<i class="fas fa-circle-check"></i> Save Element';
+                document.getElementById('cancelBtn').style.display = 'none';
+                document.getElementById('id').readOnly = false;
+
+                showToast('Form Reset');
+            }
+
+            function editScenepack(id) {
+                const item = currentScenepacks.find(s => s.id === id);
+                if (!item) return;
+
+                isEditing = true;
+                editingId = id;
+
+                // Fill basic info
+                document.getElementById('title').value = item.title || '';
+                document.getElementById('id').value = item.id;
+                document.getElementById('id').readOnly = true; // Protect ID during edit
+                document.getElementById('preview').value = item.preview || '';
+                document.getElementById('description').value = item.description || '';
+                document.getElementById('year').value = item.year || '';
+                document.getElementById('rating').value = item.rating || '';
+                document.getElementById('director').value = item.director || '';
+                document.getElementById('runtime').value = item.runtime || '';
+                document.getElementById('genre').value = item.genre || '';
+                document.getElementById('cast').value = item.cast || '';
+                document.getElementById('creator').value = item.creator || '';
+                document.getElementById('uploader').value = item.uploader || '';
+
+                // Categories
+                const activeCats = (item.category || '').split(',').map(c => c.trim());
+                document.querySelectorAll('.category-checkbox').forEach(cb => {
+                    cb.checked = activeCats.includes(cb.value);
+                });
+
+                // Tags
+                tags.length = 0;
+                if (item.tags) {
+                    if (Array.isArray(item.tags)) tags.push(...item.tags);
+                    else if (typeof item.tags === 'string') tags.push(...item.tags.split(',').map(t => t.trim()));
+                }
+                renderTags();
+
+                // Thumbnail
+                if (item.thumbnail && !item.thumbnail.includes('placeholder')) {
+                    // Show the existing thumbnail in the preview, but keep file mode so a new file can be uploaded
+                    setThumbMode('file');
+                    const previewImg = document.getElementById('previewImg');
+                    const thumbPreview = document.getElementById('thumb-preview');
+                    const dropZone = document.getElementById('dropZone');
+                    previewImg.src = item.thumbnail;
+                    thumbPreview.style.display = 'block';
+                    dropZone.style.display = 'none';
+                    // Store the existing URL so it is preserved if no new file is uploaded
+                    document.getElementById('thumbnail').value = item.thumbnail;
+                } else {
+                    removeThumbnail();
+                }
+
+                // Download Links
+                const linksList = document.getElementById('linksList');
+                linksList.innerHTML = '';
+
+                const links = item.download_links || item.downloadLinks || [];
+                if (links.length === 0) {
+                    addLinkEntry();
+                } else {
+                    links.forEach(link => {
+                        const div = document.createElement('div');
+                        div.className = 'link-entry';
+                        div.innerHTML = `
                         <i class="fas fa-circle-xmark remove-link" onclick="this.parentElement.remove()"></i>
                         <div class="input-group" style="margin-bottom: 10px;">
                             <label class="input-label">Link Label (e.g. Part 1)</label>
@@ -1920,47 +2031,43 @@
                                 <input type="text" class="link-quality" value="${link.quality || ''}" placeholder="1080P HEVC">
                             </div>
                             <div class="input-group">
-                                <label class="input-label">Size (or Upload below)</label>
-                                <input type="text" class="link-size" value="${link.size || ''}" placeholder="Auto if uploaded">
+                                <label class="input-label">File Size</label>
+                                <input type="text" class="link-size" value="${link.size || ''}" placeholder="e.g. 1.2 GB">
                             </div>
                             <div class="input-group">
-                                <label class="input-label">URL (or Upload below)</label>
-                                <input type="text" class="link-url" value="${link.url || ''}" placeholder="https://...">
+                                <label class="input-label">Download URL</label>
+                                <input type="text" class="link-url" value="${link.url || ''}" placeholder="https://mega.nz/...">
                             </div>
                         </div>
-                        <div class="input-group" style="margin-top: 10px;">
-                            <label class="input-label">Upload Scenepack File (Optional)</label>
-                            <input type="file" class="link-file" accept="video/mp4,video/x-matroska,video/*">
-                        </div>
                     `;
-                    linksList.appendChild(div);
-                });
-            }
-
-            // Update UI
-            document.getElementById('saveBtn').innerHTML = '<i class="fas fa-circle-check"></i> Update Element';
-            document.getElementById('cancelBtn').style.display = 'block';
-
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function loadManagementList() {
-            const container = document.getElementById('managementList');
-
-            try {
-                const response = await fetch(`${API_BASE}/api/scenepacks`);
-                if (!response.ok) throw new Error('Failed to fetch');
-
-                const data = await response.json();
-                currentScenepacks = data.scenepacks || [];
-
-                if (currentScenepacks.length === 0) {
-                    container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 40px;">No elements found. Add your first scenepack above!</div>`;
-                    return;
+                        linksList.appendChild(div);
+                    });
                 }
 
-                container.innerHTML = currentScenepacks.map(item => `
+                // Update UI
+                document.getElementById('saveBtn').innerHTML = '<i class="fas fa-circle-check"></i> Update Element';
+                document.getElementById('cancelBtn').style.display = 'block';
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            async function loadManagementList() {
+                const container = document.getElementById('managementList');
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/scenepacks`);
+                    if (!response.ok) throw new Error('Failed to fetch');
+
+                    const data = await response.json();
+                    currentScenepacks = data.scenepacks || [];
+
+                    if (currentScenepacks.length === 0) {
+                        container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 40px;">No elements found. Add your first scenepack above!</div>`;
+                        return;
+                    }
+
+                    container.innerHTML = currentScenepacks.map(item => `
                     <div class="manage-item" id="item-${item.id}">
                         <div class="item-info">
                             <img src="${item.thumbnail || '/assets/placeholder.jpg'}" class="item-thumb" onerror="this.src='/assets/spark-logo-main.jpg'; this.onerror=null;">
@@ -1981,187 +2088,187 @@
                     </div>
                 `).join('');
 
-            } catch (err) {
-                console.error('Error loading management list:', err);
-                container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 40px;">Error loading content. Please try again.</div>`;
-            }
-        }
-
-        function filterManagementList() {
-            const term = document.getElementById('manageSearch').value.toLowerCase();
-            const items = document.querySelectorAll('.manage-item');
-            let visibleCount = 0;
-
-            items.forEach(item => {
-                const text = item.innerText.toLowerCase();
-                if (text.includes(term)) {
-                    item.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    item.style.display = 'none';
+                } catch (err) {
+                    console.error('Error loading management list:', err);
+                    container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 40px;">Error loading content. Please try again.</div>`;
                 }
-            });
-
-            // Handle empty search result
-            const container = document.getElementById('managementList');
-            const noResultId = 'manage-no-results';
-            let noResultMsg = document.getElementById(noResultId);
-
-            if (visibleCount === 0 && term !== '') {
-                if (!noResultMsg) {
-                    noResultMsg = document.createElement('div');
-                    noResultMsg.id = noResultId;
-                    noResultMsg.style.cssText = 'text-align: center; color: var(--text-secondary); padding: 40px; width: 100%;';
-                    noResultMsg.innerHTML = `<i class="fas fa-search-minus" style="font-size: 24px; margin-bottom: 10px; opacity: 0.5;"></i><p>No matches found for "${term}"</p>`;
-                    container.appendChild(noResultMsg);
-                }
-            } else if (noResultMsg) {
-                noResultMsg.remove();
-            }
-        }
-
-        // --- REAL-TIME ADMIN UPDATES ---
-        function subscribeToAdminChanges() {
-            try {
-                // Listen for changes on scenepacks
-                supabaseClient
-                    .channel('admin-scenepacks')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'scenepacks' }, (payload) => {
-                        console.log('Scenepack update:', payload.eventType);
-                        const activeTab = document.querySelector('.tab-content.active').id;
-                        if (activeTab === 'contentTab') loadManagementList();
-                        if (activeTab === 'statsTab') loadStats();
-                    })
-                    .subscribe();
-
-                // Listen for changes on requests
-                supabaseClient
-                    .channel('admin-requests')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'requests' }, (payload) => {
-                        console.log('Request update:', payload.eventType);
-                        const activeTab = document.querySelector('.tab-content.active').id;
-                        if (activeTab === 'requestsTab') loadRequestsList();
-                        if (activeTab === 'statsTab') loadStats();
-                        
-                        // Always update request badge
-                        loadRequestsList(true); // Helper to just update badge
-                    })
-                    .subscribe();
-            } catch (err) {
-                console.warn('Real-time setup failed:', err);
-            }
-        }
-
-        // Initialize Real-time
-        subscribeToAdminChanges();
-
-        let statsInterval = null;
-
-        function switchTab(tabId) {
-            // Clear existing intervals
-            if (statsInterval) {
-                clearInterval(statsInterval);
-                statsInterval = null;
             }
 
-            // Update button states
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                const isMatch = (tabId === 'content' && btn.id === 'btn-content') || 
-                                (tabId === 'requests' && btn.id === 'btn-requests') ||
-                                (tabId === 'stats' && btn.id === 'btn-stats');
-                btn.classList.toggle('active', isMatch);
-            });
+            function filterManagementList() {
+                const term = document.getElementById('manageSearch').value.toLowerCase();
+                const items = document.querySelectorAll('.manage-item');
+                let visibleCount = 0;
 
-            // Update content visibility
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            let targetContentId = 'contentTab';
-            if (tabId === 'requests') targetContentId = 'requestsTab';
-            if (tabId === 'stats') targetContentId = 'statsTab';
-
-            const targetContent = document.getElementById(targetContentId);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-            
-            // Update Header UI
-            const dashboardTitle = document.querySelector('.header h1');
-            const dashboardSubtitle = document.querySelector('.header p');
-            const saveBtn = document.getElementById('saveBtn');
-            const cancelBtn = document.getElementById('cancelBtn');
-
-            if (tabId === 'requests') {
-                dashboardTitle.textContent = 'User Requests';
-                dashboardSubtitle.textContent = 'Handling content requests from the community';
-                saveBtn.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                // Switch background to Zenitsu for Requests
-                document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('/assets/Zenitsu.jpg')";
-                loadRequestsList();
-            } else if (tabId === 'stats') {
-                dashboardTitle.textContent = 'Site Statistics';
-                dashboardSubtitle.textContent = 'Real-time performance metrics and insights';
-                saveBtn.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                // Switch background to Purpleish for Stats
-                document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url('/assets/blackhole.jpg')";
-                loadStats();
-                // Refresh every 30 seconds
-                statsInterval = setInterval(loadStats, 30000);
-            } else {
-                dashboardTitle.textContent = 'Dashboard';
-                dashboardSubtitle.textContent = 'Managing Spark Scenepacks & Content';
-                saveBtn.style.display = 'block';
-                if (isEditing) cancelBtn.style.display = 'block';
-                // Switch background to Blackhole for Management
-                document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg')";
-                loadManagementList();
-            }
-        }
-
-        async function loadRequestsList(badgeOnly = false) {
-            const container = document.getElementById('requestsList');
-            if (!badgeOnly) {
-                container.innerHTML = '<div style="text-align: center; padding: 60px; grid-column: 1/-1;"><i class="fas fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 15px;"></i><p>Fetching latest requests...</p></div>';
-            }
-
-            try {
-                const response = await fetch(`${API_BASE}/api/requests`, {
-                    credentials: 'include'
+                items.forEach(item => {
+                    const text = item.innerText.toLowerCase();
+                    if (text.includes(term)) {
+                        item.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
                 });
-                if (!response.ok) throw new Error('Failed to fetch requests');
 
-                const data = await response.json();
-                const requests = data.requests || [];
-                
-                // Update counter badge
-                const counter = document.getElementById('requestCount');
-                if (requests.length > 0) {
-                    counter.textContent = requests.length;
-                    counter.style.display = 'inline-block';
-                } else {
-                    counter.style.display = 'none';
+                // Handle empty search result
+                const container = document.getElementById('managementList');
+                const noResultId = 'manage-no-results';
+                let noResultMsg = document.getElementById(noResultId);
+
+                if (visibleCount === 0 && term !== '') {
+                    if (!noResultMsg) {
+                        noResultMsg = document.createElement('div');
+                        noResultMsg.id = noResultId;
+                        noResultMsg.style.cssText = 'text-align: center; color: var(--text-secondary); padding: 40px; width: 100%;';
+                        noResultMsg.innerHTML = `<i class="fas fa-search-minus" style="font-size: 24px; margin-bottom: 10px; opacity: 0.5;"></i><p>No matches found for "${term}"</p>`;
+                        container.appendChild(noResultMsg);
+                    }
+                } else if (noResultMsg) {
+                    noResultMsg.remove();
+                }
+            }
+
+            // --- REAL-TIME ADMIN UPDATES ---
+            function subscribeToAdminChanges() {
+                try {
+                    // Listen for changes on scenepacks
+                    supabaseClient
+                        .channel('admin-scenepacks')
+                        .on('postgres_changes', { event: '*', schema: 'public', table: 'scenepacks' }, (payload) => {
+                            console.log('Scenepack update:', payload.eventType);
+                            const activeTab = document.querySelector('.tab-content.active').id;
+                            if (activeTab === 'contentTab') loadManagementList();
+                            if (activeTab === 'statsTab') loadStats();
+                        })
+                        .subscribe();
+
+                    // Listen for changes on requests
+                    supabaseClient
+                        .channel('admin-requests')
+                        .on('postgres_changes', { event: '*', schema: 'public', table: 'requests' }, (payload) => {
+                            console.log('Request update:', payload.eventType);
+                            const activeTab = document.querySelector('.tab-content.active').id;
+                            if (activeTab === 'requestsTab') loadRequestsList();
+                            if (activeTab === 'statsTab') loadStats();
+
+                            // Always update request badge
+                            loadRequestsList(true); // Helper to just update badge
+                        })
+                        .subscribe();
+                } catch (err) {
+                    console.warn('Real-time setup failed:', err);
+                }
+            }
+
+            // Initialize Real-time
+            subscribeToAdminChanges();
+
+            let statsInterval = null;
+
+            function switchTab(tabId) {
+                // Clear existing intervals
+                if (statsInterval) {
+                    clearInterval(statsInterval);
+                    statsInterval = null;
                 }
 
-                if (badgeOnly) return;
+                // Update button states
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    const isMatch = (tabId === 'content' && btn.id === 'btn-content') ||
+                        (tabId === 'requests' && btn.id === 'btn-requests') ||
+                        (tabId === 'stats' && btn.id === 'btn-stats');
+                    btn.classList.toggle('active', isMatch);
+                });
 
-                if (requests.length === 0) {
-                    container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 80px; grid-column: 1/-1;">
+                // Update content visibility
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+
+                let targetContentId = 'contentTab';
+                if (tabId === 'requests') targetContentId = 'requestsTab';
+                if (tabId === 'stats') targetContentId = 'statsTab';
+
+                const targetContent = document.getElementById(targetContentId);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+
+                // Update Header UI
+                const dashboardTitle = document.querySelector('.header h1');
+                const dashboardSubtitle = document.querySelector('.header p');
+                const saveBtn = document.getElementById('saveBtn');
+                const cancelBtn = document.getElementById('cancelBtn');
+
+                if (tabId === 'requests') {
+                    dashboardTitle.textContent = 'User Requests';
+                    dashboardSubtitle.textContent = 'Handling content requests from the community';
+                    saveBtn.style.display = 'none';
+                    cancelBtn.style.display = 'none';
+                    // Switch background to Zenitsu for Requests
+                    document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('/assets/Zenitsu.jpg')";
+                    loadRequestsList();
+                } else if (tabId === 'stats') {
+                    dashboardTitle.textContent = 'Site Statistics';
+                    dashboardSubtitle.textContent = 'Real-time performance metrics and insights';
+                    saveBtn.style.display = 'none';
+                    cancelBtn.style.display = 'none';
+                    // Switch background to Purpleish for Stats
+                    document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)), url('/assets/blackhole.jpg')";
+                    loadStats();
+                    // Refresh every 30 seconds
+                    statsInterval = setInterval(loadStats, 30000);
+                } else {
+                    dashboardTitle.textContent = 'Dashboard';
+                    dashboardSubtitle.textContent = 'Managing Spark Scenepacks & Content';
+                    saveBtn.style.display = 'block';
+                    if (isEditing) cancelBtn.style.display = 'block';
+                    // Switch background to Blackhole for Management
+                    document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg')";
+                    loadManagementList();
+                }
+            }
+
+            async function loadRequestsList(badgeOnly = false) {
+                const container = document.getElementById('requestsList');
+                if (!badgeOnly) {
+                    container.innerHTML = '<div style="text-align: center; padding: 60px; grid-column: 1/-1;"><i class="fas fa-spinner fa-spin" style="font-size: 30px; margin-bottom: 15px;"></i><p>Fetching latest requests...</p></div>';
+                }
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/requests`, {
+                        credentials: 'include'
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch requests');
+
+                    const data = await response.json();
+                    const requests = data.requests || [];
+
+                    // Update counter badge
+                    const counter = document.getElementById('requestCount');
+                    if (requests.length > 0) {
+                        counter.textContent = requests.length;
+                        counter.style.display = 'inline-block';
+                    } else {
+                        counter.style.display = 'none';
+                    }
+
+                    if (badgeOnly) return;
+
+                    if (requests.length === 0) {
+                        container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 80px; grid-column: 1/-1;">
                         <i class="fas fa-check-double" style="font-size: 40px; margin-bottom: 15px; opacity: 0.3;"></i>
                         <p style="font-size: 18px; font-weight: 600;">All caught up!</p>
                         <p style="font-size: 14px; margin-top: 5px;">No pending content requests at the moment.</p>
                     </div>`;
-                    return;
-                }
+                        return;
+                    }
 
-                container.innerHTML = requests.map(req => {
-                    const type = (req.type || 'request').toLowerCase();
-                    const badgeClass = `badge-${type}`;
-                    const date = req.created_at ? new Date(req.created_at).toLocaleDateString() : 'Unknown date';
-                    
-                    return `
+                    container.innerHTML = requests.map(req => {
+                        const type = (req.type || 'request').toLowerCase();
+                        const badgeClass = `badge-${type}`;
+                        const date = req.created_at ? new Date(req.created_at).toLocaleDateString() : 'Unknown date';
+
+                        return `
                         <div class="request-item" id="req-${req.id}">
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
@@ -2187,216 +2294,223 @@
                             </div>
                         </div>
                     `;
-                }).join('');
+                    }).join('');
 
-            } catch (error) {
-                if (!badgeOnly) {
-                    container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 60px; grid-column: 1/-1;">
+                } catch (error) {
+                    if (!badgeOnly) {
+                        container.innerHTML = `<div style="text-align: center; color: #ff4444; padding: 60px; grid-column: 1/-1;">
                         <i class="fas fa-exclamation-triangle" style="font-size: 30px; margin-bottom: 15px;"></i>
                         <p>Error loading requests: ${error.message}</p>
                         <button onclick="loadRequestsList()" style="margin-top: 15px; width: auto; padding: 8px 20px;">Retry</button>
                     </div>`;
+                    }
                 }
             }
-        }
-    
-        async function loadStats() {
-            const elements = {
-                downloads: document.getElementById('stat-downloads'),
-                scenepacks: document.getElementById('stat-scenepacks'),
-                requests: document.getElementById('stat-requests'),
-                pending: document.getElementById('stat-pending'),
-                topTitle: document.getElementById('stat-top-title'),
-                topDl: document.getElementById('stat-top-dl')
-            };
-    
-            // Reset with loading state
-            Object.values(elements).forEach(el => {
-                if (el) el.textContent = '...';
-            });
-    
-            try {
-                const response = await fetch(`${API_BASE}/api/admin/stats`, {
-                    credentials: 'include'
-                });
-                if (!response.ok) throw new Error('Failed to fetch stats');
-    
-                const { stats } = await response.json();
-                
-                // Update UI with fetched stats
-                elements.downloads.textContent = stats.totalDownloads.toLocaleString();
-                elements.scenepacks.textContent = stats.totalScenepacks;
-                elements.requests.textContent = stats.totalRequests;
-                elements.pending.textContent = stats.pendingRequests;
-                elements.topTitle.textContent = stats.topScenepack.title || 'No Scenepacks Yet';
-                elements.topDl.textContent = (stats.topScenepack.downloads || 0).toLocaleString();
-    
-            } catch (error) {
-                console.error('Stats Loading Error:', error);
-                showToast('Error loading stats');
-            }
-        }
 
-        async function deleteRequest(id) {
-            if (!confirm('Mark this request as completed/deleted?')) return;
+            async function loadStats() {
+                const elements = {
+                    downloads: document.getElementById('stat-downloads'),
+                    scenepacks: document.getElementById('stat-scenepacks'),
+                    requests: document.getElementById('stat-requests'),
+                    pending: document.getElementById('stat-pending'),
+                    topTitle: document.getElementById('stat-top-title'),
+                    topDl: document.getElementById('stat-top-dl')
+                };
 
-            try {
-                const response = await fetch(`${API_BASE}/api/requests/${id}`, {
-                    method: 'DELETE',
-                    credentials: 'include'
+                // Reset with loading state
+                Object.values(elements).forEach(el => {
+                    if (el) el.textContent = '...';
                 });
 
-                if (response.ok) {
-                    showToast('Request Handled ✓');
-                    loadRequestsList();
-                } else {
-                    alert('Failed to delete request.');
+                try {
+                    const response = await fetch(`${API_BASE}/api/admin/stats`, {
+                        credentials: 'include'
+                    });
+                    if (!response.ok) throw new Error('Failed to fetch stats');
+
+                    const { stats } = await response.json();
+
+                    // Update UI with fetched stats
+                    elements.downloads.textContent = stats.totalDownloads.toLocaleString();
+                    elements.scenepacks.textContent = stats.totalScenepacks;
+                    elements.requests.textContent = stats.totalRequests;
+                    elements.pending.textContent = stats.pendingRequests;
+                    elements.topTitle.textContent = stats.topScenepack.title || 'No Scenepacks Yet';
+                    elements.topDl.textContent = (stats.topScenepack.downloads || 0).toLocaleString();
+
+                } catch (error) {
+                    console.error('Stats Loading Error:', error);
+                    showToast('Error loading stats');
                 }
-            } catch (error) {
-                alert('Error connecting to server.');
             }
-        }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            showToast('Title copied to clipboard!');
-        }
+            async function deleteRequest(id) {
+                if (!confirm('Mark this request as completed/deleted?')) return;
 
-        let currentReplyEmail = '';
-        let currentRequestTitle = '';
+                try {
+                    const response = await fetch(`${API_BASE}/api/requests/${id}`, {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    });
 
-        function openReplyModal(email, title) {
-            currentReplyEmail = email;
-            currentRequestTitle = title;
-            document.getElementById('replyTo').value = email;
-            document.getElementById('replyMessage').value = `Hi! Regarding your request for "${title}", it has been uploaded/processed. You can find it on our site now!\n\nBest,\nSpark Scenepacks Team`;
-            document.getElementById('replyModal').style.display = 'flex';
-        }
-
-        function closeReplyModal() {
-            document.getElementById('replyModal').style.display = 'none';
-        }
-
-        async function sendEmail() {
-            const btn = document.getElementById('sendEmailBtn');
-            const message = document.getElementById('replyMessage').value;
-            
-            if (!message.trim()) return alert('Please enter a message.');
-
-            const originalHtml = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
-
-            try {
-                const response = await fetch(`${API_BASE}/api/admin/send-email`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify({
-                        to: currentReplyEmail,
-                        subject: `Update: ${currentRequestTitle}`,
-                        message: message
-                    })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showToast('Email Sent Successfully ✓');
-                    closeReplyModal();
-                } else {
-                    alert('Error: ' + (data.error || 'Failed to send email.'));
-                }
-            } catch (error) {
-                alert('Connection error. Check if server is running.');
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
-            }
-        }
-
-        async function deleteScenepack(e, id, title) {
-            if (e) e.preventDefault();
-
-            const confirmed = confirm(`--- PERMANENT DELETION ---\n\nAre you absolutely sure you want to delete "${title}"?\n\nThis action is FINAL and cannot be undone. It will be removed from the website and database immediately.`);
-
-            if (!confirmed) return;
-
-            const btn = e.currentTarget;
-            const originalHtml = btn.innerHTML;
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> DELETING...';
-
-            try {
-                const response = await fetch(`${API_BASE}/api/scenepacks/${id}`, {
-                    method: 'DELETE',
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    showToast('Deleted Permanently ✓');
-                    // Animate out then reload list from server to confirm deletion
-                    const itemElement = document.getElementById(`item-${id}`);
-                    if (itemElement) {
-                        itemElement.style.opacity = '0';
-                        itemElement.style.transform = 'translateX(20px)';
-                        itemElement.style.transition = 'all 0.3s ease';
-                        setTimeout(() => {
-                            itemElement.remove();
-                            loadManagementList(); // Re-fetch from server to confirm
-                        }, 300);
+                    if (response.ok) {
+                        showToast('Request Handled ✓');
+                        loadRequestsList();
                     } else {
-                        loadManagementList();
+                        alert('Failed to delete request.');
                     }
-                } else {
-                    let errorMessage = 'Could not delete.';
-                    try {
-                        const err = await response.json();
-                        errorMessage = err.error || errorMessage;
-                    } catch (e) {
-                        if (response.status === 401) errorMessage = 'Session expired. Please refresh and log in again.';
-                        else errorMessage = `Server Error (${response.status}).`;
+                } catch (error) {
+                    alert('Error connecting to server.');
+                }
+            }
+
+            function copyToClipboard(text) {
+                navigator.clipboard.writeText(text);
+                showToast('Title copied to clipboard!');
+            }
+
+            let currentReplyEmail = '';
+            let currentRequestTitle = '';
+
+            function openReplyModal(email, title) {
+                currentReplyEmail = email;
+                currentRequestTitle = title;
+                document.getElementById('replyTo').value = email;
+                document.getElementById('replyMessage').value = `Hi! Regarding your request for "${title}", it has been uploaded/processed. You can find it on our site now!\n\nBest,\nSpark Scenepacks Team`;
+                document.getElementById('replyModal').style.display = 'flex';
+            }
+
+            function closeReplyModal() {
+                document.getElementById('replyModal').style.display = 'none';
+            }
+
+            async function sendEmail() {
+                const btn = document.getElementById('sendEmailBtn');
+                const message = document.getElementById('replyMessage').value;
+
+                if (!message.trim()) return alert('Please enter a message.');
+
+                const originalHtml = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/admin/send-email`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            to: currentReplyEmail,
+                            subject: `Update: ${currentRequestTitle}`,
+                            message: message
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        showToast('Email Sent Successfully ✓');
+                        closeReplyModal();
+                    } else {
+                        alert('Error: ' + (data.error || 'Failed to send email.'));
                     }
-                    console.error('Delete Error:', errorMessage);
-                    alert('Error: ' + errorMessage);
+                } catch (error) {
+                    alert('Connection error. Check if server is running.');
+                } finally {
                     btn.disabled = false;
                     btn.innerHTML = originalHtml;
                 }
-            } catch (error) {
-                alert('Connection Error. Database is busy or unreachable.');
-                btn.disabled = false;
-                btn.innerHTML = originalHtml;
             }
-        }
 
-        // Smart Navigation Hiding Logic
-        let lastScrollY = window.scrollY;
-        const adminNav = document.querySelector('.admin-nav');
+            async function deleteScenepack(e, id, title) {
+                if (e) e.preventDefault();
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > lastScrollY && window.scrollY > 20) {
-                if (adminNav) adminNav.classList.add('nav-scrolled-down');
-            } else if (window.scrollY < lastScrollY) {
-                if (adminNav) adminNav.classList.remove('nav-scrolled-down');
+                const confirmed = confirm(`--- PERMANENT DELETION ---\n\nAre you absolutely sure you want to delete "${title}"?\n\nThis action is FINAL and cannot be undone. It will be removed from the website and database immediately.`);
+
+                if (!confirmed) return;
+
+                const btn = e.currentTarget;
+                const originalHtml = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> DELETING...';
+
+                try {
+                    const response = await fetch(`${API_BASE}/api/scenepacks/${id}`, {
+                        method: 'DELETE',
+                        credentials: 'include'
+                    });
+
+                    if (response.ok) {
+                        showToast('Deleted Permanently ✓');
+                        // Animate out then reload list from server to confirm deletion
+                        const itemElement = document.getElementById(`item-${id}`);
+                        if (itemElement) {
+                            itemElement.style.opacity = '0';
+                            itemElement.style.transform = 'translateX(20px)';
+                            itemElement.style.transition = 'all 0.3s ease';
+                            setTimeout(() => {
+                                itemElement.remove();
+                                loadManagementList(); // Re-fetch from server to confirm
+                            }, 300);
+                        } else {
+                            loadManagementList();
+                        }
+                    } else {
+                        let errorMessage = 'Could not delete.';
+                        try {
+                            const err = await response.json();
+                            errorMessage = err.error || errorMessage;
+                        } catch (e) {
+                            if (response.status === 401) errorMessage = 'Session expired. Please refresh and log in again.';
+                            else errorMessage = `Server Error (${response.status}).`;
+                        }
+                        console.error('Delete Error:', errorMessage);
+                        alert('Error: ' + errorMessage);
+                        btn.disabled = false;
+                        btn.innerHTML = originalHtml;
+                    }
+                } catch (error) {
+                    alert('Connection Error. Database is busy or unreachable.');
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
             }
-            lastScrollY = window.scrollY;
-        }, { passive: true });
-    </script>
+
+            // Smart Navigation Hiding Logic
+            let lastScrollY = window.scrollY;
+            const adminNav = document.querySelector('.admin-nav');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > lastScrollY && window.scrollY > 20) {
+                    if (adminNav) adminNav.classList.add('nav-scrolled-down');
+                } else if (window.scrollY < lastScrollY) {
+                    if (adminNav) adminNav.classList.remove('nav-scrolled-down');
+                }
+                lastScrollY = window.scrollY;
+            }, { passive: true });
+        </script>
     </div> <!-- End adminDashboard -->
     <div id="replyModal" class="cropper-modal-container" style="z-index: 4000;">
         <div class="cropper-card" style="max-width: 500px; width: 90%;">
             <h3 class="card-title" style="margin-bottom: 20px;"><i class="fas fa-reply"></i> Reply to User</h3>
             <div style="margin-bottom: 15px;">
-                <p style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 5px;">Recipient</p>
-                <input type="text" id="replyTo" readonly style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #888; padding: 10px; border-radius: 8px; font-size: 13px;">
+                <p
+                    style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 5px;">
+                    Recipient</p>
+                <input type="text" id="replyTo" readonly
+                    style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #888; padding: 10px; border-radius: 8px; font-size: 13px;">
             </div>
             <div style="margin-bottom: 20px;">
-                <p style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 5px;">Message</p>
-                <textarea id="replyMessage" placeholder="Type your response here..." style="width: 100%; height: 150px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 8px; font-size: 14px; resize: none;"></textarea>
+                <p
+                    style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 5px;">
+                    Message</p>
+                <textarea id="replyMessage" placeholder="Type your response here..."
+                    style="width: 100%; height: 150px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 8px; font-size: 14px; resize: none;"></textarea>
             </div>
             <div class="cropper-actions">
                 <button class="btn-cancel-crop" onclick="closeReplyModal()">Cancel</button>
-                <button class="btn-crop" id="sendEmailBtn" onclick="sendEmail()">Send Email <i class="fas fa-paper-plane" style="margin-left: 8px;"></i></button>
+                <button class="btn-crop" id="sendEmailBtn" onclick="sendEmail()">Send Email <i
+                        class="fas fa-paper-plane" style="margin-left: 8px;"></i></button>
             </div>
         </div>
     </div>
@@ -2418,8 +2532,3 @@
 </body>
 
 </html>
-
-
-
-
-

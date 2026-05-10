@@ -2856,6 +2856,9 @@
                         <a href="/donate" class="user-menu-item">
                             <i class="fas fa-crown" style="color: #f1c40f;"></i> Support Us
                         </a>
+                        <a href="/admin" class="user-menu-item" id="adminMenuItem" style="display: none;">
+                            <i class="fas fa-user-shield"></i> Admin Panel
+                        </a>
                         <div class="user-menu-divider"></div>
                         <a href="#" class="user-menu-item logout" id="navLogoutBtn">
                             <i class="fas fa-sign-out-alt"></i> Logout
@@ -2956,6 +2959,7 @@
                     <a href="/legal">Legal</a>
                     <a href="/requests">Request</a>
                     <a href="/donate">Donate</a>
+                    <a href="/admin">Admin</a>
                     <a href="https://discord.gg/eQUpXE2F5N" target="_blank">Discord</a>
                 </div>
                 <div class="footer-community">4K Scenepacks and Editing Community</div>
@@ -4191,9 +4195,24 @@
                 if (favFilter) favFilter.style.display = 'none';
                 
                 // Reset to ALL if we were in favorites and logged out
-                if (currentCategory === 'FAVORITES') {
-                    filterCategory('ALL');
+            }
+            
+            // Check for admin session
+            checkAdminSession();
+        }
+
+        async function checkAdminSession() {
+            try {
+                const response = await fetch('/api/admin/check-session');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.loggedIn) {
+                        const adminItem = document.getElementById('adminMenuItem');
+                        if (adminItem) adminItem.style.display = 'flex';
+                    }
                 }
+            } catch (err) {
+                // Silently fail as it's just a UI enhancement
             }
         }
         
