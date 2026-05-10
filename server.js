@@ -308,7 +308,7 @@ async function sendDiscordNotification(scenepack) {
 
         const siteUrl = "https://sparkscenepacks.vercel.app";
         const downloadUrl = `${siteUrl}/?scenepack=${scenepack.id}`;
-        const logoUrl = `${siteUrl}/assets/logo.gif`;
+        const logoUrl = `${siteUrl}/assets/logo.gif?v=${Date.now()}`;
 
         const embed = {
             author: {
