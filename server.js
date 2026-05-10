@@ -10,6 +10,14 @@ const { createClient } = require('@supabase/supabase-js');
 const os = require('os');
 const nodemailer = require('nodemailer');
 
+// Global Error Handlers for better Vercel logging
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+process.on('uncaughtException', (err) => {
+    console.error('Uncaught Exception:', err);
+});
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -17,11 +25,16 @@ const PORT = process.env.PORT || 5000;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_KEY = process.env.SUPABASE_KEY;
 
+let supabase;
 if (!SUPABASE_URL || !SUPABASE_KEY) {
     console.error('CRITICAL ERROR: Supabase credentials missing from environment variables.');
+} else {
+    try {
+        supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    } catch (err) {
+        console.error('CRITICAL ERROR: Failed to initialize Supabase client:', err.message);
+    }
 }
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Static Fallback Creators (Matches your data.json)
 const CREATORS = {
@@ -192,6 +205,7 @@ app.get(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'], 
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.set('Pragma', 'no-cache');
     try {
+        if (!supabase) throw new Error('Supabase client not initialized');
         const { data, error } = await supabase
             .from('scenepacks')
             .select('*')
@@ -215,6 +229,7 @@ app.get(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'], 
 
 app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'], isAuthenticated, async (req, res) => {
     try {
+        if (!supabase) throw new Error('Supabase client not initialized');
         const scenepackData = req.body;
         const { data, error } = await supabase
             .from('scenepacks')
@@ -272,7 +287,7 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
 });
 
 // --- DISCORD NOTIFICATION UTILITY ---
-const fs = require('fs');
+
 
 async function sendDiscordNotification(scenepack) {
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
@@ -285,8 +300,8 @@ async function sendDiscordNotification(scenepack) {
             genre: "🎭", creator: "👤", uploader: "🛠️", download: "📥", website: "🌐", alert: "🚨"
         };
         try {
-            const emojiData = fs.readFileSync(path.join(__dirname, 'emojis.json'), 'utf8');
-            emojis = JSON.parse(emojiData);
+            // Use require for better compatibility with Vercel bundling
+            emojis = require('./emojis.json');
         } catch (e) {
             console.warn('[Discord] Using default emojis (emojis.json not found or invalid)');
         }
@@ -358,6 +373,7 @@ async function sendDiscordNotification(scenepack) {
 // --- ANALYTICS API (Real-Time Counters) ---
 app.post('/api/scenepacks/:id/view', async (req, res) => {
     try {
+        if (!supabase) throw new Error('Supabase client not initialized');
         const { id } = req.params;
         // Using SQL Increment via RPC or direct update
         const { data, error } = await supabase.rpc('increment_views', { row_id: id });
@@ -376,6 +392,7 @@ app.post('/api/scenepacks/:id/view', async (req, res) => {
 
 app.post('/api/scenepacks/:id/download', async (req, res) => {
     try {
+        if (!supabase) throw new Error('Supabase client not initialized');
         const { id } = req.params;
         const { error } = await supabase.rpc('increment_downloads', { row_id: id });
         
@@ -469,6 +486,7 @@ app.delete(['/api/requests/:id', '/api/requests/:id/'], isAuthenticated, async (
 // --- ADMIN STATS API ---
 app.get(['/api/admin/stats', '/api/admin/stats/', '/admin/stats', '/admin/stats/'], isAuthenticated, async (req, res) => {
     try {
+        if (!supabase) throw new Error('Supabase client not initialized');
         const [scenepacksData, downloadsData, requestsData, pendingData, topData] = await Promise.all([
             supabase.from('scenepacks').select('id', { count: 'exact' }),
             supabase.from('scenepacks').select('downloads'),
