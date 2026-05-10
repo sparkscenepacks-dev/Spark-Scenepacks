@@ -104,11 +104,6 @@
             pointer-events: none;
         }
 
-        .top-bar.nav-scrolled-down {
-            transform: translate(-50%, -150%) !important;
-            opacity: 0;
-        }
-
         .nav-container {
             display: flex;
             justify-content: space-between;
@@ -337,7 +332,6 @@
         }
 
         @media (max-width: 768px) {
-            .top-bar { display: none !important; }
             .nav {
                 top: 15px !important;
                 width: 94% !important;
@@ -671,12 +665,6 @@
     <div class="grid-overlay"></div>
 
     <!-- Navigation -->
-    <div class="top-bar" id="topBar">
-        <div class="top-bar-content">
-            <span>Support Spark Scenepacks to keep us running!</span>
-            <a href="/donate" class="top-bar-link">Donate Now <i class="fas fa-heart"></i></a>
-        </div>
-    </div>
 
     <nav class="nav" id="mainNav">
         <div class="nav-container">
