@@ -134,7 +134,7 @@
 
         .logo img {
             height: 35px;
-            filter: drop-shadow(0 0 10px var(--accent-glow));
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px var(--accent-glow));
         }
 
         .nav-links {
@@ -514,7 +514,6 @@
         <nav class="nav-container">
             <a href="/" class="logo">
                 <img src="/assets/spark-logo.png" alt="Spark">
-                <span>SPARK</span>
             </a>
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
@@ -576,7 +575,7 @@
 
     <footer>
         <div class="footer-logo">
-            <img src="/assets/spark-logo.png" alt="Spark">
+            <img src="/assets/spark-logo.png" alt="Spark" style="filter: brightness(0) invert(1);">
         </div>
         <p class="copyright">&copy; 2026 Spark Scenepacks. Designed for the community.</p>
     </footer>
