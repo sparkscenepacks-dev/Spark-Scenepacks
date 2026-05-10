@@ -333,10 +333,10 @@ async function sendDiscordNotification(scenepack) {
                 { name: `${emojis.download} Download`, value: `[Direct Link](${downloadUrl})`, inline: true },
                 { name: `${emojis.website} Website`, value: `[Visit Spark](${siteUrl})`, inline: true }
             ],
-            thumbnail: { url: logoUrl },
+            thumbnail: { url: 'https://sparkscenepacks.vercel.app/assets/spark-logo.png' },
             footer: { 
                 text: 'Spark Scenepacks | Premium Quality Scenes',
-                icon_url: logoUrl
+                icon_url: 'https://sparkscenepacks.vercel.app/assets/spark-logo.png'
             },
             timestamp: new Date()
         };
