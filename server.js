@@ -351,15 +351,24 @@ async function sendDiscordNotification(scenepack) {
                         components: [
                             {
                                 type: 2,
-                                label: `Download Now`,
+                                label: "Download Scenepack",
                                 style: 5,
-                                url: downloadUrl
+                                url: downloadUrl,
+                                emoji: { name: "📥" }
                             },
                             {
                                 type: 2,
-                                label: `Visit Site`,
+                                label: "View on Website",
                                 style: 5,
-                                url: siteUrl
+                                url: siteUrl,
+                                emoji: { name: "🌐" }
+                            },
+                            {
+                                type: 2,
+                                label: "Direct Link",
+                                style: 5,
+                                url: downloadUrl,
+                                emoji: { name: "🔗" }
                             }
                         ]
                     }
@@ -373,10 +382,10 @@ async function sendDiscordNotification(scenepack) {
             throw new Error(`Discord API returned ${response.status}`);
         }
 
-        console.log('[Discord] Premium notification sent successfully');
+        console.log('[Discord] Premium notification with buttons sent successfully');
     } catch (err) {
         console.error('[Discord Error] Failed to send notification:', err);
-        throw err; // Re-throw to be caught by the API handler
+        throw err;
     }
 }
 
