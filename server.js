@@ -261,12 +261,52 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
             console.error('[Automation Error] Failed to auto-complete requests:', autoErr);
         }
 
-        res.json({ message: 'Scenepack updated successfully' });
+        // 3. Send Discord Notification (New Feature!)
+        sendDiscordNotification(scenepackData);
+
+        res.json({ message: 'Scenepack saved successfully' });
     } catch (err) {
-        console.error('Update Error:', err);
-        res.status(500).json({ error: 'Failed to update scenepack' });
+        console.error('Supabase Save Error:', err);
+        res.status(500).json({ error: 'Failed to save to Supabase' });
     }
 });
+
+// --- DISCORD NOTIFICATION UTILITY ---
+async function sendDiscordNotification(scenepack) {
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    if (!webhookUrl) return;
+
+    try {
+        const embed = {
+            title: `🚀 New Scenepack Uploaded: ${scenepack.title}`,
+            description: scenepack.preview || "A new high-quality scenepack is now available!",
+            color: 0x7b61ff, // Spark Purple
+            image: { url: scenepack.thumbnail },
+            fields: [
+                { name: "📅 Year", value: scenepack.year || "N/A", inline: true },
+                { name: "🎬 Genre", value: scenepack.genre || "N/A", inline: true },
+                { name: "👤 Creator", value: scenepack.creator || "son.astral", inline: true }
+            ],
+            footer: { text: "Spark Scenepacks - Premium Quality" },
+            timestamp: new Date()
+        };
+
+        const siteUrl = "https://sparkscenepacks.vercel.app"; // Update with your real URL
+        const downloadUrl = `${siteUrl}/?scenepack=${scenepack.id}`;
+
+        await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: `🚨 **NEW UPLOAD!** Check it out here: ${downloadUrl}`,
+                embeds: [embed]
+            })
+        });
+        console.log('[Discord] Notification sent successfully');
+    } catch (err) {
+        console.error('[Discord Error] Failed to send notification:', err);
+    }
+}
 
 // --- ANALYTICS API (Real-Time Counters) ---
 app.post('/api/scenepacks/:id/view', async (req, res) => {
@@ -318,7 +358,6 @@ app.delete(['/api/scenepacks/:id', '/api/scenepacks/:id/', '/scenepacks/:id', '/
         res.status(500).json({ error: 'Failed to delete from Supabase' });
     }
 });
-
 
 // --- REQUESTS API ---
 app.post(['/api/requests', '/api/requests/'], async (req, res) => {
