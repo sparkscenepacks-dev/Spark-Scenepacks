@@ -330,9 +330,9 @@ async function sendDiscordNotification(scenepack) {
                 { name: `${emojis.uploader} System`, value: `${emojis.alert} \`Verified\``, inline: true },
                 { name: `\u200b`, value: `\u200b`, inline: true }, // Spacer
                 { name: `${emojis.download} Download`, value: `[Direct Link](${downloadUrl})`, inline: true },
-                { name: `${emojis.website} Website`, value: `[Visit Spark](${siteUrl})`, inline: true },
-                { name: '\u200b', value: `\` 🔗 \` **${downloadUrl}**` }
+                { name: `${emojis.website} Website`, value: `[Visit Spark](${siteUrl})`, inline: true }
             ],
+            thumbnail: { url: 'https://sparkscenepacks.vercel.app/assets/link-logo.png' },
             footer: { 
                 text: 'Spark Scenepacks | Premium Quality Scenes',
                 icon_url: 'https://sparkscenepacks.vercel.app/assets/spark-logo-main.jpg'
