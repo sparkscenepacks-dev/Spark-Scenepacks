@@ -3155,7 +3155,8 @@
         function getProxyUrl(url) {
             if (!url) return url;
             if (url.includes('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public/')) {
-                return url.replace('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
+                // Fix: Replace the entire protocol + domain to avoid double https://
+                return url.replace('https://mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
             }
             return url;
         }
@@ -3788,8 +3789,14 @@
                     this.parentElement.style.background = 'transparent';
                 };
                 img.onerror = function () {
-                    console.warn(`[Thumbnail Error] Failed to load: ${this.src} for scenepack: ${scenepack.id}`);
-                    this.parentElement.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
+                    // Fallback to direct Supabase URL if proxy fails
+                    if (this.src.includes('sparkscenepacks.workers.dev')) {
+                        console.warn(`[Proxy Error] Falling back to direct URL for: ${scenepack.id}`);
+                        this.src = scenepack.thumbnail;
+                    } else {
+                        console.error(`[Thumbnail Error] Failed to load: ${this.src} for scenepack: ${scenepack.id}`);
+                        this.parentElement.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
+                    }
                 };
                 thumbnailDiv.appendChild(img);
             } else {
@@ -3975,7 +3982,13 @@
                     img.src = getProxyUrl(scenepack.thumbnail);
                     img.alt = scenepack.title;
                     img.onerror = function () {
-                        modalPoster.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
+                        // Fallback to direct Supabase URL if proxy fails
+                        if (this.src.includes('sparkscenepacks.workers.dev')) {
+                            console.warn(`[Proxy Error] Modal falling back to direct URL`);
+                            this.src = scenepack.thumbnail;
+                        } else {
+                            modalPoster.innerHTML = '<div class="placeholder"><i class="fas fa-film"></i></div>';
+                        }
                     };
                     modalPoster.appendChild(img);
                 } else {

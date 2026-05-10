@@ -2055,7 +2055,8 @@
             function getProxyUrl(url) {
                 if (!url) return url;
                 if (url.includes('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public/')) {
-                    return url.replace('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
+                    // Fix: Replace the entire protocol + domain to avoid double https://
+                    return url.replace('https://mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
                 }
                 return url;
             }
@@ -2594,7 +2595,7 @@
                     container.innerHTML = currentScenepacks.map(item => `
                     <div class="manage-item" id="item-${item.id}">
                         <div class="item-info">
-                            <img src="${item.thumbnail || '/assets/placeholder.jpg'}" class="item-thumb" onerror="this.src='/assets/spark-logo-main.jpg'; this.onerror=null;">
+                            <img src="${getProxyUrl(item.thumbnail) || '/assets/placeholder.jpg'}" class="item-thumb" onerror="this.src=item.thumbnail; this.onerror=null;">
                             <div class="item-details">
                                 <h4>${item.title}</h4>
                                 <p style="color: #666; font-size: 10px;">ID: ${item.id}</p>

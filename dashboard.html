@@ -1029,7 +1029,8 @@
         function getProxyUrl(url) {
             if (!url) return url;
             if (url.includes('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public/')) {
-                return url.replace('mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
+                // Fix: Replace the entire protocol + domain to avoid double https://
+                return url.replace('https://mrndyxetxslvyznqyirx.supabase.co/storage/v1/object/public', 'https://sparkscenepacks911.sparkscenepacks.workers.dev');
             }
             return url;
         }
