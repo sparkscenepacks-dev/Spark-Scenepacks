@@ -248,7 +248,7 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
                 runtime: scenepackData.runtime,
                 cast: scenepackData.cast,
                 download_links: scenepackData.downloadLinks
-            }], { onConflict: 'id' });
+            }]);
 
         if (error) throw error;
 
@@ -282,7 +282,11 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
         res.json({ message: 'Scenepack saved successfully' });
     } catch (err) {
         console.error('Supabase Save Error:', err);
-        res.status(500).json({ error: 'Failed to save to Supabase' });
+        res.status(500).json({ 
+            error: 'Failed to save to Supabase',
+            message: err.message || 'Unknown error',
+            details: err.details || err
+        });
     }
 });
 
