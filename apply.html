@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Application - Spark Scenepacks</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="/assets/spark-logo.png">
+    <link rel="shortcut icon" type="image/png" href="/assets/spark-logo.png">
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #050505;
+            --accent: #7b61ff;
+            --accent-glow: rgba(123, 97, 255, 0.5);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --error: #ff4757;
+            --success: #2ed573;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Background System */
+        .bg-system {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #000;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        /* Standard Nav Styles (Simplified for Application) */
+        /* Copying navigation CSS from team.html */
+        .top-bar { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); width: fit-content; padding: 0 25px; height: 35px; background: rgba(123, 97, 255, 0.15); backdrop-filter: blur(15px); z-index: 3000; display: flex; align-items: center; border-radius: 100px; border: 1px solid rgba(123, 97, 255, 0.2); transition: 0.4s; }
+        .top-bar.hidden { transform: translateY(-100%); opacity: 0; }
+        .top-bar-content { display: flex; align-items: center; gap: 15px; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
+        .top-bar-link { color: #fff; text-decoration: none; background: rgba(255, 255, 255, 0.2); padding: 4px 12px; border-radius: 50px; display: flex; align-items: center; gap: 6px; }
+
+        .nav { position: fixed; top: 55px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 1200px; height: 60px; padding: 0 32px; z-index: 2000; background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(25px); border-radius: 100px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; transition: 0.4s; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .logo img { height: 32px; filter: brightness(0) invert(1); }
+        .nav-links { display: flex; align-items: center; gap: 24px; }
+        .nav-link { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-weight: 700; font-size: 15px; transition: 0.3s; }
+        .nav-link:hover { color: #fff; }
+        .nav-donate-pill { background: rgba(255, 255, 255, 0.08); color: #fff; padding: 10px 24px; border-radius: 100px; font-weight: 800; font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255, 255, 255, 0.05); }
+
+        /* Application Form Styles */
+        .apply-container {
+            max-width: 800px;
+            margin: 180px auto 100px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .apply-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .apply-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 15px;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .apply-header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        .apply-card {
+            background: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 50px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-left: 5px;
+        }
+
+        input, select, textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(123, 97, 255, 0.15);
+        }
+
+        textarea {
+            resize: none;
+            min-height: 150px;
+        }
+
+        /* Custom Dropdown Styles */
+        .custom-select-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .custom-select-trigger {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .custom-select-wrapper.active .custom-select-trigger {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(123, 97, 255, 0.15);
+        }
+
+        .custom-select-trigger i {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            transition: transform 0.3s ease;
+        }
+
+        .custom-select-wrapper.active .custom-select-trigger i {
+            transform: rotate(180deg);
+        }
+
+        .custom-options {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            width: 100%;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            overflow: hidden;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .custom-select-wrapper.active .custom-options {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .custom-option {
+            padding: 14px 20px;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .custom-option:last-child {
+            border-bottom: none;
+        }
+
+        .custom-option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            padding-left: 25px;
+        }
+
+        .custom-option.selected {
+            background: rgba(123, 97, 255, 0.15);
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .submit-btn {
+            grid-column: span 2;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: 18px;
+            padding: 20px;
+            font-weight: 900;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.02) translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn i {
+            font-size: 1.2rem;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Success State */
+        .success-overlay {
+            display: none;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: var(--success);
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            margin: 0 auto 30px;
+            animation: bounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        /* Notification Modal */
+        .notification-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); z-index: 9999; display: none; justify-content: center; align-items: center; }
+        .notification-card { background: rgba(20, 20, 20, 0.95); border: 1px solid var(--glass-border); border-radius: 30px; padding: 40px; width: 90%; max-width: 400px; text-align: center; }
+        .notification-btn { padding: 14px 28px; border-radius: 16px; border: none; font-weight: 700; cursor: pointer; background: #fff; color: #000; margin-top: 20px; }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .submit-btn { grid-column: span 1; }
+            .apply-header h1 { font-size: 2.5rem; }
+            .apply-card { padding: 30px; }
+            .nav { width: 95%; padding: 0 20px; top: 20px; }
+            .top-bar { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-system"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Navigation -->
+    <div class="top-bar" id="topBar">
+        <div class="top-bar-content">
+            <span>Join the revolution. Become a Creator.</span>
+            <a href="/team" class="top-bar-link">Our Team <i class="fas fa-users"></i></a>
+        </div>
+    </div>
+
+    <nav class="nav" id="mainNav">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <img src="/assets/spark-logo.png" alt="Spark Logo">
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/team" class="nav-link">Team</a>
+                <a href="/donate" class="nav-donate-pill">Donate Now <i class="fas fa-heart"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="apply-container">
+        <div class="apply-header">
+            <h1>Join the Elite</h1>
+            <p>Apply to become an official Scenepack Creator for Spark.</p>
+        </div>
+
+        <div class="apply-card">
+            <form id="applyForm" class="form-grid">
+                <div class="form-group">
+                    <label for="editorName">Editor Name</label>
+                    <input type="text" id="editorName" name="editorName" placeholder="Zenitsu" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="discord">Discord Username</label>
+                    <input type="text" id="discord" name="discord" placeholder="user#0000" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="instagram">Instagram Link</label>
+                    <input type="url" id="instagram" name="instagram" placeholder="https://instagram.com/..." required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="portfolio">Portfolio / Best Work (Link)</label>
+                    <input type="url" id="portfolio" name="portfolio" placeholder="Google Drive, Mega, or YouTube Link" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Experience Level</label>
+                    <div class="custom-select-wrapper" id="experienceSelect">
+                        <div class="custom-select-trigger">
+                            <span id="selectedExperience">Select Level</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="custom-options">
+                            <div class="custom-option" data-value="beginner">Beginner (1-6 months)</div>
+                            <div class="custom-option" data-value="intermediate">Intermediate (6-12 months)</div>
+                            <div class="custom-option" data-value="advanced">Advanced (1-2 years)</div>
+                            <div class="custom-option" data-value="expert">Expert (2+ years)</div>
+                        </div>
+                        <input type="hidden" name="experience" id="experienceInput" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="software">Primary Editing Software</label>
+                    <input type="text" id="software" name="software" placeholder="After Effects, Topaz, etc." required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="motivation">Why do you want to join Spark?</label>
+                    <textarea id="motivation" name="motivation" placeholder="Tell us about your passion for curation..." required></textarea>
+                </div>
+
+                <button type="submit" id="submitBtn" class="submit-btn">
+                    <span>SUBMIT APPLICATION</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+
+            <div id="successState" class="success-overlay">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2>Application Received!</h2>
+                <p>Our team will review your portfolio and reach out via Discord if you're a good fit. Good luck!</p>
+                <button class="submit-btn" style="background: rgba(255,255,255,0.1); color: #fff; margin-top: 30px;" onclick="window.location.href='/'">BACK TO HOME</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notificationOverlay" class="notification-overlay">
+        <div class="notification-card">
+            <h3 id="notifTitle">Error</h3>
+            <p id="notifMessage" style="color: var(--text-dim); margin-top: 10px;"></p>
+            <button class="notification-btn" onclick="closeNotif()">Got it</button>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://mrndyxetxslvyznqyirx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybmR5eGV0eHNsdnl6bnF5aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMDA4NDksImV4cCI6MjA5Mzg3Njg0OX0.7jY1-_tYTCDj7h3uuHzz7L-neB8DT-MzEvYGesWWJQA';
+        
+        const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1348160410464817163/uVb-Y-eAn02I57Cq8_I0Wk3Y0A-MofYfC4G3hS6p_5_xO_v_U_f_H_S_z_L_T_A'; // Placeholder or actual if available
+
+        let supabaseClient;
+        try {
+            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (e) {
+            console.error('Supabase Init Error:', e);
+        }
+
+        const form = document.getElementById('applyForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successState = document.getElementById('successState');
+
+        // Custom Select Logic
+        const experienceSelect = document.getElementById('experienceSelect');
+        const experienceInput = document.getElementById('experienceInput');
+        const selectedText = document.getElementById('selectedExperience');
+        const options = experienceSelect.querySelectorAll('.custom-option');
+
+        experienceSelect.addEventListener('click', (e) => {
+            experienceSelect.classList.toggle('active');
+        });
+
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const value = option.getAttribute('data-value');
+                const text = option.textContent;
+
+                experienceInput.value = value;
+                selectedText.textContent = text;
+                selectedText.style.color = '#fff';
+
+                options.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        // Close when clicking outside
+        window.addEventListener('click', (e) => {
+            if (!experienceSelect.contains(e.target)) {
+                experienceSelect.classList.remove('active');
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Validate custom select
+            if (!experienceInput.value) {
+                showNotif('Required Field', 'Please select your experience level.');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                // 1. Insert into Supabase
+                const { error } = await supabaseClient
+                    .from('applications')
+                    .insert([
+                        {
+                            editor_name: data.editorName,
+                            discord: data.discord,
+                            instagram: data.instagram,
+                            portfolio: data.portfolio,
+                            experience: data.experience,
+                            software: data.software,
+                            motivation: data.motivation,
+                            status: 'pending',
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
+
+                if (error) throw error;
+
+                // 2. Send Discord Notification (via the specific webhook if configured)
+                await sendDiscordNotification(data);
+
+                // 3. Show Success
+                form.style.display = 'none';
+                successState.style.display = 'block';
+                document.querySelector('.apply-header').style.display = 'none';
+
+            } catch (err) {
+                console.error('Submission Error:', err);
+                showNotif('Submission Failed', err.message || 'There was an error sending your application. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>SUBMIT APPLICATION</span> <i class="fas fa-paper-plane"></i>';
+            }
+        });
+
+        async function sendDiscordNotification(data) {
+            // Using the actual webhook from server.js logic if possible, or a direct call
+            const embed = {
+                title: "🚀 New Creator Application!",
+                color: 0x7b61ff,
+                fields: [
+                    { name: "Editor Name", value: data.editorName, inline: true },
+                    { name: "Discord", value: data.discord, inline: true },
+                    { name: "Experience", value: data.experience, inline: true },
+                    { name: "Software", value: data.software, inline: true },
+                    { name: "Instagram", value: data.instagram },
+                    { name: "Portfolio", value: data.portfolio },
+                    { name: "Motivation", value: data.motivation }
+                ],
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                // We'll use the server endpoint if available, otherwise fetch directly
+                await fetch('https://discord.com/api/webhooks/1348160410464817163/uVb-Y-eAn02I57Cq8_I0Wk3Y0A-MofYfC4G3hS6p_5_xO_v_U_f_H_S_z_L_T_A', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+            } catch (e) {
+                console.warn('Discord webhook failed, but Supabase entry created.');
+            }
+        }
+
+        function showNotif(title, msg) {
+            document.getElementById('notifTitle').textContent = title;
+            document.getElementById('notifMessage').textContent = msg;
+            document.getElementById('notificationOverlay').style.display = 'flex';
+        }
+
+        function closeNotif() {
+            document.getElementById('notificationOverlay').style.display = 'none';
+        }
+
+        // Scroll listener for nav
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('mainNav');
+            const topBar = document.getElementById('topBar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+                if (topBar) topBar.classList.add('hidden');
+            } else {
+                nav.classList.remove('scrolled');
+                if (topBar) topBar.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+
+</html>
