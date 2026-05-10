@@ -339,7 +339,7 @@ async function sendDiscordNotification(scenepack) {
             timestamp: new Date()
         };
 
-        await fetch(webhookUrl, {
+        const response = await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -366,9 +366,17 @@ async function sendDiscordNotification(scenepack) {
                 ]
             })
         });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`[Discord Error] HTTP ${response.status}: ${errorText}`);
+            throw new Error(`Discord API returned ${response.status}`);
+        }
+
         console.log('[Discord] Premium notification sent successfully');
     } catch (err) {
         console.error('[Discord Error] Failed to send notification:', err);
+        throw err; // Re-throw to be caught by the API handler
     }
 }
 
