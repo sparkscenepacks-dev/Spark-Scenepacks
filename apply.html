@@ -76,18 +76,287 @@
 
         /* Standard Nav Styles (Simplified for Application) */
         /* Copying navigation CSS from team.html */
-        .top-bar { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); width: fit-content; padding: 0 25px; height: 35px; background: rgba(123, 97, 255, 0.15); backdrop-filter: blur(15px); z-index: 3000; display: flex; align-items: center; border-radius: 100px; border: 1px solid rgba(123, 97, 255, 0.2); transition: 0.4s; }
-        .top-bar.hidden { transform: translateY(-100%); opacity: 0; }
-        .top-bar-content { display: flex; align-items: center; gap: 15px; font-size: 12px; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
-        .top-bar-link { color: #fff; text-decoration: none; background: rgba(255, 255, 255, 0.2); padding: 4px 12px; border-radius: 50px; display: flex; align-items: center; gap: 6px; }
+        /* Navigation Redesign */
+        .nav {
+            position: fixed;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1200px;
+            height: 60px;
+            padding: 0 32px;
+            z-index: 2000;
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
 
-        .nav { position: fixed; top: 55px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 1200px; height: 60px; padding: 0 32px; z-index: 2000; background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(25px); border-radius: 100px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; align-items: center; transition: 0.4s; }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo img { height: 32px; filter: brightness(0) invert(1); }
-        .nav-links { display: flex; align-items: center; gap: 24px; }
-        .nav-link { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-weight: 700; font-size: 15px; transition: 0.3s; }
-        .nav-link:hover { color: #fff; }
-        .nav-donate-pill { background: rgba(255, 255, 255, 0.08); color: #fff; padding: 10px 24px; border-radius: 100px; font-weight: 800; font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255, 255, 255, 0.05); }
+        .nav-scrolled-down {
+            transform: translate(-50%, -120%) !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .top-bar.nav-scrolled-down {
+            transform: translate(-50%, -150%) !important;
+            opacity: 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            text-decoration: none !important;
+            flex-shrink: 0;
+        }
+
+        .logo img {
+            height: 32px;
+            width: auto;
+            object-fit: contain;
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+            filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: nowrap;
+            height: 100%;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.7) !important;
+            text-decoration: none !important;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        .nav-donate-pill {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #ffffff !important;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 14px;
+            text-decoration: none !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-donate-pill i {
+            color: #ff4757;
+            font-size: 14px;
+        }
+
+        .nav-donate-pill:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.1);
+        }
+
+        /* User Profile Dropdown */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-trigger {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-trigger:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .user-trigger img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-trigger span {
+            font-weight: 700;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        .user-trigger i.fa-chevron-down {
+            font-size: 10px;
+            opacity: 0.5;
+            transition: transform 0.3s ease;
+        }
+
+        .user-dropdown.active .user-trigger i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .user-menu {
+            position: absolute;
+            top: calc(100% + 15px);
+            right: 0;
+            width: 240px;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 3000;
+        }
+
+        .user-dropdown.active .user-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .user-menu-header {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .user-menu-name {
+            display: block;
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .user-menu-email {
+            display: block;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+        }
+
+        .user-menu-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 8px 10px;
+        }
+
+        .user-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 14px;
+            transition: 0.3s;
+        }
+
+        .user-menu-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .user-menu-item.logout {
+            color: #ff4757;
+        }
+
+        /* Mobile Nav Toggle */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 2100;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .top-bar { display: none !important; }
+            .nav {
+                top: 20px !important;
+                width: 95% !important;
+                padding: 0 20px !important;
+            }
+            .nav-toggle { display: flex; }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(25px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 1050;
+                padding: 40px;
+                gap: 20px;
+                border-left: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .nav-links.active { right: 0; }
+            .nav-link { font-size: 1.2rem; width: 100%; text-align: center; }
+        }
 
         /* Application Form Styles */
         .apply-container {
@@ -105,7 +374,7 @@
 
         .apply-header h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 8vw, 4rem);
             font-weight: 900;
             letter-spacing: -2px;
             margin-bottom: 15px;
@@ -343,8 +612,8 @@
     <!-- Navigation -->
     <div class="top-bar" id="topBar">
         <div class="top-bar-content">
-            <span>Join the revolution. Become a Creator.</span>
-            <a href="/team" class="top-bar-link">Our Team <i class="fas fa-users"></i></a>
+            <span>Support Spark Scenepacks to keep us running!</span>
+            <a href="/donate" class="top-bar-link">Donate Now <i class="fas fa-heart"></i></a>
         </div>
     </div>
 
@@ -353,10 +622,52 @@
             <a href="/" class="logo">
                 <img src="/assets/spark-logo.png" alt="Spark Logo">
             </a>
-            <div class="nav-links">
+            <div class="nav-toggle" id="mobileNavToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
                 <a href="/" class="nav-link">Home</a>
+                <a href="/#scenepacks" class="nav-link">Scenepacks</a>
+                <a href="/requests" class="nav-link">Request</a>
                 <a href="/team" class="nav-link">Team</a>
                 <a href="/donate" class="nav-donate-pill">Donate Now <i class="fas fa-heart"></i></a>
+                
+                <!-- Profile -->
+                <div id="userProfile" class="user-dropdown" style="display: none;">
+                    <div class="user-trigger" onclick="toggleUserMenu(event)">
+                        <img id="navUserAvatar" src="/assets/spark-logo-pfp.jpg" alt="PFP">
+                        <span id="navUserName">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="user-menu" id="userMenu">
+                        <div class="user-menu-header">
+                            <span id="menuUserName" class="user-menu-name">User</span>
+                            <span id="menuUserEmail" class="user-menu-email">editor@spark.com</span>
+                        </div>
+                        <div class="user-menu-divider"></div>
+                        <a href="/dashboard" class="user-menu-item">
+                            <i class="fas fa-user-circle"></i> My Dashboard
+                        </a>
+                        <a href="/donate" class="user-menu-item">
+                            <i class="fas fa-crown" style="color: #f1c40f;"></i> Support Us
+                        </a>
+                        <a href="/admin" class="user-menu-item" id="adminMenuItem" style="display: none;">
+                            <i class="fas fa-user-shield"></i> Admin Panel
+                        </a>
+                        <div class="user-menu-divider"></div>
+                        <a href="#" class="user-menu-item logout" id="navLogoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+
+                <a href="/auth" class="nav-link" id="navLoginBtn">Login</a>
+
+                <a href="https://discord.gg/eQUpXE2F5N" class="nav-discord" target="_blank" style="background: #fff; color: #000; padding: 10px 24px; border-radius: 100px; font-weight: 800; font-size: 14px; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                    Join Discord <i class="fas fa-arrow-right" style="font-size: 11px;"></i>
+                </a>
             </div>
         </div>
     </nav>
@@ -508,6 +819,9 @@
 
             try {
                 // 1. Insert into Supabase
+                const user = JSON.parse(localStorage.getItem('spark_user'));
+                const userEmail = user ? user.email : null;
+
                 const { error } = await supabaseClient
                     .from('applications')
                     .insert([
@@ -519,6 +833,7 @@
                             experience: data.experience,
                             software: data.software,
                             motivation: data.motivation,
+                            user_email: userEmail,
                             status: 'pending',
                             created_at: new Date().toISOString()
                         }
@@ -581,18 +896,103 @@
             document.getElementById('notificationOverlay').style.display = 'none';
         }
 
-        // Scroll listener for nav
+        // --- NAVIGATION LOGIC ---
+        let lastScrollY = window.scrollY;
+        const navPill = document.getElementById('mainNav');
+        const topBar = document.getElementById('topBar');
+
         window.addEventListener('scroll', () => {
-            const nav = document.getElementById('mainNav');
-            const topBar = document.getElementById('topBar');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-                if (topBar) topBar.classList.add('hidden');
-            } else {
-                nav.classList.remove('scrolled');
-                if (topBar) topBar.classList.remove('hidden');
+            if (window.scrollY > lastScrollY && window.scrollY > 20) {
+                if (navPill) navPill.classList.add('nav-scrolled-down');
+                if (topBar) topBar.classList.add('nav-scrolled-down');
+            } else if (window.scrollY < lastScrollY) {
+                if (navPill) navPill.classList.remove('nav-scrolled-down');
+                if (topBar) topBar.classList.remove('nav-scrolled-down');
             }
+            lastScrollY = window.scrollY;
+        }, { passive: true });
+
+        // Mobile Nav
+        const mobileToggle = document.getElementById('mobileNavToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        if (mobileToggle && navLinks) {
+            mobileToggle.addEventListener('click', () => {
+                mobileToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // User Menu
+        function toggleUserMenu(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('userProfile');
+            dropdown.classList.toggle('active');
+        }
+
+        window.addEventListener('click', () => {
+            const dropdown = document.getElementById('userProfile');
+            if (dropdown) dropdown.classList.remove('active');
         });
+
+        // --- AUTH & INITIALIZATION ---
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('spark_user'));
+            const loginBtn = document.getElementById('navLoginBtn');
+            const userProfile = document.getElementById('userProfile');
+            const navUserName = document.getElementById('navUserName');
+            const menuUserName = document.getElementById('menuUserName');
+            const menuUserEmail = document.getElementById('menuUserEmail');
+            const navUserAvatar = document.getElementById('navUserAvatar');
+            const logoutBtn = document.getElementById('navLogoutBtn');
+
+            if (user) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (userProfile) {
+                    userProfile.style.display = 'block';
+                    const displayName = user.displayName || user.display_name || user.username;
+                    if (navUserName) navUserName.textContent = displayName;
+                    if (menuUserName) menuUserName.textContent = displayName;
+                    if (menuUserEmail) menuUserEmail.textContent = user.email || 'Professional Editor';
+                    if (navUserAvatar) navUserAvatar.src = user.profilePic || user.profile_pic || '/assets/spark-logo-pfp.jpg';
+                    
+                    // Pre-fill form if logged in
+                    if (user.username && !document.getElementById('editorName').value) {
+                        document.getElementById('editorName').value = displayName;
+                    }
+                    if (user.discord && !document.getElementById('discord').value) {
+                        document.getElementById('discord').value = user.discord;
+                    }
+                }
+            } else {
+                if (loginBtn) loginBtn.style.display = 'flex';
+                if (userProfile) userProfile.style.display = 'none';
+            }
+            
+            checkAdminSession();
+        }
+
+        async function checkAdminSession() {
+            try {
+                const response = await fetch('/api/admin/check-session');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.loggedIn) {
+                        const adminItem = document.getElementById('adminMenuItem');
+                        if (adminItem) adminItem.style.display = 'flex';
+                    }
+                }
+            } catch (err) {}
+        }
+
+        document.getElementById('navLogoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('spark_user');
+            localStorage.removeItem('spark_favorites');
+            window.location.reload();
+        });
+
+        checkAuth();
     </script>
 </body>
 

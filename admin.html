@@ -1301,7 +1301,7 @@
                 </button>
                 <button class="tab-btn" id="btn-applications" onclick="switchTab('applications')">
                     <i class="fas fa-file-signature"></i> Applications
-                    <span id="applications-badge" 
+                    <span id="applications-badge"
                         style="background: #7b61ff; color: white; padding: 2px 8px; border-radius: 50px; font-size: 9px; font-weight: 900; margin-left: 5px; display: none; box-shadow: 0 4px 10px rgba(123, 97, 255, 0.3);">0</span>
                 </button>
                 <button class="tab-btn" id="btn-stats" onclick="switchTab('stats')">
@@ -1351,15 +1351,19 @@
                     <h3 class="card-title"><i class="fas fa-info-circle"></i> Basic Details</h3>
 
                     <!-- IMDb Auto-Fill Section -->
-                    <div style="background: rgba(123, 97, 255, 0.08); border: 1px solid rgba(123, 97, 255, 0.2); border-radius: 15px; padding: 18px; margin-bottom: 25px; position: relative; overflow: hidden;">
-                        <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #7b61ff;"></div>
+                    <div
+                        style="background: rgba(123, 97, 255, 0.08); border: 1px solid rgba(123, 97, 255, 0.2); border-radius: 15px; padding: 18px; margin-bottom: 25px; position: relative; overflow: hidden;">
+                        <div
+                            style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #7b61ff;">
+                        </div>
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
                             <i class="fab fa-imdb" style="color: #f5c518; font-size: 24px;"></i>
-                            <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.5px; color: #fff;">IMDb AUTO-FILL</span>
+                            <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.5px; color: #fff;">IMDb
+                                AUTO-FILL</span>
                         </div>
                         <div style="display: flex; gap: 10px;">
                             <div style="flex: 1;">
-                                <input type="text" id="imdbId" placeholder="Paste IMDb ID (e.g. tt1375666)" 
+                                <input type="text" id="imdbId" placeholder="Paste IMDb ID (e.g. tt1375666)"
                                     style="margin-bottom: 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 12px 15px; font-size: 13px;">
                             </div>
                             <button type="button" onclick="fetchImdbData()" id="fetchBtn"
@@ -1368,7 +1372,8 @@
                             </button>
                         </div>
                         <p style="font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 10px; font-weight: 500;">
-                            <i class="fas fa-info-circle"></i> This will automatically fill Title, Year, Genres, and Description.
+                            <i class="fas fa-info-circle"></i> This will automatically fill Title, Year, Genres, and
+                            Description.
                         </p>
                     </div>
 
@@ -1563,10 +1568,13 @@
 
         <div id="applicationsTab" class="tab-content">
             <div class="admin-card" style="margin-bottom: 30px;">
-                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 800; margin-bottom: 10px;">Creator Applications</h2>
-                <p style="color: var(--text-secondary); font-size: 14px;">Review and manage applications from potential scenepack creators.</p>
-                
-                <div id="applicationsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; margin-top: 30px;">
+                <h2 style="font-family: 'Space Grotesk', sans-serif; font-weight: 800; margin-bottom: 10px;">Creator
+                    Applications</h2>
+                <p style="color: var(--text-secondary); font-size: 14px;">Review and manage applications from potential
+                    scenepack creators.</p>
+
+                <div id="applicationsList"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; margin-top: 30px;">
                     <!-- Applications will be loaded here -->
                 </div>
             </div>
@@ -1666,7 +1674,7 @@
             async function fetchImdbData() {
                 const id = document.getElementById('imdbId').value.trim();
                 const btn = document.getElementById('fetchBtn');
-                
+
                 if (!id) {
                     alert('Please enter an IMDb ID (e.g. tt1375666)');
                     return;
@@ -1675,11 +1683,11 @@
                 const originalBtnText = btn.innerHTML;
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> FETCHING...';
-                
+
                 try {
                     const response = await fetch(`${API_BASE}/api/admin/imdb/${id}`);
                     const data = await response.json();
-                    
+
                     if (data.error) {
                         alert(`Error: ${data.error}`);
                     } else {
@@ -1704,7 +1712,7 @@
                         // Show Success Glow
                         btn.style.background = '#43b883';
                         btn.innerHTML = '<i class="fas fa-check"></i> FETCHED!';
-                        
+
                         setTimeout(() => {
                             btn.style.background = '#7b61ff';
                             btn.innerHTML = originalBtnText;
@@ -1736,7 +1744,7 @@
                 const lerp = (a, b, n) => (1 - n) * a + n * b;
                 cursorX = lerp(cursorX, mouseX, 0.2);
                 cursorY = lerp(cursorY, mouseY, 0.2);
-                
+
                 if (cursor) {
                     cursor.style.left = `${cursorX}px`;
                     cursor.style.top = `${cursorY}px`;
@@ -2493,7 +2501,7 @@
                             console.log('Application update:', payload.eventType);
                             const activeTab = document.querySelector('.tab-content.active').id;
                             if (activeTab === 'applicationsTab') loadApplicationsList();
-                            
+
                             // Always update application badge
                             loadApplicationsList(true);
                         })
@@ -2878,6 +2886,7 @@
                             </div>
                             
                             <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 20px;">
+                                <p style="margin-bottom: 8px;"><i class="fas fa-envelope" style="width: 20px;"></i> ${app.user_email || 'No email associated'}</p>
                                 <p style="margin-bottom: 8px;"><i class="fas fa-layer-group" style="width: 20px;"></i> ${app.experience}</p>
                                 <p style="margin-bottom: 8px;"><i class="fas fa-laptop-code" style="width: 20px;"></i> ${app.software}</p>
                                 <p style="margin-bottom: 8px;"><i class="fab fa-instagram" style="width: 20px;"></i> <a href="${app.instagram}" target="_blank" style="color: var(--accent); text-decoration: none;">Instagram</a></p>
@@ -2890,10 +2899,10 @@
 
                             ${app.status === 'pending' ? `
                             <div style="display: flex; gap: 10px;">
-                                <button onclick="updateApplicationStatus('${app.id}', 'accepted')" style="flex: 1; padding: 12px; background: #43b883; color: #fff; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">
+                                <button onclick="updateApplicationStatus('${app.id}', 'accepted', '${app.user_email || ''}')" style="flex: 1; padding: 12px; background: #43b883; color: #fff; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">
                                     <i class="fas fa-check"></i> ACCEPT
                                 </button>
-                                <button onclick="updateApplicationStatus('${app.id}', 'rejected')" style="flex: 1; padding: 12px; background: #ff4757; color: #fff; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">
+                                <button onclick="updateApplicationStatus('${app.id}', 'rejected', '${app.user_email || ''}')" style="flex: 1; padding: 12px; background: #ff4757; color: #fff; border: none; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer;">
                                     <i class="fas fa-times"></i> REJECT
                                 </button>
                             </div>
@@ -2910,18 +2919,31 @@
                 }
             }
 
-            async function updateApplicationStatus(id, status) {
+            async function updateApplicationStatus(id, status, email) {
                 try {
+                    // Update application record
                     const { error } = await supabaseClient
                         .from('applications')
                         .update({ status: status })
                         .eq('id', id);
 
                     if (error) throw error;
+
+                    // If accepted, update user role
+                    if (status === 'accepted' && email) {
+                        const { error: roleError } = await supabaseClient
+                            .from('users')
+                            .update({ role: 'creator' })
+                            .eq('email', email);
+                        
+                        if (roleError) console.warn('Could not update user role:', roleError);
+                    }
+
                     showToast(`Application ${status.toUpperCase()}`);
                     loadApplicationsList();
                 } catch (err) {
                     showToast('Update failed');
+                    console.error(err);
                 }
             }
 
@@ -2940,7 +2962,7 @@
                     showToast('Delete failed');
                 }
             }
-            
+
             // Update application badge on load
             loadApplicationsList(true);
         </script>

@@ -868,6 +868,9 @@
             <button class="dash-tab" onclick="switchTab('settings')">
                 <i class="fas fa-cog"></i> Settings
             </button>
+            <button class="dash-tab" id="creatorTabBtn" onclick="switchTab('creator')" style="display: none; background: rgba(123, 97, 255, 0.1); color: #7b61ff; border: 1px solid rgba(123, 97, 255, 0.2);">
+                <i class="fas fa-bolt"></i> Creator Hub
+            </button>
         </div>
 
         <!-- Favorites Content -->
@@ -905,6 +908,29 @@
                         placeholder="Tell us about your editing style..."></textarea>
                 </div>
                 <button class="save-btn" onclick="saveSettings()">Save Changes</button>
+            </div>
+        </div>
+
+        <!-- Creator Content -->
+        <div id="creatorContent" class="tab-content">
+            <div class="settings-card" style="border-left: 4px solid #7b61ff;">
+                <h3 style="margin-bottom: 20px; font-family: 'Space Grotesk', sans-serif;"><i class="fas fa-bolt"></i> Creator Dashboard</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 14px;">Welcome to the Elite Creator Team! Soon you'll be able to upload and manage your scenepacks directly from here.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05);">
+                        <span style="font-size: 24px; font-weight: 800; color: #fff; display: block;">0</span>
+                        <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Total Downloads</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05);">
+                        <span style="font-size: 24px; font-weight: 800; color: #fff; display: block;">0</span>
+                        <span style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Scenepacks</span>
+                    </div>
+                </div>
+
+                <button class="save-btn" style="background: #7b61ff; opacity: 0.5; cursor: not-allowed;" title="Coming Soon">
+                    <i class="fas fa-plus"></i> Upload New Scenepack
+                </button>
             </div>
         </div>
     </main>
@@ -1037,6 +1063,12 @@
             // Fill settings form
             document.getElementById('editDisplayName').value = (currentUser.display_name || currentUser.displayName || currentUser.username || '').replace('Professional Editor', '');
             document.getElementById('editBio').value = (currentUser.bio || currentUser.user_bio || '').replace('No bio yet. Add one in settings!', '');
+
+            // Check for creator role
+            const creatorTabBtn = document.getElementById('creatorTabBtn');
+            if (currentUser.role === 'creator' || currentUser.is_creator) {
+                if (creatorTabBtn) creatorTabBtn.style.display = 'flex';
+            }
         }
 
         // --- REAL-TIME DASHBOARD UPDATES ---
