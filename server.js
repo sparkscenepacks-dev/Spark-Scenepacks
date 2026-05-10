@@ -272,11 +272,25 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
 });
 
 // --- DISCORD NOTIFICATION UTILITY ---
+const fs = require('fs');
+
 async function sendDiscordNotification(scenepack) {
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
     if (!webhookUrl) return;
 
     try {
+        // Load custom emojis
+        let emojis = {
+            spark: "⚡", movie: "🎬", year: "🗓️", rating: "⭐", runtime: "⏱️",
+            genre: "🎭", creator: "👤", uploader: "🛠️", download: "📥", website: "🌐", alert: "🚨"
+        };
+        try {
+            const emojiData = fs.readFileSync(path.join(__dirname, 'emojis.json'), 'utf8');
+            emojis = JSON.parse(emojiData);
+        } catch (e) {
+            console.warn('[Discord] Using default emojis (emojis.json not found or invalid)');
+        }
+
         const siteUrl = "https://sparkscenepacks.vercel.app";
         const downloadUrl = `${siteUrl}/?scenepack=${scenepack.id}`;
         const logoUrl = "https://sparkscenepacks.vercel.app/assets/spark-logo.png";
@@ -287,19 +301,19 @@ async function sendDiscordNotification(scenepack) {
                 icon_url: logoUrl,
                 url: siteUrl
             },
-            title: `🎬 NEW CONTENT UPLOADED: ${scenepack.title.toUpperCase()}`,
+            title: `${emojis.spark} NEW UPLOAD: ${scenepack.title.toUpperCase()} ${emojis.movie}`,
             url: downloadUrl,
             description: `**${scenepack.preview || "High-quality scenepack available now!"}**\n\n` +
                          `> *Check out the latest upload to the Spark collection. High bitrate clips ready for your next edit.*`,
             color: 0x7b61ff, // Premium Purple
             image: { url: scenepack.thumbnail },
             fields: [
-                { name: "📅 Year", value: `\`${scenepack.year || "2024"}\``, inline: true },
-                { name: "⭐ Rating", value: `\`${scenepack.rating || "N/A"}\``, inline: true },
-                { name: "⏳ Runtime", value: `\`${scenepack.runtime || "N/A"}\``, inline: true },
-                { name: "🎭 Genres", value: `${scenepack.genre || "Action, Drama"}`, inline: false },
-                { name: "👤 Creator", value: `[${scenepack.creator || 'son.astral'}](https://tiktok.com/@${scenepack.creator || 'son.astral'})`, inline: true },
-                { name: "📤 Uploader", value: `\`${scenepack.uploader || 'Admin'}\``, inline: true }
+                { name: `${emojis.year} Year`, value: `\`${scenepack.year || "2024"}\``, inline: true },
+                { name: `${emojis.rating} Rating`, value: `\`${scenepack.rating || "N/A"}\``, inline: true },
+                { name: `${emojis.runtime} Runtime`, value: `\`${scenepack.runtime || "N/A"}\``, inline: true },
+                { name: `${emojis.genre} Genres`, value: `${scenepack.genre || "Action, Drama"}`, inline: false },
+                { name: `${emojis.creator} Creator`, value: `[${scenepack.creator || 'son.astral'}](https://tiktok.com/@${scenepack.creator || 'son.astral'})`, inline: true },
+                { name: `${emojis.uploader} Uploader`, value: `\`${scenepack.uploader || 'Admin'}\``, inline: true }
             ],
             footer: { 
                 text: "✨ Premium Edits & Scenes | sparkscenepacks.vercel.app",
@@ -312,7 +326,7 @@ async function sendDiscordNotification(scenepack) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                content: `🚨 **@everyone - New Scenepack Alert!**`,
+                content: `${emojis.spark} **@everyone - New Spark Upload Alert!** ${emojis.spark}`,
                 embeds: [embed],
                 components: [
                     {
@@ -320,13 +334,13 @@ async function sendDiscordNotification(scenepack) {
                         components: [
                             {
                                 type: 2,
-                                label: "Download Now",
+                                label: `${emojis.download} Download Now`,
                                 style: 5,
                                 url: downloadUrl
                             },
                             {
                                 type: 2,
-                                label: "Visit Website",
+                                label: `${emojis.website} Visit Website`,
                                 style: 5,
                                 url: siteUrl
                             }
