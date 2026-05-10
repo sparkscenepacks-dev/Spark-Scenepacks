@@ -1345,6 +1345,28 @@
                 <div class="admin-card">
                     <h3 class="card-title"><i class="fas fa-info-circle"></i> Basic Details</h3>
 
+                    <!-- IMDb Auto-Fill Section -->
+                    <div style="background: rgba(123, 97, 255, 0.08); border: 1px solid rgba(123, 97, 255, 0.2); border-radius: 15px; padding: 18px; margin-bottom: 25px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: #7b61ff;"></div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <i class="fab fa-imdb" style="color: #f5c518; font-size: 24px;"></i>
+                            <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.5px; color: #fff;">IMDb AUTO-FILL</span>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <input type="text" id="imdbId" placeholder="Paste IMDb ID (e.g. tt1375666)" 
+                                    style="margin-bottom: 0; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 12px 15px; font-size: 13px;">
+                            </div>
+                            <button type="button" onclick="fetchImdbData()" id="fetchBtn"
+                                style="width: auto; padding: 0 25px; background: #7b61ff; color: #fff; font-weight: 800; border-radius: 12px; font-size: 12px; transition: all 0.3s ease;">
+                                <i class="fas fa-magic"></i> FETCH
+                            </button>
+                        </div>
+                        <p style="font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 10px; font-weight: 500;">
+                            <i class="fas fa-info-circle"></i> This will automatically fill Title, Year, Genres, and Description.
+                        </p>
+                    </div>
+
                     <div class="input-group">
                         <label class="input-label">Title / Name</label>
                         <input type="text" id="title" placeholder="e.g. John Wick Scenepack">
