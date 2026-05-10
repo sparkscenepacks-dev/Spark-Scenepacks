@@ -761,7 +761,7 @@
             width: fit-content;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 20px rgba(123, 97, 255, 0.1);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: default;
+            cursor: pointer;
             position: relative;
             z-index: 100;
         }
@@ -2996,7 +2996,7 @@
 
     <!-- Scenepacks Section -->
     <section class="section" id="scenepacks">
-        <div class="password-tab">
+        <div class="password-tab" onclick="copyPassword(this)">
             <i class="fas fa-key"></i> The Password For Softwares And Plugins Is <strong>"star"</strong>
         </div>
         <!-- Search -->
@@ -3251,6 +3251,24 @@
             };
 
             overlay.style.display = 'flex';
+        }
+
+        function copyPassword(element) {
+            const pwd = "star";
+            navigator.clipboard.writeText(pwd).then(() => {
+                const originalContent = element.innerHTML;
+                element.innerHTML = '<i class="fas fa-check"></i> Password Copied!';
+                element.style.background = 'rgba(46, 213, 115, 0.2)';
+                element.style.borderColor = 'rgba(46, 213, 115, 0.4)';
+                
+                setTimeout(() => {
+                    element.innerHTML = originalContent;
+                    element.style.background = '';
+                    element.style.borderColor = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
         }
 
         function closeNotification() {
