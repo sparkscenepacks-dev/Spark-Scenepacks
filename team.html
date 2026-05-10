@@ -8,6 +8,10 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/webp" href="/assets/spark-logo.png">
+    <link rel="shortcut icon" type="image/png" href="/assets/spark-logo.png">
+
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -51,6 +55,11 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
+            background: #000;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), url('/assets/blackhole.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
         .blob {
@@ -95,97 +104,418 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         /* Navigation */
-        .nav-wrapper {
+        /* Top Announcement Bar */
+        .top-bar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 20px;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: fit-content;
+            padding: 0 25px;
+            height: 35px;
+            background: rgba(123, 97, 255, 0.15);
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            z-index: 3000;
             display: flex;
+            align-items: center;
             justify-content: center;
+            border-radius: 100px;
+            border: 1px solid rgba(123, 97, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+
+        .top-bar.hidden {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .top-bar-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .top-bar-link {
+            color: #ffffff;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .top-bar-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .top-bar-link i {
+            color: #ff4757;
+            font-size: 10px;
+        }
+
+        /* Navigation Style */
+        .nav {
+            position: fixed;
+            top: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1200px;
+            height: 60px;
+            padding: 0 32px;
+            z-index: 2000;
+            background: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
         }
 
         .nav-container {
-            width: 100%;
-            max-width: 1200px;
-            height: 70px;
-            background: rgba(10, 10, 10, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            gap: 20px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: #fff;
-            font-weight: 900;
-            font-size: 1.2rem;
-            letter-spacing: -0.5px;
+            height: 100%;
+            text-decoration: none !important;
+            flex-shrink: 0;
         }
 
         .logo img {
-            height: 35px;
-            filter: brightness(0) invert(1) drop-shadow(0 0 10px var(--accent-glow));
+            height: 32px;
+            width: auto;
+            object-fit: contain;
+            filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+            filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
         }
 
         .nav-links {
             display: flex;
-            gap: 30px;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: nowrap;
+            height: 100%;
         }
 
         .nav-link {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7) !important;
+            text-decoration: none !important;
+            font-weight: 700;
+            font-size: 15px;
             transition: all 0.3s ease;
-            position: relative;
+            white-space: nowrap;
         }
 
         .nav-link:hover, .nav-link.active {
+            color: #ffffff !important;
+        }
+
+        .nav-discord {
+            background: #ffffff;
+            color: #000000 !important;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 14px;
+            text-decoration: none !important;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            white-space: nowrap;
+            margin-left: 5px;
+        }
+
+        .nav-discord:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-donate-pill {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #ffffff !important;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 14px;
+            text-decoration: none !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-donate-pill i {
+            color: #ff4757;
+            font-size: 14px;
+        }
+
+        .nav-donate-pill:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.1);
+        }
+
+        /* User Profile Dropdown */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-trigger {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 16px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .user-trigger:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .user-trigger img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-trigger span {
+            font-weight: 700;
+            font-size: 13px;
             color: #fff;
         }
 
-        .nav-link::after {
-            content: '';
+        .user-trigger i.fa-chevron-down {
+            font-size: 10px;
+            opacity: 0.5;
+            transition: transform 0.3s ease;
+        }
+
+        .user-dropdown.active .user-trigger i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        .user-menu {
             position: absolute;
-            bottom: -5px;
-            left: 50%;
-            width: 0;
+            top: calc(100% + 15px);
+            right: 0;
+            width: 240px;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px) scale(0.95);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 3000;
+        }
+
+        .user-dropdown.active .user-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .user-menu-header {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .user-menu-name {
+            display: block;
+            font-size: 15px;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .user-menu-email {
+            display: block;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 4px;
+        }
+
+        .user-menu-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 8px 10px;
+        }
+
+        .user-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 14px;
+            transition: 0.3s;
+        }
+
+        .user-menu-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            transform: translateX(5px);
+        }
+
+        .user-menu-item.logout {
+            color: #ff4757;
+        }
+
+        /* Mobile Nav Toggle */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 2100;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 25px;
             height: 2px;
-            background: var(--accent);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
+            background: #ffffff;
+            border-radius: 2px;
+            transition: 0.3s;
         }
 
-        .nav-link:hover::after, .nav-link.active::after {
+        @media (max-width: 768px) {
+            .top-bar { display: none !important; }
+            .nav {
+                top: 20px !important;
+                width: 95% !important;
+                padding: 0 20px !important;
+            }
+            .nav-toggle { display: flex; }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(25px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 1050;
+                padding: 40px;
+                gap: 20px;
+                border-left: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .nav-links.active { right: 0; }
+        }
+
+        /* Notification Modal Styles */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
         }
 
-        .nav-cta {
+        .notification-card {
+            background: rgba(20, 20, 20, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        .notification-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--accent);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            margin: 0 auto 24px;
+        }
+
+        .notification-title { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 12px; }
+        .notification-message { color: rgba(255, 255, 255, 0.6); font-size: 16px; line-height: 1.5; margin-bottom: 32px; }
+        .notification-actions { display: flex; gap: 12px; }
+        .notification-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 16px;
+            border: none;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             background: #fff;
             color: #000;
-            padding: 10px 24px;
-            border-radius: 14px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 0.85rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        .nav-cta:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
-        }
+        .notification-btn.secondary { background: rgba(255, 255, 255, 0.1); color: #fff; }
+        .notification-btn:hover { transform: translateY(-2px); opacity: 0.9; }
 
         /* Hero Section */
         .hero {
@@ -510,19 +840,81 @@
         <div class="grid-overlay"></div>
     </div>
 
-    <div class="nav-wrapper">
-        <nav class="nav-container">
+    <!-- Top Announcement Bar -->
+    <div class="top-bar" id="topBar">
+        <div class="top-bar-content">
+            <span>Support Spark Scenepacks to keep us running!</span>
+            <a href="/donate" class="top-bar-link">Donate Now <i class="fas fa-heart"></i></a>
+        </div>
+    </div>
+
+    <nav class="nav" id="mainNav">
+        <div class="nav-container">
             <a href="/" class="logo">
-                <img src="/assets/spark-logo.png" alt="Spark">
+                <img src="/assets/spark-logo.png" alt="Spark Logo">
             </a>
-            <div class="nav-links">
-                <a href="/" class="nav-link">Home</a>
-                <a href="/team" class="nav-link active">Team</a>
-                <a href="/requests" class="nav-link">Requests</a>
-                <a href="/donate" class="nav-link">Donate</a>
+            <div class="nav-toggle" id="mobileNavToggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
-            <a href="/auth" class="nav-cta">GET STARTED</a>
-        </nav>
+            <div class="nav-links" id="navLinks">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/#scenepacks" class="nav-link">Scenepacks</a>
+                <a href="/requests" class="nav-link">Request</a>
+                <a href="/team" class="nav-link active">Team</a>
+                <a href="/donate" class="nav-donate-pill">Donate Now <i class="fas fa-heart"></i></a>
+                
+                <!-- Profile -->
+                <div id="userProfile" class="user-dropdown" style="display: none;">
+                    <div class="user-trigger" onclick="toggleUserMenu(event)">
+                        <img id="userAvatar" src="/assets/spark-logo-pfp.jpg" alt="PFP">
+                        <span id="userName">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="user-menu">
+                        <div class="user-menu-header">
+                            <span id="menuUserName" class="user-menu-name">User</span>
+                            <span id="userEmail" class="user-menu-email">editor@spark.com</span>
+                        </div>
+                        <div class="user-menu-divider"></div>
+                        <a href="/dashboard" class="user-menu-item">
+                            <i class="fas fa-user-circle"></i> My Dashboard
+                        </a>
+                        <a href="/donate" class="user-menu-item">
+                            <i class="fas fa-crown" style="color: #f1c40f;"></i> Support Us
+                        </a>
+                        <a href="/admin" class="user-menu-item" id="adminMenuItem" style="display: none;">
+                            <i class="fas fa-user-shield"></i> Admin Panel
+                        </a>
+                        <div class="user-menu-divider"></div>
+                        <a href="#" class="user-menu-item logout" id="navLogoutBtn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </div>
+                </div>
+
+                <a href="/auth" class="nav-link" id="navLoginBtn">Login</a>
+
+                <a href="https://discord.gg/eQUpXE2F5N" class="nav-discord" target="_blank">
+                    Join Discord <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Modal -->
+    <div id="notificationOverlay" class="notification-overlay">
+        <div class="notification-card">
+            <div class="notification-icon" id="notificationIcon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="notification-title" id="notificationTitle">Success</h3>
+            <p class="notification-message" id="notificationMessage">Action completed successfully.</p>
+            <div class="notification-actions" id="notificationActions">
+                <button class="notification-btn" onclick="closeNotification()">Great!</button>
+            </div>
+        </div>
     </div>
 
     <header class="hero">
@@ -581,6 +973,157 @@
     </footer>
 
     <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://mrndyxetxslvyznqyirx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ybmR5eGV0eHNsdnl6bnF5aXJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzMDA4NDksImV4cCI6MjA5Mzg3Njg0OX0.7jY1-_tYTCDj7h3uuHzz7L-neB8DT-MzEvYGesWWJQA';
+        
+        let supabaseClient;
+        try {
+            if (typeof supabase !== 'undefined') {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch (e) {
+            console.error('Supabase Init Error:', e);
+        }
+
+        // Navigation Logic
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('mainNav');
+            const topBar = document.getElementById('topBar');
+            const currentScroll = window.scrollY;
+            
+            if (currentScroll > 50) {
+                nav.classList.add('scrolled');
+                if (topBar) topBar.classList.add('hidden');
+            } else {
+                nav.classList.remove('scrolled');
+                if (topBar) topBar.classList.remove('hidden');
+            }
+            lastScroll = currentScroll;
+        });
+
+        function toggleNav() {
+            const navLinks = document.getElementById('navLinks');
+            const navToggle = document.getElementById('mobileNavToggle');
+            navLinks.classList.toggle('active');
+            navToggle.classList.toggle('active');
+            if (navLinks.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        function toggleUserMenu(e) {
+            if (e) e.stopPropagation();
+            document.getElementById('userProfile').classList.toggle('active');
+        }
+
+        window.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('userProfile');
+            if (dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        // User Auth Check
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('spark_user'));
+            const loginBtn = document.getElementById('navLoginBtn');
+            const userProfile = document.getElementById('userProfile');
+            const userName = document.getElementById('userName');
+            const menuUserName = document.getElementById('menuUserName');
+            const userEmail = document.getElementById('userEmail');
+            const userAvatar = document.getElementById('userAvatar');
+            const logoutBtn = document.getElementById('navLogoutBtn');
+
+            if (user) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (userProfile) {
+                    userProfile.style.display = 'block';
+                    const displayName = user.displayName || user.display_name || user.username;
+                    if (userName) userName.textContent = displayName;
+                    if (menuUserName) menuUserName.textContent = displayName;
+                    if (userEmail) userEmail.textContent = user.email || 'Professional Editor';
+                    if (userAvatar) userAvatar.src = user.profilePic || user.profile_pic || '/assets/spark-logo-pfp.jpg';
+                    
+                    if (logoutBtn) {
+                        logoutBtn.onclick = null;
+                        logoutBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            showNotification('Logout', 'Are you sure you want to sign out?', 'confirm', () => {
+                                localStorage.removeItem('spark_user');
+                                localStorage.removeItem('spark_favorites');
+                                showNotification('Logged Out', 'Successfully signed out.', 'success');
+                                setTimeout(() => window.location.reload(), 1200);
+                            }, true);
+                        });
+                    }
+                }
+            } else {
+                if (loginBtn) loginBtn.style.display = 'flex';
+                if (userProfile) userProfile.style.display = 'none';
+            }
+            checkAdminSession();
+        }
+
+        async function checkAdminSession() {
+            try {
+                const response = await fetch('/api/admin/check-session');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.loggedIn) {
+                        const adminItem = document.getElementById('adminMenuItem');
+                        if (adminItem) adminItem.style.display = 'flex';
+                    }
+                }
+            } catch (err) {}
+        }
+
+        function showNotification(title, message, type = 'success', callback = null, showCancel = false) {
+            const overlay = document.getElementById('notificationOverlay');
+            const titleEl = document.getElementById('notificationTitle');
+            const messageEl = document.getElementById('notificationMessage');
+            const iconEl = document.getElementById('notificationIcon');
+            const actionsEl = document.getElementById('notificationActions');
+
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            if (type === 'error') {
+                iconEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                iconEl.style.background = '#ff4757';
+            } else if (type === 'confirm') {
+                iconEl.innerHTML = '<i class="fas fa-question-circle"></i>';
+                iconEl.style.background = 'rgba(255,255,255,0.1)';
+            } else {
+                iconEl.innerHTML = '<i class="fas fa-check"></i>';
+                iconEl.style.background = '#4facfe';
+            }
+
+            let buttonsHtml = '';
+            if (showCancel) {
+                buttonsHtml += `<button class="notification-btn secondary" onclick="closeNotification()">Cancel</button>`;
+            }
+            buttonsHtml += `<button class="notification-btn" id="confirmBtn">${type === 'confirm' ? 'Confirm' : 'Continue'}</button>`;
+            actionsEl.innerHTML = buttonsHtml;
+            
+            document.getElementById('confirmBtn').onclick = () => {
+                closeNotification();
+                if (callback) callback();
+            };
+            overlay.style.display = 'flex';
+        }
+
+        function closeNotification() {
+            document.getElementById('notificationOverlay').style.display = 'none';
+        }
+
+        // Initialize Auth
+        checkAuth();
+
+        // Original Team Page Logic
         // Smooth reveal on scroll
         const observerOptions = {
             threshold: 0.1
