@@ -503,6 +503,33 @@
             text-align: center;
         }
 
+        /* ANALYTICS BADGES */
+        .card-stats {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+
+        .stat-item i {
+            font-size: 12px;
+            color: var(--accent);
+        }
+
+        .stat-item.downloads i {
+            color: #43b883;
+        }
+
         .user-menu-item.logout {
             color: #ff4757;
             margin-top: 4px;
@@ -3751,6 +3778,16 @@
                     <div class="scenepack-credit-line">Created by <strong>${scenepack.creator || 'son.astral'}</strong></div>
                     <div class="scenepack-credit-line">Uploaded by <strong>${scenepack.uploader || 'tcmmi.ae'}</strong></div>
                 </div>
+                <div class="card-stats">
+                    <div class="stat-item views">
+                        <i class="fas fa-eye"></i> 
+                        <span id="views-${scenepack.id}">${scenepack.views || 0}</span>
+                    </div>
+                    <div class="stat-item downloads">
+                        <i class="fas fa-download"></i> 
+                        <span id="downloads-${scenepack.id}">${scenepack.downloads || 0}</span>
+                    </div>
+                </div>
                 <div class="scenepack-card-footer">
                     <button class="view-resource-btn" onclick="event.stopPropagation(); openModal('${scenepack.id}', this.closest('.scenepack-card'))">
                         <i class="fas fa-eye"></i> View Resource
@@ -3845,6 +3882,30 @@
             modal.style.display = 'block';
             setTimeout(() => modal.classList.add('show'), 10);
             document.body.style.overflow = 'hidden';
+
+            // Real-time View Tracking
+            trackEvent(scenepackId, 'view');
+        }
+
+        // --- ANALYTICS TRACKING ---
+        async function trackEvent(id, type) {
+            try {
+                // Optimistic UI Update
+                const span = document.getElementById(`${type}s-${id}`);
+                if (span) {
+                    const currentCount = parseInt(span.textContent) || 0;
+                    span.textContent = currentCount + 1;
+                    
+                    // Update local data object too
+                    const sp = scenepacks.find(s => s.id === id);
+                    if (sp) sp[`${type}s`] = (parseInt(sp[`${type}s`]) || 0) + 1;
+                }
+
+                // Backend Sync
+                fetch(`/api/scenepacks/${id}/${type}`, { method: 'POST' });
+            } catch (err) {
+                console.error(`Failed to track ${type}:`, err);
+            }
         }
 
         function populateModalContent(scenepack) {
@@ -3945,7 +4006,7 @@
                                 ${link.movie} • ${link.quality} • ${scenepack.creator || 'son.astral'}
                             </div>
                         </div>
-                        <a href="${downloadSiteUrl}" class="scenepack-download-btn">
+                        <a href="${downloadSiteUrl}" class="scenepack-download-btn" onclick="trackEvent('${scenepack.id}', 'download')">
                             <i class="fas fa-download"></i>
                             Download
                         </a>

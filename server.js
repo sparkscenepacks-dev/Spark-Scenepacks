@@ -261,10 +261,45 @@ app.post(['/api/scenepacks', '/api/scenepacks/', '/scenepacks', '/scenepacks/'],
             console.error('[Automation Error] Failed to auto-complete requests:', autoErr);
         }
 
-        res.json({ message: 'Scenepack saved successfully' });
+        res.json({ message: 'Scenepack updated successfully' });
     } catch (err) {
-        console.error('Supabase Save Error:', err);
-        res.status(500).json({ error: 'Failed to save to Supabase' });
+        console.error('Update Error:', err);
+        res.status(500).json({ error: 'Failed to update scenepack' });
+    }
+});
+
+// --- ANALYTICS API (Real-Time Counters) ---
+app.post('/api/scenepacks/:id/view', async (req, res) => {
+    try {
+        const { id } = req.params;
+        // Using SQL Increment via RPC or direct update
+        const { data, error } = await supabase.rpc('increment_views', { row_id: id });
+        
+        // Fallback if RPC isn't set up yet
+        if (error) {
+            const { data: current } = await supabase.from('scenepacks').select('views').eq('id', id).single();
+            await supabase.from('scenepacks').update({ views: (current?.views || 0) + 1 }).eq('id', id);
+        }
+        
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/scenepacks/:id/download', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase.rpc('increment_downloads', { row_id: id });
+        
+        if (error) {
+            const { data: current } = await supabase.from('scenepacks').select('downloads').eq('id', id).single();
+            await supabase.from('scenepacks').update({ downloads: (current?.downloads || 0) + 1 }).eq('id', id);
+        }
+        
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 
