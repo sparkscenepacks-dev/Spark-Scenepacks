@@ -308,7 +308,7 @@ async function sendDiscordNotification(scenepack) {
 
         const siteUrl = "https://sparkscenepacks.vercel.app";
         const downloadUrl = `${siteUrl}/?scenepack=${scenepack.id}`;
-        const logoUrl = "https://sparkscenepacks.vercel.app/assets/spark-logo.png";
+        const logoUrl = `${siteUrl}/assets/logo.gif`;
 
         const embed = {
             author: {
@@ -316,22 +316,24 @@ async function sendDiscordNotification(scenepack) {
                 icon_url: logoUrl,
                 url: siteUrl
             },
-            title: `${emojis.spark} NEW UPLOAD: ${scenepack.title.toUpperCase()} ${emojis.movie}`,
+            title: `${emojis.spark} ${scenepack.title.toUpperCase()} ${emojis.movie}`,
             url: downloadUrl,
-            description: `**${scenepack.preview || "High-quality scenepack available now!"}**\n\n` +
-                         `> *Check out the latest upload to the Spark collection. High bitrate clips ready for your next edit.*`,
+            description: `**${scenepack.preview || "Premium scenepack available for download."}**\n\n` +
+                         `${emojis.genre} **Genre:** \`${scenepack.genre || "Action"}\`\n` +
+                         `${emojis.year} **Year:** \`${scenepack.year || "2024"}\`\n` +
+                         `${emojis.rating} **Rating:** \`${scenepack.rating || "N/A"}\`\n` +
+                         `${emojis.runtime} **Runtime:** \`${scenepack.runtime || "N/A"}\``,
             color: 0x7b61ff, // Premium Purple
             image: { url: scenepack.thumbnail },
             fields: [
-                { name: `${emojis.year} Year`, value: `\`${scenepack.year || "2024"}\``, inline: true },
-                { name: `${emojis.rating} Rating`, value: `\`${scenepack.rating || "N/A"}\``, inline: true },
-                { name: `${emojis.runtime} Runtime`, value: `\`${scenepack.runtime || "N/A"}\``, inline: true },
-                { name: `${emojis.genre} Genres`, value: `${scenepack.genre || "Action, Drama"}`, inline: false },
                 { name: `${emojis.creator} Creator`, value: `[${scenepack.creator || 'Insane'}](https://tiktok.com/@${scenepack.creator || 'Insane'})`, inline: true },
-                { name: `${emojis.uploader} Uploader`, value: `\`${scenepack.uploader || 'Admin'}\``, inline: true }
+                { name: `${emojis.uploader} System`, value: `${emojis.alert} \`Verified\``, inline: true },
+                { name: `\u200b`, value: `\u200b`, inline: true }, // Spacer
+                { name: `${emojis.download} Download`, value: `[Direct Link](${downloadUrl})`, inline: true },
+                { name: `${emojis.website} Website`, value: `[Visit Spark](${siteUrl})`, inline: true }
             ],
             footer: { 
-                text: "✨ Premium Edits & Scenes | sparkscenepacks.vercel.app",
+                text: "Spark Scenepacks | Premium Quality Scenes",
                 icon_url: logoUrl
             },
             timestamp: new Date()
@@ -341,7 +343,7 @@ async function sendDiscordNotification(scenepack) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                content: `${emojis.spark} **@everyone - New Spark Upload Alert!** ${emojis.spark}`,
+                content: `### ${emojis.spark} **New Upload Alert!**`,
                 embeds: [embed],
                 components: [
                     {
@@ -349,13 +351,13 @@ async function sendDiscordNotification(scenepack) {
                         components: [
                             {
                                 type: 2,
-                                label: `${emojis.download} Download Now`,
+                                label: `Download Now`,
                                 style: 5,
                                 url: downloadUrl
                             },
                             {
                                 type: 2,
-                                label: `${emojis.website} Visit Website`,
+                                label: `Visit Site`,
                                 style: 5,
                                 url: siteUrl
                             }
