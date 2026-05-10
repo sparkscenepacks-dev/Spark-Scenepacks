@@ -277,32 +277,65 @@ async function sendDiscordNotification(scenepack) {
     if (!webhookUrl) return;
 
     try {
+        const siteUrl = "https://sparkscenepacks.vercel.app";
+        const downloadUrl = `${siteUrl}/?scenepack=${scenepack.id}`;
+        const logoUrl = "https://sparkscenepacks.vercel.app/assets/spark-logo.png";
+
         const embed = {
-            title: `🚀 New Scenepack Uploaded: ${scenepack.title}`,
-            description: scenepack.preview || "A new high-quality scenepack is now available!",
-            color: 0x7b61ff, // Spark Purple
+            author: {
+                name: "Spark Scenepacks",
+                icon_url: logoUrl,
+                url: siteUrl
+            },
+            title: `🎬 NEW CONTENT UPLOADED: ${scenepack.title.toUpperCase()}`,
+            url: downloadUrl,
+            description: `**${scenepack.preview || "High-quality scenepack available now!"}**\n\n` +
+                         `> *Check out the latest upload to the Spark collection. High bitrate clips ready for your next edit.*`,
+            color: 0x7b61ff, // Premium Purple
             image: { url: scenepack.thumbnail },
             fields: [
-                { name: "📅 Year", value: scenepack.year || "N/A", inline: true },
-                { name: "🎬 Genre", value: scenepack.genre || "N/A", inline: true },
-                { name: "👤 Creator", value: scenepack.creator || "son.astral", inline: true }
+                { name: "📅 Year", value: `\`${scenepack.year || "2024"}\``, inline: true },
+                { name: "⭐ Rating", value: `\`${scenepack.rating || "N/A"}\``, inline: true },
+                { name: "⏳ Runtime", value: `\`${scenepack.runtime || "N/A"}\``, inline: true },
+                { name: "🎭 Genres", value: `${scenepack.genre || "Action, Drama"}`, inline: false },
+                { name: "👤 Creator", value: `[${scenepack.creator || 'son.astral'}](https://tiktok.com/@${scenepack.creator || 'son.astral'})`, inline: true },
+                { name: "📤 Uploader", value: `\`${scenepack.uploader || 'Admin'}\``, inline: true }
             ],
-            footer: { text: "Spark Scenepacks - Premium Quality" },
+            footer: { 
+                text: "✨ Premium Edits & Scenes | sparkscenepacks.vercel.app",
+                icon_url: logoUrl
+            },
             timestamp: new Date()
         };
-
-        const siteUrl = "https://sparkscenepacks.vercel.app"; // Update with your real URL
-        const downloadUrl = `${siteUrl}/?scenepack=${scenepack.id}`;
 
         await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                content: `🚨 **NEW UPLOAD!** Check it out here: ${downloadUrl}`,
-                embeds: [embed]
+                content: `🚨 **@everyone - New Scenepack Alert!**`,
+                embeds: [embed],
+                components: [
+                    {
+                        type: 1,
+                        components: [
+                            {
+                                type: 2,
+                                label: "Download Now",
+                                style: 5,
+                                url: downloadUrl
+                            },
+                            {
+                                type: 2,
+                                label: "Visit Website",
+                                style: 5,
+                                url: siteUrl
+                            }
+                        ]
+                    }
+                ]
             })
         });
-        console.log('[Discord] Notification sent successfully');
+        console.log('[Discord] Premium notification sent successfully');
     } catch (err) {
         console.error('[Discord Error] Failed to send notification:', err);
     }
