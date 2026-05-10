@@ -672,9 +672,9 @@
         /* Hero Section */
 
         .hero {
-            height: 55vh;
-            min-height: 400px;
-            padding-top: 120px;
+            height: 45vh;
+            min-height: 350px;
+            padding-top: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -702,7 +702,7 @@
         .hero-subtitle {
             font-size: clamp(1rem, 2vw, 1.4rem);
             color: var(--text-secondary);
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             animation: fadeInUp 1s ease 0.4s both;
         }
 
@@ -741,6 +741,53 @@
         .cta-button:hover {
             transform: translateY(-4px) scale(1.05);
             box-shadow: 0 15px 40px rgba(255, 255, 255, 0.15);
+        }
+
+        .password-tab {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 30px;
+            background: rgba(123, 97, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(123, 97, 255, 0.3);
+            border-radius: 100px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            margin: 60px auto 40px;
+            width: fit-content;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 20px rgba(123, 97, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
+            position: relative;
+            z-index: 100;
+        }
+
+        .password-tab:hover {
+            background: rgba(123, 97, 255, 0.2);
+            border-color: rgba(123, 97, 255, 0.6);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4), 0 0 30px rgba(123, 97, 255, 0.2);
+        }
+
+        .password-tab i {
+            color: var(--purple-accent);
+            font-size: 16px;
+            animation: pulse 2s infinite;
+        }
+
+        .password-tab strong {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 3px 10px;
+            border-radius: 8px;
+            margin-left: 5px;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 1.5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* Section */
@@ -2949,6 +2996,9 @@
 
     <!-- Scenepacks Section -->
     <section class="section" id="scenepacks">
+        <div class="password-tab">
+            <i class="fas fa-key"></i> The Password For Softwares And Plugins Is <strong>"star"</strong>
+        </div>
         <!-- Search -->
         <div class="controls">
             <div class="search-container">
