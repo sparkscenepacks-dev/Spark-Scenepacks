@@ -754,8 +754,76 @@ module.exports.handler = serverless(app);
 
 // Local Dev
 if (require.main === module) {
+    // --- TOOLKIT API ---
+    app.get('/api/toolkit', async (req, res) => {
+        try {
+            const { data, error } = await supabase
+                .from('toolkit_items')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+            res.json(data);
+        } catch (err) {
+            console.error('Fetch Toolkit Error:', err);
+            res.status(500).json({ error: 'Failed to fetch toolkit items' });
+        }
+    });
+
+    app.post('/api/admin/toolkit', isAuthenticated, async (req, res) => {
+        try {
+            const { type, category, title, description, thumbnail_url, link_url, icon_class } = req.body;
+            
+            const { data, error } = await supabase
+                .from('toolkit_items')
+                .insert([{ type, category, title, description, thumbnail_url, link_url, icon_class }])
+                .select();
+
+            if (error) throw error;
+            res.json({ message: 'Toolkit item added', item: data[0] });
+        } catch (err) {
+            console.error('Add Toolkit Error:', err);
+            res.status(500).json({ error: 'Failed to add toolkit item' });
+        }
+    });
+
+    app.put('/api/admin/toolkit/:id', isAuthenticated, async (req, res) => {
+        try {
+            const { id } = req.params;
+            const updates = req.body;
+            
+            const { data, error } = await supabase
+                .from('toolkit_items')
+                .update(updates)
+                .eq('id', id)
+                .select();
+
+            if (error) throw error;
+            res.json({ message: 'Toolkit item updated', item: data[0] });
+        } catch (err) {
+            console.error('Update Toolkit Error:', err);
+            res.status(500).json({ error: 'Failed to update toolkit item' });
+        }
+    });
+
+    app.delete('/api/admin/toolkit/:id', isAuthenticated, async (req, res) => {
+        try {
+            const { id } = req.params;
+            
+            const { error } = await supabase
+                .from('toolkit_items')
+                .delete()
+                .eq('id', id);
+
+            if (error) throw error;
+            res.json({ message: 'Toolkit item deleted' });
+        } catch (err) {
+            console.error('Delete Toolkit Error:', err);
+            res.status(500).json({ error: 'Failed to delete toolkit item' });
+        }
+    });
+
     app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
     });
 }
-
