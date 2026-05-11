@@ -490,7 +490,8 @@ app.post(['/api/requests', '/api/requests/'], async (req, res) => {
                 description,
                 user_email: email,
                 created_at: timestamp || new Date().toISOString(),
-                status: 'pending'
+                status: 'pending',
+                votes: 0
             }]);
 
         if (error) throw error;
@@ -498,6 +499,54 @@ app.post(['/api/requests', '/api/requests/'], async (req, res) => {
     } catch (err) {
         console.error('Supabase Request Error:', err);
         res.status(500).json({ error: 'Failed to save request. Database might be busy.' });
+    }
+});
+
+// Public feed for voting
+app.get(['/api/requests/public', '/api/requests/public/'], async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('requests')
+            .select('id, type, title, description, created_at, status, votes')
+            .or('status.eq.pending,status.is.null')
+            .order('votes', { ascending: false })
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        res.json({ requests: data || [] });
+    } catch (err) {
+        console.error('Supabase Fetch Public Requests Error:', err);
+        res.status(500).json({ error: 'Failed to fetch public requests' });
+    }
+});
+
+// Voting endpoint
+app.post(['/api/requests/:id/vote', '/api/requests/:id/vote/'], async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        // Use RPC to increment if available, or fetch and update
+        const { data: current, error: fetchError } = await supabase
+            .from('requests')
+            .select('votes')
+            .eq('id', id)
+            .single();
+            
+        if (fetchError) throw fetchError;
+        
+        const newVotes = (current.votes || 0) + 1;
+        
+        const { error: updateError } = await supabase
+            .from('requests')
+            .update({ votes: newVotes })
+            .eq('id', id);
+            
+        if (updateError) throw updateError;
+        
+        res.json({ success: true, votes: newVotes });
+    } catch (err) {
+        console.error('Supabase Voting Error:', err);
+        res.status(500).json({ error: 'Failed to cast vote' });
     }
 });
 
