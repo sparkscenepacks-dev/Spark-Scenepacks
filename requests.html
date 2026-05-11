@@ -1149,52 +1149,46 @@
     <div class="request-modal" id="requestModal">
         <div class="request-modal-content">
             <button class="close-modal" onclick="closeRequestModal()"><i class="fas fa-times"></i></button>
-            <div class="request-card" style="margin: 0; box-shadow: 0 30px 60px rgba(0,0,0,0.8); border: 1px solid rgba(123, 97, 255, 0.3);">
-                <div class="request-header">
-                    <h1 class="request-title">Request Application</h1>
-                    <p class="request-subtitle">Fill in the details below and we'll prioritize your request.</p>
+            <div class="request-card" style="margin: 0; box-shadow: 0 30px 60px rgba(0,0,0,0.8); border: 1px solid rgba(255, 255, 255, 0.1); background: linear-gradient(145deg, rgba(123, 97, 255, 0.1) 0%, rgba(255, 71, 87, 0.05) 100%), rgba(20, 20, 20, 0.95); backdrop-filter: blur(40px);">
+                <div class="request-header" style="text-align: center; margin-bottom: 40px;">
+                    <h1 class="request-title" style="font-size: 3rem; font-weight: 900; text-shadow: 0 0 30px rgba(255,255,255,0.3); margin-bottom: 10px;">Request Content</h1>
+                    <p class="request-subtitle" style="font-size: 1rem; color: rgba(255,255,255,0.7); max-width: 450px; margin: 0 auto; line-height: 1.5;">Can't find what you're looking for? Let us know and we'll try to add it to the platform.</p>
                 </div>
 
                 <form id="requestForm">
                     <div class="form-group">
-                        <label class="label">Request Type</label>
+                        <label class="label" style="font-size: 12px; letter-spacing: 1.5px; opacity: 0.8;">REQUEST TYPE</label>
                         <div class="custom-select-wrapper" id="requestTypeWrapper">
-                            <div class="custom-select-trigger" id="requestTypeTrigger">
-                                <span>Select Type</span>
+                            <div class="custom-select-trigger" id="requestTypeTrigger" style="background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 20px;">
+                                <span style="font-weight: 500;">Select Type</span>
                                 <i class="fas fa-chevron-down"></i>
                             </div>
                             <div class="custom-options">
-                                <div class="custom-option" data-value="scenepack">
-                                    <i class="fas fa-film"></i> Scenepack
-                                </div>
-                                <div class="custom-option" data-value="preset">
-                                    <img src="/assets/preset-icon.png" alt="Preset"> Preset (FF, CC, etc.)
-                                </div>
-                                <div class="custom-option" data-value="resource">
-                                    <i class="fas fa-folder-open"></i> Resource (SFX, Overlay, etc.)
-                                </div>
+                                <div class="custom-option" data-value="scenepack"><i class="fas fa-film"></i> Scenepack</div>
+                                <div class="custom-option" data-value="preset"><img src="/assets/preset-icon.png" alt="Preset"> Preset</div>
+                                <div class="custom-option" data-value="resource"><i class="fas fa-folder-open"></i> Resource</div>
                             </div>
                         </div>
                         <input type="hidden" id="requestType" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="label">Title / Subject</label>
-                        <input type="text" class="input" id="requestTitle" placeholder="e.g. Stranger Things S4 Max Scenepack" required>
+                        <label class="label" style="font-size: 12px; letter-spacing: 1.5px; opacity: 0.8;">TITLE / SUBJECT</label>
+                        <input type="text" class="input" id="requestTitle" placeholder="e.g. Stranger Things S4 Max Scenepack" style="background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 20px;" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="label">Details / Reference Link</label>
-                        <textarea class="textarea" id="requestDetails" placeholder="Add any specific details or a YouTube/Tiktok link for reference..." required></textarea>
+                        <label class="label" style="font-size: 12px; letter-spacing: 1.5px; opacity: 0.8;">DETAILS / REFERENCE LINK</label>
+                        <textarea class="textarea" id="requestDetails" placeholder="Add any specific details or a YouTube/Tiktok link for reference..." style="background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 20px; height: 150px;" required></textarea>
                     </div>
 
                     <div class="form-group" id="emailGroup">
-                        <label class="label">Your Email</label>
-                        <input type="email" class="input" id="requestEmail" placeholder="To notify you once it's added" required>
+                        <label class="label" style="font-size: 12px; letter-spacing: 1.5px; opacity: 0.8;">YOUR EMAIL</label>
+                        <input type="email" class="input" id="requestEmail" placeholder="To notify you once it's added" style="background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); padding: 20px;" required>
                     </div>
 
-                    <button type="submit" class="submit-btn" id="submitBtn" style="background: var(--purple-accent); color: #fff; box-shadow: 0 15px 30px rgba(123, 97, 255, 0.3);">
-                        Submit Application <i class="fas fa-paper-plane"></i>
+                    <button type="submit" class="submit-btn" id="submitBtn" style="background: #fff; color: #000; border-radius: 20px; padding: 22px; font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 15px 35px rgba(255,255,255,0.1);">
+                        SUBMIT REQUEST <i class="fas fa-paper-plane" style="margin-left: 10px;"></i>
                     </button>
                 </form>
             </div>
