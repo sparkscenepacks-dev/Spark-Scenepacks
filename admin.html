@@ -1419,9 +1419,6 @@
                 <button class="tab-btn" id="btn-stats" onclick="switchTab('stats')">
                     <i class="fas fa-chart-line"></i> Stats
                 </button>
-                <button class="tab-btn" id="btn-toolkit" onclick="switchTab('toolkit')">
-                    <i class="fas fa-tools"></i> Toolkit
-                </button>
                 <button onclick="location.href='/'" class="tab-btn">
                     <i class="fas fa-external-link-alt"></i> View Site
                 </button>
@@ -1667,21 +1664,6 @@
                             <p>Loading scenepacks...</p>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="toolkitTab" class="tab-content" style="display: none;">
-            <div class="admin-card">
-                <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;">
-                    <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 800;">Toolkit Management</h2>
-                    <button onclick="openToolkitModal()" style="width: auto; padding: 12px 30px; background: #fff; color: #000; border-radius: 15px; font-weight: 800; font-size: 13px;">
-                        <i class="fas fa-plus"></i> ADD TOOLKIT ITEM
-                    </button>
-                </div>
-                
-                <div id="toolkitList" class="admin-grid" style="grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
-                    <div style="text-align: center; color: var(--text-secondary); padding: 40px; width: 100%;">Loading toolkit...</div>
                 </div>
             </div>
         </div>
@@ -2774,22 +2756,17 @@
                     const isMatch = (tabId === 'content' && btn.id === 'btn-content') ||
                         (tabId === 'requests' && btn.id === 'btn-requests') ||
                         (tabId === 'applications' && btn.id === 'btn-applications') ||
-                        (tabId === 'stats' && btn.id === 'btn-stats') ||
-                        (tabId === 'toolkit' && btn.id === 'btn-toolkit');
+                        (tabId === 'stats' && btn.id === 'btn-stats');
                     btn.classList.toggle('active', isMatch);
                 });
 
                 // Update content visibility
                 document.querySelectorAll('.tab-content').forEach(content => {
                     content.classList.remove('active');
-                    content.style.display = 'none'; // Ensure display none
                 });
 
                 const targetTab = document.getElementById(tabId + 'Tab');
-                if (targetTab) {
-                    targetTab.classList.add('active');
-                    targetTab.style.display = 'block'; // Show
-                }
+                if (targetTab) targetTab.classList.add('active');
 
                 // Update Header UI
                 const dashboardTitle = document.querySelector('.header h1');
@@ -2804,13 +2781,6 @@
                     cancelBtn.style.display = 'none';
                     document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('/assets/Zenitsu.jpg')";
                     loadRequestsList();
-                } else if (tabId === 'toolkit') {
-                    dashboardTitle.textContent = 'Toolkit Management';
-                    dashboardSubtitle.textContent = 'Curating tutorials and resources for the community';
-                    saveBtn.style.display = 'none';
-                    cancelBtn.style.display = 'none';
-                    document.body.style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('/assets/Zenitsu.jpg')";
-                    loadToolkitList();
                 } else if (tabId === 'applications') {
                     dashboardTitle.textContent = 'Staff Applications';
                     dashboardSubtitle.textContent = 'Reviewing new team member submissions';
@@ -3224,153 +3194,6 @@
 
             // Update application badge on load
             loadApplicationsList(true);
-            // --- TOOLKIT MANAGEMENT ---
-            let toolkitItems = [];
-
-            async function loadToolkitList() {
-                try {
-                    const response = await fetch(`${API_BASE}/api/toolkit`);
-                    toolkitItems = await response.json();
-                    
-                    const container = document.getElementById('toolkitList');
-                    if (toolkitItems.length === 0) {
-                        container.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 40px; width: 100%;">No toolkit items found. Add one!</div>`;
-                        return;
-                    }
-
-                    container.innerHTML = toolkitItems.map(item => `
-                        <div class="admin-card" id="toolkit-${item.id}">
-                            <div style="display: flex; gap: 20px; align-items: flex-start;">
-                                ${item.type === 'tutorial' 
-                                    ? `<img src="${item.thumbnail_url || '/assets/placeholder.jpg'}" style="width: 120px; height: 67px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">`
-                                    : `<div style="width: 60px; height: 60px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #7b61ff;"><i class="${item.icon_class || 'fas fa-box'}"></i></div>`
-                                }
-                                <div style="flex: 1;">
-                                    <span style="font-size: 10px; font-weight: 800; color: #7b61ff; text-transform: uppercase; background: rgba(123, 97, 255, 0.1); padding: 2px 8px; border-radius: 5px;">${item.category}</span>
-                                    <h4 style="margin: 8px 0 5px; font-size: 15px; font-weight: 700;">${item.title}</h4>
-                                    <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.4; margin-bottom: 15px;">${item.description}</p>
-                                    <div style="display: flex; gap: 10px;">
-                                        <button onclick="editToolkitItem('${item.id}')" style="width: auto; padding: 8px 15px; font-size: 11px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);">EDIT</button>
-                                        <button onclick="deleteToolkitItem('${item.id}')" style="width: auto; padding: 8px 15px; font-size: 11px; background: rgba(255, 71, 87, 0.1); color: #ff4757;">DELETE</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('');
-                } catch (err) {
-                    console.error('Failed to load toolkit:', err);
-                }
-            }
-
-            function openToolkitModal(editId = null) {
-                const modal = document.getElementById('toolkitModal');
-                const title = document.getElementById('toolkitModalTitle');
-                const form = document.getElementById('toolkitForm');
-                
-                form.reset();
-                document.getElementById('toolkitId').value = '';
-                
-                if (editId) {
-                    const item = toolkitItems.find(i => i.id === editId);
-                    if (item) {
-                        title.innerHTML = '<i class="fas fa-edit"></i> Edit Toolkit Item';
-                        document.getElementById('toolkitId').value = item.id;
-                        document.getElementById('toolkitType').value = item.type;
-                        document.getElementById('toolkitCategory').value = item.category;
-                        document.getElementById('toolkitTitle').value = item.title;
-                        document.getElementById('toolkitDescription').value = item.description;
-                        document.getElementById('toolkitLink').value = item.link_url;
-                        document.getElementById('toolkitThumbnail').value = item.thumbnail_url || '';
-                        document.getElementById('toolkitIcon').value = item.icon_class || '';
-                        toggleToolkitFields();
-                    }
-                } else {
-                    title.innerHTML = '<i class="fas fa-plus"></i> Add Toolkit Item';
-                }
-                
-                modal.style.display = 'flex';
-            }
-
-            function closeToolkitModal() {
-                document.getElementById('toolkitModal').style.display = 'none';
-            }
-
-            function toggleToolkitFields() {
-                const type = document.getElementById('toolkitType').value;
-                document.getElementById('tutorialFields').style.display = type === 'tutorial' ? 'block' : 'none';
-                document.getElementById('resourceFields').style.display = type === 'resource' ? 'block' : 'none';
-            }
-
-            document.getElementById('toolkitForm').addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const id = document.getElementById('toolkitId').value;
-                const data = {
-                    type: document.getElementById('toolkitType').value,
-                    category: document.getElementById('toolkitCategory').value,
-                    title: document.getElementById('toolkitTitle').value,
-                    description: document.getElementById('toolkitDescription').value,
-                    link_url: document.getElementById('toolkitLink').value,
-                    thumbnail_url: document.getElementById('toolkitThumbnail').value,
-                    icon_class: document.getElementById('toolkitIcon').value
-                };
-
-                const btn = document.getElementById('saveToolkitBtn');
-                btn.disabled = true;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
-                try {
-                    const url = id ? `${API_BASE}/api/admin/toolkit/${id}` : `${API_BASE}/api/admin/toolkit`;
-                    const method = id ? 'PUT' : 'POST';
-                    
-                    const response = await fetch(url, {
-                        method: method,
-                        headers: { 'Content-Type': 'application/json' },
-                        credentials: 'include',
-                        body: JSON.stringify(data)
-                    });
-
-                    if (response.ok) {
-                        showToast(id ? 'Updated Successfully!' : 'Added Successfully!');
-                        closeToolkitModal();
-                        loadToolkitList();
-                    } else {
-                        alert('Failed to save item');
-                    }
-                } catch (err) {
-                    alert('Error saving item');
-                } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = 'Save Item <i class="fas fa-check" style="margin-left: 8px;"></i>';
-                }
-            });
-
-            function editToolkitItem(id) {
-                openToolkitModal(id);
-            }
-
-            async function deleteToolkitItem(id) {
-                if (!confirm('Are you sure you want to delete this item?')) return;
-                try {
-                    const response = await fetch(`${API_BASE}/api/admin/toolkit/${id}`, {
-                        method: 'DELETE',
-                        credentials: 'include'
-                    });
-                    if (response.ok) {
-                        showToast('Item deleted');
-                        loadToolkitList();
-                    }
-                } catch (err) {
-                    showToast('Delete failed');
-                }
-            }
-
-            // Expose globally for onclick handlers
-            window.openToolkitModal = openToolkitModal;
-            window.closeToolkitModal = closeToolkitModal;
-            window.editToolkitItem = editToolkitItem;
-            window.deleteToolkitItem = deleteToolkitItem;
-            window.toggleToolkitFields = toggleToolkitFields;
-
         </script>
     </div> <!-- End adminDashboard -->
     <div id="replyModal" class="cropper-modal-container" style="z-index: 4000;">
@@ -3412,56 +3235,6 @@
         </div>
     </div>
 
-    <!-- Toolkit Modal -->
-    <div id="toolkitModal" class="cropper-modal-container" style="z-index: 5000; display: none;">
-        <div class="cropper-card" style="max-width: 600px; width: 95%; max-height: 90vh; overflow-y: auto;">
-            <h3 class="card-title" style="margin-bottom: 20px;" id="toolkitModalTitle"><i class="fas fa-tools"></i> Add Toolkit Item</h3>
-            <form id="toolkitForm">
-                <input type="hidden" id="toolkitId">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                    <div class="input-group" style="margin-bottom: 0;">
-                        <label class="input-label">Type</label>
-                        <select id="toolkitType" onchange="toggleToolkitFields()">
-                            <option value="tutorial">Tutorial (Video)</option>
-                            <option value="resource">Resource (Link)</option>
-                        </select>
-                    </div>
-                    <div class="input-group" style="margin-bottom: 0;">
-                        <label class="input-label">Category</label>
-                        <input type="text" id="toolkitCategory" placeholder="e.g. Color Grading">
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Title</label>
-                    <input type="text" id="toolkitTitle" placeholder="Item title" required>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Description</label>
-                    <textarea id="toolkitDescription" rows="3" placeholder="Brief description..." required></textarea>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">Link URL</label>
-                    <input type="text" id="toolkitLink" placeholder="https://..." required>
-                </div>
-                <div id="tutorialFields">
-                    <div class="input-group">
-                        <label class="input-label">Thumbnail URL</label>
-                        <input type="text" id="toolkitThumbnail" placeholder="https://...">
-                    </div>
-                </div>
-                <div id="resourceFields" style="display: none;">
-                    <div class="input-group">
-                        <label class="input-label">Icon Class (FontAwesome)</label>
-                        <input type="text" id="toolkitIcon" placeholder="e.g. fas fa-bolt">
-                    </div>
-                </div>
-                <div class="cropper-actions" style="margin-top: 30px;">
-                    <button type="button" class="btn-cancel-crop" onclick="closeToolkitModal()">Cancel</button>
-                    <button type="submit" class="btn-crop" id="saveToolkitBtn">Save Item <i class="fas fa-check" style="margin-left: 8px;"></i></button>
-                </div>
-            </form>
-        </div>
-    </div>
 </body>
 
 </html>
