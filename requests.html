@@ -1082,7 +1082,7 @@
             <div class="nav-links" id="navLinks">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/#scenepacks" class="nav-link">Scenepacks</a>
-                <a href="/requests" class="nav-link">Request</a>
+                <a href="/requests" class="nav-link" onclick="handleNavRequest(event)">Request</a>
                 <a href="/team" class="nav-link">Team</a>
                 <a href="/donate" class="nav-donate-pill">Donate Now <i class="fas fa-heart"></i></a>
                 
@@ -1225,6 +1225,30 @@
 
     <script>
         const API_BASE = window.location.origin === 'http://127.0.0.1:5500' ? 'http://localhost:5000' : '';
+
+        // Modal Functions
+        function openRequestModal() {
+            const modal = document.getElementById('requestModal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeRequestModal() {
+            const modal = document.getElementById('requestModal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function handleNavRequest(e) {
+            if (window.location.pathname === '/requests' || window.location.pathname.endsWith('requests.html')) {
+                e.preventDefault();
+                openRequestModal();
+            }
+        }
 
         // Custom Select Logic
         const wrapper = document.getElementById('requestTypeWrapper');
@@ -1372,6 +1396,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadPublicRequests();
             
+            // Deep linking for modal
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('open') === 'true') {
+                openRequestModal();
+            }
+
             const user = JSON.parse(localStorage.getItem('spark_user'));
             const loginBtn = document.getElementById('navLoginBtn');
             const userProfile = document.getElementById('userProfile');
